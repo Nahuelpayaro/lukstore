@@ -1,20 +1,145 @@
+/* Premium PLP Category Design - Lukstore */
+
+.category-page {
+    padding-top: var(--header-height);
+}
+
 .cat-hero {
     position: relative;
-    height: 300px;
-    /* Strict max height as requested */
-    padding: 0 1rem;
+    height: 350px;
+    margin: 0 2rem 3rem 2rem;
+    border-radius: 30px;
+    overflow: hidden;
     background-size: cover;
     background-position: center;
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
-    color: var(--color-paper);
-    margin-bottom: 3rem;
-    background-color: #1a1a1a;
+    color: #fff;
 }
 
-/*... existing ...*/
+.cat-hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.3) 100%);
+    backdrop-filter: blur(2px);
+}
+
+.cat-hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 800px;
+    padding: 2rem;
+}
+
+.cat-hero-content h1 {
+    font-size: 4rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: -0.03em;
+    text-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.cat-hero-content p {
+    font-size: 1.1rem;
+    font-weight: 400;
+    color: #fff;
+    letter-spacing: 0.02em;
+    opacity: 0.9;
+    line-height: 1.5;
+}
+
+/* Elegant Breadcrumbs */
+.breadcrumbs {
+    margin-bottom: 3rem;
+    color: #888;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    font-weight: 600;
+}
+
+.breadcrumbs span {
+    padding: 0 0.5rem;
+}
+
+.breadcrumbs .current {
+    color: #111;
+    font-weight: 800;
+    border-bottom: 1px solid #111;
+    padding-bottom: 2px;
+}
+
+.cat-body {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    gap: 4rem;
+    margin-bottom: 8rem;
+}
+
+/* Premium Filter Sidebar */
+.cat-filters h3 {
+    font-size: 1.2rem;
+    font-weight: 800;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid #eaeaea;
+    padding-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+    color: #111;
+}
+
+.filter-group {
+    margin-bottom: 2rem;
+}
+
+.filter-group label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #555;
+}
+
+.filter-group select,
+.filter-group input {
+    width: 100%;
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    background-color: #fcfcfc;
+    font-size: 0.9rem;
+    font-family: inherit;
+    font-weight: 500;
+    color: #111;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23111' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 1.2em;
+    transition: all 0.3s ease;
+}
+
+.filter-group select:hover,
+.filter-group input:hover {
+    background-color: #fff;
+    border-color: #aaa;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+}
+
+.filter-group select:focus,
+.filter-group input:focus {
+    border-color: #111;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(17,17,17,0.1);
+}
 
 .cat-products {
     width: 100%;
@@ -23,129 +148,30 @@
 .product-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    /* 4 columns as per directive */
     gap: 2rem;
 }
 
+/* Responsiveness adjustments */
 @media (max-width: 1200px) {
     .product-grid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(3, 1fr);
     }
 }
 
-@media (max-width: 600px) {
-    .product-grid {
-        grid-template-columns: repeat(2, 1fr);
-        /* 2 Columns on mobile as per modern standard */
-        gap: 16px;
-        /* Tighter gap for mobile */
-    }
-
-    .cat-hero h1 {
-        font-size: 1.8rem;
-    }
-
-    .cat-body {
-        gap: 2rem;
-        margin-bottom: 4rem;
-    }
-}
-
-.cat-hero-overlay {
-    position: absolute;
-    inset: 0;
-    background-color: rgba(14, 14, 14, 0.4);
-}
-
-.cat-hero-content {
-    position: relative;
-    z-index: 2;
-}
-
-.cat-hero-content h1 {
-    font-size: 3rem;
-    margin-bottom: 1rem;
-    text-transform: uppercase;
-}
-
-.cat-hero-content p {
-    font-size: 1rem;
-    max-width: 600px;
-    font-weight: 400;
-}
-
-.breadcrumbs {
-    margin-bottom: 2rem;
-    color: var(--color-text-secondary);
-    font-size: 0.8rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-}
-
-.breadcrumbs .current {
-    color: var(--color-ink);
-    font-weight: 700;
-}
-
-.cat-body {
-    display: grid;
-    grid-template-columns: 220px 1fr;
-    gap: 3rem;
-    margin-bottom: 6rem;
-}
-
-.cat-filters h3 {
-    font-size: 1rem;
-    margin-bottom: 1.5rem;
-    border-bottom: 2px solid var(--color-ink);
-    padding-bottom: 0.5rem;
-    text-transform: uppercase;
-}
-
-.filter-group {
-    margin-bottom: 1.5rem;
-}
-
-.filter-group label {
-    display: block;
-    font-size: 0.8rem;
-    font-weight: 700;
-    margin-bottom: 0.5rem;
-    text-transform: uppercase;
-    color: var(--color-ink);
-}
-
-.filter-group select,
-.filter-group input {
-    width: 100%;
-    padding: 0.8rem 1rem;
-    border: 1px solid var(--color-border);
-    border-radius: 0;
-    background-color: #fff;
-    font-size: 0.85rem;
-    font-family: inherit;
-    cursor: pointer;
-    appearance: none;
-    -webkit-appearance: none;
-    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-    background-repeat: no-repeat;
-    background-position: right 1rem center;
-    background-size: 1em;
-    transition: border-color 0.2s;
-}
-
-.filter-group select:hover,
-.filter-group input:hover,
-.filter-group select:focus,
-.filter-group input:focus {
-    border-color: var(--color-ink);
-    outline: none;
-}
-
-/* Override responsive for sticky filter maybe? */
 @media (max-width: 1024px) {
+    .cat-hero {
+        height: 300px;
+        margin: 0 1rem 2rem 1rem;
+        border-radius: 20px;
+    }
+
+    .cat-hero-content h1 {
+        font-size: 3rem;
+    }
+
     .cat-body {
         grid-template-columns: 1fr;
+        gap: 2rem;
     }
 
     .cat-filters {
@@ -153,18 +179,39 @@
         gap: 1.5rem;
         align-items: center;
         flex-wrap: wrap;
-        border-bottom: 1px solid var(--color-border);
-        padding-bottom: 1.5rem;
+        border-bottom: 1px solid #eaeaea;
+        padding-bottom: 2rem;
+        margin-bottom: 2rem;
     }
 
     .cat-filters h3 {
         display: none;
-        /* Hide title on mobile filter bar */
     }
 
     .filter-group {
         margin-bottom: 0;
         flex: 1;
-        min-width: 150px;
+        min-width: 180px;
+    }
+}
+
+@media (max-width: 768px) {
+    .product-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem; /* Tighter gap for mobile cards */
+    }
+
+    .cat-hero {
+        height: 250px;
+        border-radius: 0;
+        margin: 0 0 2rem 0; /* Full bleed on mobile */
+    }
+
+    .cat-hero-content h1 {
+        font-size: 2.5rem;
+    }
+
+    .filter-group {
+        min-width: 100%; /* Stack filters on very small screens */
     }
 }

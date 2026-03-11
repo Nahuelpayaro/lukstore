@@ -123,12 +123,12 @@ const Product = () => {
 
             <div className="container product-main">
                 {/* Breadcrumbs */}
-                <div style={{ width: '100%', marginBottom: '1rem' }}>
-                    <nav className="breadcrumbs-container" style={{ fontSize: '0.85rem', color: '#666' }}>
+                <div style={{ width: '100%', marginBottom: '1.5rem' }}>
+                    <nav className="breadcrumbs-container">
                         {crumbs.map((c, i) => (
                             <span key={i}>
-                                <Link to={c.url} style={{ color: '#666', textDecoration: 'none' }}>{c.label}</Link>
-                                {i < crumbs.length - 1 && <span style={{ margin: '0 0.5rem' }}>/</span>}
+                                <Link to={c.url} className={i === crumbs.length -1 ? 'active' : ''}>{c.label}</Link>
+                                {i < crumbs.length - 1 && <span style={{ margin: '0 0.75rem', color: '#ccc' }}>/</span>}
                             </span>
                         ))}
                     </nav>

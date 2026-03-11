@@ -37,7 +37,7 @@ const Checkout = () => {
         e.preventDefault();
 
         try {
-            // 1. Create Order
+            // 1. Create Order in Pending State
             const { data: orderData, error: orderError } = await supabase
                 .from('orders')
                 .insert([{
@@ -47,7 +47,7 @@ const Checkout = () => {
                     customer_city: formData.city,
                     customer_region: formData.region,
                     total_amount: cartTotal,
-                    status: 'paid', // Simulate successful payment
+                    status: 'pending', // Pending payment
                     payment_method: 'mercadopago'
                 }])
                 .select()
@@ -71,14 +71,35 @@ const Checkout = () => {
 
                 if (itemsError) throw itemsError;
 
-                // 3. Clear & Redirect
-                clearCart();
-                navigate('/success', { state: { orderId: orderData.id } });
+                // 3. Request Preference Form Edge Function
+                const { data: fnData, error: fnError } = await supabase.functions.invoke('create-preference', {
+                    body: {
+                       orderItems: orderItems,
+                       orderId: orderData.id,
+                       payer: {
+                           email: formData.email,
+                           name: formData.firstName
+                       }
+                    }
+                });
+
+                if (fnError) {
+                     console.error("Function error details:", fnError)
+                     throw fnError;
+                }
+
+                if(fnData?.init_point) {
+                     // Redirect to MP
+                     clearCart();
+                     window.location.href = fnData.init_point;
+                } else {
+                     throw new Error("No init_point received from MercadoPago");
+                }
             }
 
         } catch (error) {
-            console.error('Error creating order:', error);
-            alert('Hubo un error al procesar tu pedido. Por favor intenta nuevamente.');
+            console.error('Error creating order/preference:', error);
+            alert('Hubo un error al procesar tu pedido con MercadoPago. Por favor intenta nuevamente.');
         }
     };
 
@@ -131,7 +152,7 @@ const Checkout = () => {
                             </div>
                         </div>
 
-// ... existing code ...
+
                         <h3>Pago</h3>
                         <div className="payment-mock mp-payment">
                             <div className="payment-header">
@@ -157,13 +178,18 @@ const Checkout = () => {
 
                 {/* Right: Summary Order */}
                 <div className="cart-summary">
-                    {/* ... (existing summary code) ... */}
                     <h2>Tu Pedido</h2>
                     <div className="order-items-preview">
                         {cartItems.map(item => (
                             <div key={`${item.id}-${item.size}`} className="order-preview-row">
-                                <span>{item.title} x {item.quantity}</span>
-                                <span>${(parseInt(String(item.price).replace(/\./g, '')) * item.quantity).toLocaleString('es-CL')}</span>
+                                <img src={item.image} alt={item.title} className="order-preview-image" />
+                                <div className="order-preview-details">
+                                    <span className="order-preview-title">{item.title}</span>
+                                    <span className="order-preview-qty">Cant: {item.quantity}</span>
+                                </div>
+                                <span className="order-preview-price">
+                                    ${(parseInt(String(item.price).replace(/\./g, '')) * item.quantity).toLocaleString('es-CL')}
+                                </span>
                             </div>
                         ))}
                     </div>
