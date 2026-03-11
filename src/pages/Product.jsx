@@ -14,6 +14,7 @@ const Product = () => {
     const { getProductById, getProductBySlug, products, loading } = useProducts();
     const [selectedSize, setSelectedSize] = useState(null);
     const [product, setProduct] = useState(null);
+    const [activeImage, setActiveImage] = useState(null);
 
     useEffect(() => {
         console.log("Product Page Params:", { id, slug });
@@ -33,6 +34,11 @@ const Product = () => {
                 console.log("Searching by id:", id, "Found:", found);
             }
             setProduct(found || null);
+            if (found && found.images && found.images.length > 0) {
+                setActiveImage(found.images[0]);
+            } else if (found) {
+                setActiveImage(found.image);
+            }
         }
     }, [id, slug, products, loading, getProductById, getProductBySlug]);
 
@@ -136,11 +142,31 @@ const Product = () => {
 
                 {/* Left: Gallery */}
                 <div className="product-gallery">
-                    <div className="main-image" style={{ background: '#fff', borderRadius: '8px', overflow: 'hidden', position: 'relative' }}>
-                        <img src={product.image} alt={h1Title} style={{ width: '100%', height: 'auto', objectFit: 'contain' }} />
+                    <div className="main-image-container">
+                        <img 
+                            src={activeImage || product.image} 
+                            alt={h1Title} 
+                            className="main-image zoom-effect" 
+                        />
                         {product.condition === 'used' && <span className="pdp-badge-used">Pre-Loved</span>}
                         {product.stock <= 2 && product.stock > 0 && <span className="badge-low-stock">¡Últimos pares!</span>}
                     </div>
+                    
+                    {/* Thumbnail Gallery */}
+                    {product.images && product.images.length > 1 && (
+                        <div className="thumbnail-gallery">
+                            {product.images.map((imgSrc, index) => (
+                                <button 
+                                    key={index}
+                                    className={`thumbnail-btn ${activeImage === imgSrc ? 'active' : ''}`}
+                                    onClick={() => setActiveImage(imgSrc)}
+                                    aria-label={`View image ${index + 1}`}
+                                >
+                                    <img src={imgSrc} alt={`${product.title} view ${index + 1}`} />
+                                </button>
+                            ))}
+                        </div>
+                    )}
                 </div>
 
                 {/* Right: Info */}
