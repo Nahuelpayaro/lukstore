@@ -1,53 +1,116 @@
 import React from 'react';
 import { PageMeta } from '../hooks/usePageMeta';
-import { Mail, MessageCircle, Clock } from 'lucide-react';
+import { Mail, MessageCircle, Clock, MapPin, Instagram } from 'lucide-react';
+import { motion } from 'framer-motion';
 import './Institutional.css';
 
 const Contact = () => {
     return (
-        <div className="institutional-page">
-            <PageMeta title="Contacto" description="Escríbenos directamente." />
-            <div className="container" style={{ padding: '6rem 0', maxWidth: '600px' }}>
-                <h1 style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>Contacto</h1>
-                <p style={{ fontSize: '1.1rem', color: '#666', marginBottom: '3rem' }}>
-                    Si tienes dudas sobre productos, tallas o pedidos, puedes escribirnos directamente. Respondemos lo antes posible.
-                </p>
+        <div className="institutional-page contact-page">
+            <PageMeta title="Contacto | Lukstore" description="Ponte en contacto con el equipo de Lukstore. Soporte ventas, autenticación y showroom." />
 
-                <div className="contact-methods" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', marginBottom: '3rem' }}>
-                    <div className="method-card" style={{ background: '#f9f9f9', padding: '1.5rem', borderRadius: '4px' }}>
-                        <Mail size={24} style={{ marginBottom: '1rem' }} />
-                        <h3 style={{ fontSize: '0.9rem', marginBottom: '0.5rem' }}>Email</h3>
-                        <a href="mailto:hola@lukstore.cl" style={{ color: 'var(--color-primary)', fontWeight: 600 }}>hola@lukstore.cl</a>
+            <header style={{ padding: '8rem 0 4rem', textAlign: 'center', background: '#000', color: '#fff' }}>
+                <div className="container">
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                    >
+                        <h1 style={{ fontSize: '3.5rem', fontWeight: 800, marginBottom: '1rem' }}>CONTACTO</h1>
+                        <p style={{ color: '#888', fontSize: '1.2rem', maxWidth: '600px', margin: '0 auto' }}>
+                            Estamos aquí para resolver tus dudas sobre lanzamientos, tallas o tu pedido actual.
+                        </p>
+                    </motion.div>
+                </div>
+            </header>
+
+            <section className="container" style={{ padding: '6rem 0' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '4rem' }}>
+                    
+                    {/* INFO COL */}
+                    <div>
+                        <h2 style={{ fontSize: '2rem', fontWeight: 800, marginBottom: '2.5rem' }}>Canales Oficiales</h2>
+                        
+                        <div style={{ display: 'grid', gap: '2.5rem' }}>
+                            <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'flex-start' }}>
+                                <div style={{ background: '#f5f5f5', padding: '1rem', borderRadius: '12px' }}>
+                                    <MessageCircle size={24} />
+                                </div>
+                                <div>
+                                    <h4 style={{ fontWeight: 700, marginBottom: '0.25rem' }}>WhatsApp Soporte</h4>
+                                    <p style={{ color: '#666', marginBottom: '0.5rem' }}>Respuesta inmediata para ventas y guías.</p>
+                                    <a href="https://wa.me/56900000000" style={{ fontWeight: 800, borderBottom: '2px solid #000', paddingBottom: '2px' }}>+56 9 0000 0000</a>
+                                </div>
+                            </div>
+
+                            <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'flex-start' }}>
+                                <div style={{ background: '#f5f5f5', padding: '1rem', borderRadius: '12px' }}>
+                                    <Mail size={24} />
+                                </div>
+                                <div>
+                                    <h4 style={{ fontWeight: 700, marginBottom: '0.25rem' }}>Email Administrativo</h4>
+                                    <p style={{ color: '#666', marginBottom: '0.5rem' }}>Para temas de facturación y colaboraciones.</p>
+                                    <a href="mailto:hola@lukstore.cl" style={{ fontWeight: 800, borderBottom: '2px solid #000', paddingBottom: '2px' }}>hola@lukstore.cl</a>
+                                </div>
+                            </div>
+
+                            <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'flex-start' }}>
+                                <div style={{ background: '#f5f5f5', padding: '1rem', borderRadius: '12px' }}>
+                                    <Clock size={24} />
+                                </div>
+                                <div>
+                                    <h4 style={{ fontWeight: 700, marginBottom: '0.25rem' }}>Horarios</h4>
+                                    <p style={{ color: '#666' }}>Lunes a Viernes: 10:00 - 19:00</p>
+                                    <p style={{ color: '#666' }}>Sábados: 11:00 - 14:00</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div className="method-card" style={{ background: '#f9f9f9', padding: '1.5rem', borderRadius: '4px' }}>
-                        <MessageCircle size={24} style={{ marginBottom: '1rem' }} />
-                        <h3 style={{ fontSize: '0.9rem', marginBottom: '0.5rem' }}>WhatsApp</h3>
-                        <a href="https://wa.me/56912345678" target="_blank" rel="noreferrer" style={{ color: 'var(--color-primary)', fontWeight: 600 }}>+56 9 1234 5678</a>
+
+                    {/* FORM COL */}
+                    <div style={{ background: '#fff', padding: '3rem', borderRadius: '24px', boxShadow: '0 10px 40px rgba(0,0,0,0.05)', border: '1px solid #eee' }}>
+                        <h3 style={{ fontSize: '1.5rem', fontWeight: 800, marginBottom: '2rem' }}>Envíanos un mensaje</h3>
+                        <form onSubmit={(e) => e.preventDefault()} style={{ display: 'grid', gap: '1.2rem' }}>
+                            <div className="form-group">
+                                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.85rem', fontWeight: 700, color: '#888' }}>NOMBRE COMPLETO</label>
+                                <input type="text" style={{ width: '100%', padding: '1rem', borderRadius: '8px', border: '1px solid #eee', background: '#fafafa' }} placeholder="Tu nombre..." />
+                            </div>
+                            <div className="form-group">
+                                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.85rem', fontWeight: 700, color: '#888' }}>EMAIL</label>
+                                <input type="email" style={{ width: '100%', padding: '1rem', borderRadius: '8px', border: '1px solid #eee', background: '#fafafa' }} placeholder="tu@email.com" />
+                            </div>
+                            <div className="form-group">
+                                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.85rem', fontWeight: 700, color: '#888' }}>MENSAJE</label>
+                                <textarea rows="4" style={{ width: '100%', padding: '1rem', borderRadius: '8px', border: '1px solid #eee', background: '#fafafa' }} placeholder="¿En qué podemos ayudarte?"></textarea>
+                            </div>
+                            <button type="submit" className="btn btn-black" style={{ marginTop: '1rem', padding: '1.2rem', borderRadius: '8px', fontWeight: 800 }}>ENVIAR MENSAJE</button>
+                        </form>
                     </div>
                 </div>
+            </section>
 
-                <div style={{ marginBottom: '3rem' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
-                        <Clock size={16} />
-                        <span style={{ fontWeight: 600 }}>Horario de atención</span>
+            {/* LOCATION / SHOWROOM MOCKUP */}
+            <section style={{ background: '#fafafa', padding: '8rem 0' }}>
+                <div className="container" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '4rem', alignItems: 'center' }}>
+                    <div style={{ borderRadius: '24px', overflow: 'hidden', boxShadow: '0 20px 50px rgba(0,0,0,0.1)' }}>
+                        <img src="/assets/hero-street-editorial.png" alt="Showroom" style={{ width: '100%', display: 'block' }} />
                     </div>
-                    <p style={{ color: '#666', fontSize: '0.9rem' }}>Lunes a Viernes: 10:00 - 19:00 hrs<br />Sábados: 11:00 - 14:00 hrs</p>
+                    <div>
+                        <div style={{ background: '#000', color: '#fff', display: 'inline-flex', padding: '0.5rem 1rem', borderRadius: '50px', fontSize: '0.75rem', fontWeight: 700, marginBottom: '1.5rem', letterSpacing: '0.1em' }}>
+                            SHOWROOM SANTIAGO
+                        </div>
+                        <h2 style={{ fontSize: '2.5rem', fontWeight: 800, marginBottom: '1.5rem' }}>Visítanos</h2>
+                        <p style={{ fontSize: '1.1rem', color: '#666', lineHeight: 1.7, marginBottom: '2rem' }}>
+                            Contamos con un espacio privado para pruebas de talla y visualización de stock exclusivo en la zona oriente de Santiago. 
+                            <br /><br />
+                            <strong>Atención solo previa cita agendada por WhatsApp.</strong>
+                        </p>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', color: '#000', fontWeight: 700 }}>
+                            <MapPin size={20} />
+                            <span>La Dehesa, Lo Barnechea, Santiago.</span>
+                        </div>
+                    </div>
                 </div>
-
-                <form className="contact-form" onSubmit={(e) => e.preventDefault()}>
-                    <h3 style={{ marginBottom: '1.5rem' }}>Envíanos un mensaje</h3>
-                    <div className="form-group" style={{ marginBottom: '1rem' }}>
-                        <input type="text" placeholder="Tu nombre" style={{ width: '100%', padding: '1rem', border: '1px solid #ddd', borderRadius: '4px' }} />
-                    </div>
-                    <div className="form-group" style={{ marginBottom: '1rem' }}>
-                        <input type="email" placeholder="Tu email" style={{ width: '100%', padding: '1rem', border: '1px solid #ddd', borderRadius: '4px' }} />
-                    </div>
-                    <div className="form-group" style={{ marginBottom: '1rem' }}>
-                        <textarea placeholder="¿En qué podemos ayudarte?" rows="5" style={{ width: '100%', padding: '1rem', border: '1px solid #ddd', borderRadius: '4px' }}></textarea>
-                    </div>
-                    <button type="submit" className="btn btn-primary btn-block">Enviar mensaje</button>
-                </form>
-            </div>
+            </section>
         </div>
     );
 };
