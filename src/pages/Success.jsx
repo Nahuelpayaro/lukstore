@@ -3,6 +3,7 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { CheckCircle, Loader2 } from 'lucide-react';
 import { PageMeta } from '../hooks/usePageMeta';
 import { supabase } from '../supabase';
+import { trackPurchase } from '../utils/analytics';
 
 const Success = () => {
     const [searchParams] = useSearchParams();
@@ -18,8 +19,20 @@ const Success = () => {
                     .from('orders')
                     .update({ status: 'paid' })
                     .eq('id', orderId);
-                 
                  if(error) console.error("Error updating order status:", error);
+                 
+                 // Trigger GA4 Purchase Event
+                 const lastOrderStr = sessionStorage.getItem('lastOrderGA4');
+                 if (lastOrderStr) {
+                     try {
+                         const { cartItems, cartTotal, transactionId } = JSON.parse(lastOrderStr);
+                         // Double check transaction ID matches or just trust it since it's the exact flow
+                         trackPurchase(transactionId || orderId, cartItems, cartTotal);
+                         sessionStorage.removeItem('lastOrderGA4'); // Clean up
+                     } catch(e) {
+                         console.error("Error formatting GA4 purchase:", e);
+                     }
+                 }
              }
              setIsVerifying(false);
         };

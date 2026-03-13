@@ -25,12 +25,13 @@ export const useProducts = () => {
         const cleanCat = cat.toLowerCase();
 
         // Mappings
-        if (cleanCat === 'basketball') return products.filter(p => p.category === 'Zapatillas');
-        if (cleanCat === 'streetwear') return products.filter(p => p.category === 'Streetwear' || p.gender === 'Unisex');
+        if (cleanCat === 'basketball') return products.filter(p => (p.category === 'Zapatillas' || (p.hierarchy && p.hierarchy[0] === 'Zapatillas')));
+        if (cleanCat === 'streetwear') return products.filter(p => (p.category === 'Streetwear' || (p.hierarchy && p.hierarchy[0] === 'Streetwear') || p.gender === 'Unisex'));
 
         // General search
         return products.filter(p =>
-            p.category.toLowerCase().includes(cleanCat) ||
+            (p.category && p.category.toLowerCase().includes(cleanCat)) ||
+            (p.hierarchy && p.hierarchy.some(h => h.toLowerCase().includes(cleanCat))) ||
             p.title.toLowerCase().includes(cleanCat) ||
             (p.tags && p.tags.some(t => t.includes(cleanCat)))
         );

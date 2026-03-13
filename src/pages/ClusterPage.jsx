@@ -1,55 +1,51 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { PageMeta } from '../hooks/usePageMeta';
 import ProductCard from '../components/ProductCard';
 import Breadcrumbs from '../components/Breadcrumbs';
 import { PRODUCTS } from '../data/products';
-import { getClusterData } from '../data/clusters'; // Import the new helper
-import './Category.css';
+import { getClusterData } from '../data/clusters';
+import { getCategoryContent } from '../data/categoryContent';
+import './ClusterPage.css';
 
 const ClusterPage = () => {
     const { category, brand, model } = useParams();
+    const [filters, setFilters] = useState({ sort: 'newest', size: 'all' });
 
-    // 1. Fetch Rich Cluster Data
-    const clusterData = getClusterData(category, brand, model);
+    // 1. Resolve Active Content (Hierarchy or Main Category)
+    const activeContent = useMemo(() => {
+        // If it's a deep hierarchy (brand or model present)
+        if (brand || model) {
+            return getClusterData(category, brand, model);
+        }
+        // If it's a top-level category page
+        return getCategoryContent(category);
+    }, [category, brand, model]);
 
-    // 2. Filter products based on hierarchy AND active filters
-    const [filters, setFilters] = useState({ size: 'all', sort: 'newest' });
-
+    // 2. Resolve Products for this page
     const filteredProducts = useMemo(() => {
         let result = PRODUCTS.filter(p => {
             const h = p.hierarchy.map(x => x.toLowerCase());
-
-            // Broad Category Logic (Hombre/Mujer/Zapatillas)
             const catLower = category ? category.toLowerCase() : '';
 
-            // 1. Direct Hierarchy Match
+            // Hierarchy matching logic
             let catMatch = !category || h.includes(catLower);
-
-            // 2. Gender Fallback for 'hombre'/'mujer'
+            
+            // Gender/Category fallback
             if (!catMatch && (catLower === 'hombre' || catLower === 'mujer')) {
-                const productGender = p.gender ? p.gender.toLowerCase() : 'unisex';
-                if (productGender === catLower || productGender === 'unisex') {
-                    catMatch = true;
-                }
+                const pGender = p.gender?.toLowerCase() || 'unisex';
+                catMatch = pGender === catLower || pGender === 'unisex';
             }
-            // 3. 'Zapatillas' fallback (usually in hierarchy, but just in case)
-            if (!catMatch && catLower === 'zapatillas') {
-                catMatch = true; // Assume all products are zapatillas for now in this store
-            }
+            if (!catMatch && catLower === 'zapatillas') catMatch = true;
 
             const brandMatch = !brand || h.includes(brand.toLowerCase());
             const modelMatch = !model || h.includes(model.replace(/-/g, ' ').toLowerCase());
+            
             return catMatch && brandMatch && modelMatch;
         });
 
-        // Apply visual filters (Mock logic as sizes aren't fully in data yet)
-        if (filters.size !== 'all') {
-            // In a real app, check p.sizes.includes(filters.size)
-            // For mock, we just shuffle or keep all to not hide products unnecessarily
-        }
-
-        // Sort
+        // Price formatting/sorting
         if (filters.sort === 'price-asc') {
             result.sort((a, b) => a.price - b.price);
         } else if (filters.sort === 'price-desc') {
@@ -59,115 +55,174 @@ const ClusterPage = () => {
         return result;
     }, [category, brand, model, filters]);
 
-    const handleFilterChange = (key, value) => {
-        setFilters(prev => ({ ...prev, [key]: value }));
-    };
+    // Best Sellers (Top 4)
+    const bestSellers = useMemo(() => filteredProducts.slice(0, 4), [filteredProducts]);
+    
+    // Remaining products for the main grid
+    const remainingProducts = useMemo(() => filteredProducts.slice(4), [filteredProducts]);
 
-    // 3. Fallback Content if no specific cluster data exists
-    const title = clusterData?.title || (model
-        ? `${model.replace(/-/g, ' ').toUpperCase()} - Colección Chile`
-        : brand
-            ? `${brand.toUpperCase()} - Zapatillas y Streetwear`
-            : category.toUpperCase());
+    // Metadata
+    const title = activeContent?.hero?.title || activeContent?.title || category?.toUpperCase();
+    const description = activeContent?.hero?.subtitle || activeContent?.description || `Explora lo mejor de ${category} en Lukstore.`;
+    const heroImage = activeContent?.hero?.image || activeContent?.heroImage || '/assets/hero-street-editorial.png';
 
-    const description = clusterData?.description || `Explora la mejor selección de ${title} en Lukstore. Modelos originales y verificados.`;
-    const heroImage = clusterData?.heroImage || '/assets/hero-street-editorial.png';
-
-    // Breadcrumbs
-    const crumbs = [
-        { label: category, url: `/${category}` },
-        ...(brand ? [{ label: brand, url: `/${category}/${brand}` }] : []),
-        ...(model ? [{ label: model, url: `/${category}/${brand}/${model}` }] : [])
-    ];
+    const handleFilterChange = (key, value) => setFilters(prev => ({ ...prev, [key]: value }));
 
     return (
-        <div className="cluster-page category-page">
-            <PageMeta title={title} description={description} />
+        <div className="cluster-page-v2">
+            <PageMeta title={`${title} | LUKSTORE`} description={description} />
 
-            <div className="container">
-                <Breadcrumbs items={crumbs} />
-
-                {/* HERO SECTION */}
-                <section className="cat-hero" style={{ backgroundImage: `url('${heroImage}')` }}>
-                    <div className="cat-hero-overlay"></div>
-                    <div className="container cat-hero-content">
-                        <h1>{title}</h1>
-                        <p>{clusterData?.subtitle || description}</p>
-                    </div>
-                </section>
-
-                {/* PRODUCT GRID & FILTERS */}
-                <div className="cat-body" style={{ marginTop: '3rem' }}>
-                    <aside className="cat-filters">
-                        <h3>Filtros</h3>
-                        <div className="filter-group">
-                            <label>Ordenar por</label>
-                            <select value={filters.sort} onChange={(e) => handleFilterChange('sort', e.target.value)}>
-                                <option value="newest">Más nuevos</option>
-                                <option value="price-asc">Precio: Menor a Mayor</option>
-                                <option value="price-desc">Precio: Mayor a Menor</option>
-                            </select>
-                        </div>
-                        <div className="filter-group">
-                            <label>Talla</label>
-                            <select value={filters.size} onChange={(e) => handleFilterChange('size', e.target.value)}>
-                                <option value="all">Todas</option>
-                                <option value="7">US 7</option>
-                                <option value="8">US 8</option>
-                                <option value="9">US 9</option>
-                                <option value="10">US 10</option>
-                            </select>
-                        </div>
-                    </aside>
-
-                    <main className="cat-products">
-                        <div className="grid product-grid">
-                            {filteredProducts.map(p => <ProductCard key={p.id} {...p} />)}
-                        </div>
-                        {filteredProducts.length === 0 && <p style={{ padding: '2rem', textAlign: 'center', color: '#666' }}>Estamos reponiendo stock para esta colección.</p>}
-                    </main>
+            {/* 1. HERO EDITORIAL */}
+            <header className="cluster-hero" style={{ backgroundImage: `url(${heroImage})` }}>
+                <div className="hero-overlay"></div>
+                <div className="container hero-content">
+                    <motion.h1 
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.6 }}
+                    >
+                        {title}
+                    </motion.h1>
+                    <motion.p
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.2, duration: 0.6 }}
+                    >
+                        {description}
+                    </motion.p>
                 </div>
+            </header>
 
-                {/* RICH PILLAR CONTENT (SEO ENGINE) */}
-                {clusterData?.content && (
-                    <section className="seo-content-block" style={{ marginTop: '4rem', padding: '3rem', background: '#f5f5f5', borderRadius: '8px' }}>
-                        <div className="seo-text" dangerouslySetInnerHTML={{ __html: clusterData.content }}></div>
+            {/* 2. STICKY NAV & FILTERS (IKEA Style Pills) */}
+            <nav className="cluster-nav-sticky">
+                <div className="container nav-flex">
+                    <div className="breadcrumb-wrapper">
+                        <Breadcrumbs items={[
+                            { label: 'Home', url: '/' },
+                            { label: category, url: `/${category}` },
+                            ...(brand ? [{ label: brand, url: `/${category}/${brand}` }] : []),
+                            ...(model ? [{ label: model, url: `/${category}/${brand}/${model}` }] : [])
+                        ]} />
+                    </div>
+                    <div className="filter-pills">
+                        <select className="pill-select" value={filters.sort} onChange={(e) => handleFilterChange('sort', e.target.value)}>
+                            <option value="newest">Más nuevos</option>
+                            <option value="price-asc">Precio: Menor a Mayor</option>
+                            <option value="price-desc">Precio: Mayor a Menor</option>
+                        </select>
+                        <select className="pill-select" value={filters.size} onChange={(e) => handleFilterChange('size', e.target.value)}>
+                            <option value="all">Talla: Todas</option>
+                            <option value="7">US 7</option>
+                            <option value="8">US 8</option>
+                            <option value="9">US 9</option>
+                            <option value="10">US 10</option>
+                        </select>
+                    </div>
+                </div>
+            </nav>
 
-                        {/* FAQ Schema Markup & Visuals */}
-                        {clusterData.faq && clusterData.faq.length > 0 && (
-                            <div className="cluster-faq" style={{ marginTop: '2rem', borderTop: '1px solid #ddd', paddingTop: '2rem' }}>
-                                <h3>Preguntas Frecuentes</h3>
-                                <div className="faq-grid">
-                                    {clusterData.faq.map((item, index) => (
-                                        <div key={index} className="faq-item" style={{ marginBottom: '1rem' }}>
-                                            <strong style={{ display: 'block', marginBottom: '0.5rem' }}>{item.q}</strong>
-                                            <p style={{ margin: 0, color: '#555' }}>{item.a}</p>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        )}
-
-                        {/* FAQ Schema Script */}
-                        {clusterData.faq && (
-                            <script type="application/ld+json">
-                                {JSON.stringify({
-                                    "@context": "https://schema.org",
-                                    "@type": "FAQPage",
-                                    "mainEntity": clusterData.faq.map(f => ({
-                                        "@type": "Question",
-                                        "name": f.q,
-                                        "acceptedAnswer": {
-                                            "@type": "Answer",
-                                            "text": f.a
-                                        }
-                                    }))
-                                })}
-                            </script>
-                        )}
+            <main className="container cluster-main">
+                {/* 3. MÁS VENDIDOS / SELECCIÓN INICIAL */}
+                {bestSellers.length > 0 && (
+                    <section className="section-padding">
+                        <div className="section-header">
+                            <h2>Más elegidos</h2>
+                            <p className="section-sub">Los favoritos de la comunidad este mes.</p>
+                        </div>
+                        <div className="best-sellers-grid">
+                            {bestSellers.map(p => <ProductCard key={p.id} {...p} />)}
+                        </div>
                     </section>
                 )}
-            </div>
+
+                {/* 4. EDITORIAL BANNER INLINE */}
+                {activeContent?.editorialBanner && (
+                    <section className="editorial-banner-inline">
+                        <div className="eb-image" style={{ backgroundImage: `url(${activeContent.editorialBanner.image})` }}></div>
+                        <div className="eb-content">
+                            <span className="eb-tag">Destacado</span>
+                            <h3>{activeContent.editorialBanner.title}</h3>
+                            <p>{activeContent.editorialBanner.copy}</p>
+                            <Link to={activeContent.editorialBanner.ctaLink} className="btn-eb">EXPLORAR</Link>
+                        </div>
+                    </section>
+                )}
+
+                {/* 5. GRID COMPLETO */}
+                {remainingProducts.length > 0 && (
+                    <section className="section-padding">
+                        <div className="section-header">
+                            <h2>Catálogo Completo</h2>
+                            <p className="section-sub">{filteredProducts.length} productos encontrados.</p>
+                        </div>
+                        <div className="main-cluster-grid">
+                            {remainingProducts.map(p => <ProductCard key={p.id} {...p} />)}
+                        </div>
+                    </section>
+                )}
+
+                {/* 6. EXPLORAR POR CLUSTERS (SUBCATEGORÍAS) */}
+                {activeContent?.clusters && (
+                    <section className="section-padding clusters-section">
+                        <div className="section-header">
+                            <h2>Explorar Colecciones</h2>
+                        </div>
+                        <div className="clusters-row">
+                            {activeContent.clusters.map(c => (
+                                <Link key={c.id} to={c.link} className="cluster-card-mini">
+                                    <div className="cm-img"><img src={c.image} alt={c.label} /></div>
+                                    <span>{c.label}</span>
+                                </Link>
+                            ))}
+                        </div>
+                    </section>
+                )}
+
+                {/* 7. BLOG RELACIONADO */}
+                {activeContent?.blogPosts && (
+                    <section className="section-padding blog-related">
+                        <div className="section-header">
+                            <h2>Journal & Cultura</h2>
+                        </div>
+                        <div className="blog-grid-horizontal">
+                            {activeContent.blogPosts.map(post => (
+                                <Link key={post.id} to={`/blog/${post.slug}`} className="blog-mini-card">
+                                    <div className="bm-img" style={{ backgroundImage: `url(${post.image})` }}></div>
+                                    <div className="bm-body">
+                                        <span className="bm-tag">{post.tag}</span>
+                                        <h4>{post.title}</h4>
+                                    </div>
+                                </Link>
+                            ))}
+                        </div>
+                    </section>
+                )}
+
+                {/* 8. SEO BLOCK */}
+                {activeContent?.seo && (
+                    <section className="section-padding seo-optimized-section">
+                        <details className="seo-details">
+                            <summary className="seo-summary">
+                                <h3>{activeContent.seo.h1}</h3>
+                                <span className="view-more-text">Leer más</span>
+                            </summary>
+                            <div className="seo-content-expand">
+                                <p>{activeContent.seo.text}</p>
+                                {activeContent.seo.faqs && (
+                                    <div className="seo-faqs">
+                                        {activeContent.seo.faqs.map((faq, i) => (
+                                            <div key={i} className="faq-item">
+                                                <strong>{faq.q}</strong>
+                                                <p>{faq.a}</p>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                        </details>
+                    </section>
+                )}
+            </main>
         </div>
     );
 };

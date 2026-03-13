@@ -3,12 +3,30 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { PageMeta } from '../hooks/usePageMeta';
 import ProductCard from '../components/ProductCard';
 import { useCart } from '../context/CartContext';
-import { useProducts } from '../hooks/useProducts';
 import { Shield, Truck, CreditCard, ThumbsUp } from 'lucide-react';
+import { trackViewItem, trackAddToCart } from '../utils/analytics';
 import './Product.css';
 
+// Accordion Component for IKEA-style cleaner UI
+const Accordion = ({ title, children, defaultOpen = false }) => {
+    const [isOpen, setIsOpen] = useState(defaultOpen);
+    return (
+        <div className={`pdp-accordion ${isOpen ? 'open' : ''}`}>
+            <button className="pdp-accordion-header" onClick={() => setIsOpen(!isOpen)} type="button">
+                <span>{title}</span>
+                <span className="pdp-accordion-icon">{isOpen ? '−' : '+'}</span>
+            </button>
+            <div className="pdp-accordion-content">
+                <div className="pdp-accordion-inner">
+                    {children}
+                </div>
+            </div>
+        </div>
+    );
+};
+
 const Product = () => {
-    const { id, slug } = useParams(); // Support both IDs and Slugs
+    const { id, slug } = useParams();
     const navigate = useNavigate();
     const { addToCart } = useCart();
     const { getProductById, getProductBySlug, products, loading } = useProducts();
@@ -17,27 +35,23 @@ const Product = () => {
     const [activeImage, setActiveImage] = useState(null);
 
     useEffect(() => {
-        console.log("Product Page Params:", { id, slug });
-        console.log("Products Available:", products.length);
-
-        if (products.length > 0) {
-            console.log("Available Slugs:", products.map(p => p.slug));
-        }
-
         if (!loading && products.length > 0) {
             let found = null;
             if (slug) {
                 found = getProductBySlug(slug);
-                console.log("Searching by slug:", slug, "Found:", found);
             } else if (id) {
                 found = getProductById(id);
-                console.log("Searching by id:", id, "Found:", found);
             }
             setProduct(found || null);
-            if (found && found.images && found.images.length > 0) {
-                setActiveImage(found.images[0]);
-            } else if (found) {
-                setActiveImage(found.image);
+            if (found) {
+                trackViewItem(found);
+                
+                // Set initial active image
+                if (found.images && found.images.length > 0) {
+                    setActiveImage(found.images[0]);
+                } else {
+                    setActiveImage(found.image);
+                }
             }
         }
     }, [id, slug, products, loading, getProductById, getProductBySlug]);
@@ -50,20 +64,20 @@ const Product = () => {
             alert("Por favor selecciona una talla");
             return;
         }
+        trackAddToCart(product, selectedSize, 1);
         addToCart(product, selectedSize);
-        // Navigate to cart for feedback
         navigate('/cart');
     };
 
-    // Filtramos productos relacionados por categoría
     const RELATED = products.filter(p => p.category === product.category && p.id !== product.id).slice(0, 4);
+    const productImages = product.images && product.images.length > 0 ? product.images : [product.image];
 
     // Schema.org Data
     const productSchema = product ? {
         "@context": "https://schema.org/",
         "@type": "Product",
         "name": product.title,
-        "image": `https://lukstore.cl${product.image}`, // Mock domain
+        "image": `https://lukstore.cl${product.image}`,
         "description": product.seo?.description || product.description,
         "brand": {
             "@type": "Brand",
@@ -72,38 +86,14 @@ const Product = () => {
         "sku": product.sku,
         "offers": {
             "@type": "Offer",
-            "url": window.location.href, // Dynamic URL
+            "url": window.location.href,
             "priceCurrency": "CLP",
             "price": product.price,
             "availability": product.stock > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
-            "itemCondition": product.condition === 'new' ? "https://schema.org/NewCondition" : "https://schema.org/UsedCondition",
-            "shippingDetails": {
-                "@type": "OfferShippingDetails",
-                "shippingRate": {
-                    "@type": "MonetaryAmount",
-                    "value": 0,
-                    "currency": "CLP"
-                },
-                "deliveryTime": {
-                    "@type": "ShippingDeliveryTime",
-                    "handlingTime": {
-                        "@type": "QuantitativeValue",
-                        "minValue": 1,
-                        "maxValue": 2,
-                        "unitCode": "d"
-                    },
-                    "transitTime": {
-                        "@type": "QuantitativeValue",
-                        "minValue": 2,
-                        "maxValue": 5,
-                        "unitCode": "d"
-                    }
-                }
-            }
+            "itemCondition": product.condition === 'new' ? "https://schema.org/NewCondition" : "https://schema.org/UsedCondition"
         }
     } : null;
 
-    // Breadcrumbs
     const crumbs = [
         { label: 'Home', url: '/' },
         ...(product?.hierarchy ? product.hierarchy.map((h, i) => ({
@@ -112,8 +102,7 @@ const Product = () => {
         })) : [])
     ];
 
-    // SEO Title Logic
-    const h1Title = `${product.title} ${product.condition === 'new' ? '- Original' : '- Pre-Loved'} - Envío a todo Chile`;
+    const h1Title = `${product.title} ${product.condition === 'new' ? '' : '- Pre-Loved'}`;
 
     return (
         <div className="product-page">
@@ -128,154 +117,134 @@ const Product = () => {
             )}
 
             <div className="container product-main">
-                {/* Breadcrumbs */}
-                <div style={{ width: '100%', marginBottom: '1.5rem' }}>
+                {/* Left: Gallery with Thumbnails */}
+                <div className="product-gallery">
                     <nav className="breadcrumbs-container">
                         {crumbs.map((c, i) => (
                             <span key={i}>
                                 <Link to={c.url} className={i === crumbs.length -1 ? 'active' : ''}>{c.label}</Link>
-                                {i < crumbs.length - 1 && <span style={{ margin: '0 0.75rem', color: '#ccc' }}>/</span>}
+                                {i < crumbs.length - 1 && <span className="breadcrumb-separator">/</span>}
                             </span>
                         ))}
                     </nav>
-                </div>
 
-                {/* Left: Gallery */}
-                <div className="product-gallery">
                     <div className="main-image-container">
                         <img 
-                            src={activeImage || product.image} 
-                            alt={h1Title} 
+                            src={activeImage || productImages[0]} 
+                            alt={`${product.title} vista principal`} 
                             className="main-image zoom-effect" 
                         />
-                        {product.condition === 'used' && <span className="pdp-badge-used">Pre-Loved</span>}
-                        {product.stock <= 2 && product.stock > 0 && <span className="badge-low-stock">¡Últimos pares!</span>}
+                        {product.condition === 'used' && <span className="pdp-badge pdp-badge-used">Pre-Loved</span>}
+                        {product.stock <= 2 && product.stock > 0 && <span className="pdp-badge pdp-badge-low-stock">¡Últimos pares!</span>}
                     </div>
                     
                     {/* Thumbnail Gallery */}
-                    {product.images && product.images.length > 1 && (
+                    {productImages.length > 1 && (
                         <div className="thumbnail-gallery">
-                            {product.images.map((imgSrc, index) => (
+                            {productImages.map((imgSrc, index) => (
                                 <button 
                                     key={index}
                                     className={`thumbnail-btn ${activeImage === imgSrc ? 'active' : ''}`}
                                     onClick={() => setActiveImage(imgSrc)}
-                                    aria-label={`View image ${index + 1}`}
+                                    aria-label={`Ver imagen ${index + 1}`}
+                                    type="button"
                                 >
-                                    <img src={imgSrc} alt={`${product.title} view ${index + 1}`} />
+                                    <img src={imgSrc} alt={`${product.title} miniatura ${index + 1}`} />
                                 </button>
                             ))}
                         </div>
                     )}
                 </div>
 
-                {/* Right: Info */}
-                <div className="product-details">
-                    <div className="p-header">
-                        <span className="p-brand" style={{ textTransform: 'uppercase', letterSpacing: '2px', fontSize: '0.8rem', color: '#999' }}>
-                            {product.specs?.brand || product.brand} / {product.specs?.releaseYear || ''}
-                        </span>
-                        <h1 className="p-title">{h1Title}</h1>
-                        <p className="p-price">
-                            {new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP' }).format(product.price)}
-                            {product.condition === 'used' && <span className="price-note"> (Pre-Loved)</span>}
-                        </p>
-                    </div>
-
-                    <div className="p-condition-info">
-                        <strong>
-                            Estado: {product.condition === 'new' ? 'Nuevo / Deadstock (DS)' : 'Pre-Loved / Usado'}
-                        </strong>
-                        <p>
-                            {product.condition === 'new'
-                                ? 'Producto 100% nuevo, verificado por expertos. Caja original intacta.'
-                                : 'Producto verificado. Condición certificada 9/10.'}
-                        </p>
-                    </div>
-
-                    <div className="size-selector">
-                        <div className="size-header">
-                            <label>Seleccionar Talla (US)</label>
-                            <Link to="/guia-tallas" className="size-guide-link">Ver guía de tallas</Link>
+                {/* Right: Sticky Info */}
+                <div className="product-sidebar">
+                    <div className="product-sticky-info">
+                        <div className="p-header">
+                            <span className="p-brand">
+                                {product.specs?.brand || product.brand} {product.specs?.releaseYear ? `/ ${product.specs.releaseYear}` : ''}
+                            </span>
+                            <h1 className="p-title">{h1Title}</h1>
+                            <p className="p-price">
+                                {new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP' }).format(product.price)}
+                            </p>
                         </div>
-                        <div className="size-options">
-                            {['7', '8', '8.5', '9', '10', '11', '12'].map(s => (
-                                <button
-                                    key={s}
-                                    className={`size-btn ${selectedSize === s ? 'active' : ''}`}
-                                    onClick={() => setSelectedSize(s)}
-                                >
-                                    {s}
-                                </button>
-                            ))}
-                        </div>
-                    </div>
 
-                    <div className="p-actions" style={{ marginTop: '2rem' }}>
-                        <button
-                            className="btn btn-primary btn-block add-to-cart-btn"
-                            onClick={handleAddToCart}
-                        >
-                            AGREGAR AL CARRITO
-                        </button>
-
-                        {/* TRUST SIGNALS BLOCK */}
-                        <div className="trust-signals">
-                            <div className="trust-item">
-                                <Shield size={20} strokeWidth={1.5} />
-                                <div>
-                                    <strong>Autenticidad</strong>
-                                    <span>100% Verificado</span>
-                                </div>
+                        <div className="size-selector">
+                            <div className="size-header">
+                                <label>Tallas disponibles (US)</label>
+                                <button className="size-guide-link" type="button">Guía de tallas</button>
                             </div>
-                            <div className="trust-item">
-                                <Truck size={20} strokeWidth={1.5} />
-                                <div>
-                                    <strong>Envío Rápido</strong>
-                                    <span>Todo Chile</span>
-                                </div>
-                            </div>
-                            <div className="trust-item">
-                                <CreditCard size={20} strokeWidth={1.5} />
-                                <div>
-                                    <strong>Pago Seguro</strong>
-                                    <span>Hasta 6 cuotas</span>
-                                </div>
-                            </div>
-                            <div className="trust-item">
-                                <ThumbsUp size={20} strokeWidth={1.5} />
-                                <div>
-                                    <strong>Garantía</strong>
-                                    <span>Satisfacción total</span>
-                                </div>
+                            <div className="size-grid">
+                                {(product.sizes || []).map(s => (
+                                    <button
+                                        key={s.size}
+                                        className={`size-btn ${selectedSize === s.size ? 'active' : ''} ${s.stock === 0 ? 'disabled' : ''}`}
+                                        onClick={() => s.stock > 0 && setSelectedSize(s.size)}
+                                        disabled={s.stock === 0}
+                                        type="button"
+                                    >
+                                        <span className="size-label">{s.size.replace(' us', '').replace(' US', '').toUpperCase()}</span>
+                                    </button>
+                                ))}
                             </div>
                         </div>
 
-                        {/* LONG DESCRIPTION (HTML) */}
-                        {product.longDescription ? (
-                            <div className="p-long-desc" style={{ marginTop: '3rem', borderTop: '1px solid #eee', paddingTop: '2rem' }}>
-                                <div dangerouslySetInnerHTML={{ __html: product.longDescription }} />
-                            </div>
-                        ) : (
-                            <div className="p-short-desc" style={{ marginBottom: '2rem', marginTop: '2rem' }}>
-                                <h3 style={{ fontSize: '0.9rem', textTransform: 'uppercase', marginBottom: '0.5rem', fontWeight: 'bold' }}>Descripción</h3>
-                                <p style={{ lineHeight: '1.6', color: '#444' }}>{product.description}</p>
-                            </div>
-                        )}
+                        <div className="p-actions">
+                            <button
+                                className="btn btn-primary add-to-cart-btn"
+                                onClick={handleAddToCart}
+                            >
+                                Añadir a la cesta
+                            </button>
+                        </div>
+
+                        {/* Info Accordions */}
+                        <div className="p-accordions">
+                            <Accordion title="Descripción" defaultOpen={true}>
+                                {product.longDescription ? (
+                                    <div className="richtext" dangerouslySetInnerHTML={{ __html: product.longDescription }} />
+                                ) : (
+                                    <p>{product.description || product.shortDescription}</p>
+                                )}
+                            </Accordion>
+
+                            <Accordion title="Condición">
+                                <p>
+                                    <strong>{product.condition === 'new' ? 'Nuevo / Deadstock (DS)' : 'Pre-Loved / Usado'}</strong><br/>
+                                    {product.condition === 'new'
+                                        ? 'Producto 100% nuevo y sin uso. Autenticidad garantizada y verificado por nuestros expertos. Incluye caja original y accesorios correspondientes.'
+                                        : 'Producto usado en excelente estado. Ha pasado por nuestro riguroso control de calidad para garantizar su autenticidad y condición funcional.'}
+                                </p>
+                            </Accordion>
+
+                            <Accordion title="Envío y Devoluciones">
+                                <ul className="info-list">
+                                    <li><Truck size={16}/> Envío a todo Chile vía Starken o Chilexpress.</li>
+                                    <li><Shield size={16}/> Autenticidad 100% garantizada en todos nuestros productos.</li>
+                                    <li><CreditCard size={16}/> Compra segura. Aceptamos múltiples métodos de pago.</li>
+                                </ul>
+                                <p style={{marginTop: '0.5rem', fontSize: '0.85rem', color: '#666'}}>
+                                    Revisa nuestras políticas completas de <Link to="/support/shipping">envíos</Link> y <Link to="/support/returns">devoluciones</Link>.
+                                </p>
+                            </Accordion>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            {/* Related - Cross Sell */}
-            <div className="container related-products" style={{ marginTop: '4rem', paddingBottom: '4rem' }}>
-                <div className="section-header">
-                    <h2>También te podría interesar</h2>
-                    <Link to="/hombre" className="link-arrow">Ver todo</Link>
+            {/* Related Products */}
+            {RELATED.length > 0 && (
+                <div className="related-section">
+                    <div className="container">
+                        <div className="section-header">
+                            <h2>Productos Similares</h2>
+                        </div>
+                        <div className="grid product-grid">
+                            {RELATED.map(p => <ProductCard key={p.id} {...p} />)}
+                        </div>
+                    </div>
                 </div>
-                <div className="grid product-grid">
-                    {RELATED.map(p => <ProductCard key={p.id} {...p} />)}
-                </div>
-            </div>
+            )}
         </div>
     );
 };

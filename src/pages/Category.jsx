@@ -5,6 +5,7 @@ import SEOBlock from '../components/SEOBlock';
 import './Category.css';
 
 import { useProducts } from '../hooks/useProducts';
+import { trackViewItemList } from '../utils/analytics';
 
 // Content Config
 const CATEGORY_META = {
@@ -56,6 +57,13 @@ const Category = ({ type }) => {
 
         setProducts([...result]);
     }, [type, filters, loading, getProductsByCategory]);
+
+    // GA4 Tracking
+    React.useEffect(() => {
+        if (products.length > 0) {
+            trackViewItemList(products, `Categoría: ${type}`, `cat_${type}`);
+        }
+    }, [products, type]);
 
     if (!meta) return <div>Category not found</div>;
 

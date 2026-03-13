@@ -9,7 +9,7 @@ const Footer = () => {
                 <div className="footer-top">
                     {/* Col 1: Brand */}
                     <div className="footer-col brand-col">
-                        <img src="/assets/logo-isotype.png" alt="Lukstore Isotype" className="footer-iso" style={{ width: '40px', marginBottom: '1rem' }} />
+                        <img src="/assets/logo-heritage.png" alt="Lukstore Logo" className="footer-iso" style={{ width: '120px', marginBottom: '1.5rem', mixBlendMode: 'screen' }} />
                         <h4 className="footer-logo">LUKSTORE</h4>
                         <p className="footer-desc">
                             Selected street goods.

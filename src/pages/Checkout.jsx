@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { PageMeta } from '../hooks/usePageMeta';
 import { supabase } from '../supabase';
+import { trackAddShippingInfo, trackAddPaymentInfo } from '../utils/analytics';
 import './Cart.css'; // Reusing Cart styles for layout
 
 const Checkout = () => {
@@ -89,6 +90,17 @@ const Checkout = () => {
                 }
 
                 if(fnData?.init_point) {
+                     // Fire GA4 Events right before leaving for Payment Gateway
+                     trackAddShippingInfo(cartItems, cartTotal, "Standard");
+                     trackAddPaymentInfo(cartItems, cartTotal, "MercadoPago");
+                     
+                     // Store order details temporarily for 'purchase' tracking on Success page
+                     sessionStorage.setItem('lastOrderGA4', JSON.stringify({
+                         cartItems,
+                         cartTotal,
+                         transactionId: orderData.id
+                     }));
+
                      // Redirect to MP
                      clearCart();
                      window.location.href = fnData.init_point;

@@ -25,6 +25,7 @@
     font-size: 2.5rem;
     font-weight: 800;
     letter-spacing: -0.03em;
+    margin-bottom: 0.5rem;
 }
 
 .empty-cart-container p {
@@ -511,6 +512,12 @@
 }
 
 @media (max-width: 768px) {
+    .cart-title {
+        font-size: 1.8rem;
+    }
+    .empty-cart-container h1 {
+        font-size: 1.8rem;
+    }
     .cart-grid {
         grid-template-columns: 1fr;
     }

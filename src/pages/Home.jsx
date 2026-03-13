@@ -206,18 +206,17 @@ const Home = () => {
                         <a href="https://www.instagram.com/lukstore._/" target="_blank" rel="noreferrer" className="btn btn-outline">Seguir en Instagram</a>
                     </div>
                     <div className="ig-grid">
-                        {/* 9 Placeholder Images mimicking an IG feed */}
-                        {/* 9 Placeholder Images mimicking an IG feed */
-                            [
-                                '/assets/prod-jordan1.png',
-                                '/assets/prod-jordan4.png',
-                                '/assets/prod-airmax.png',
-                                '/assets/hero-home.png',
-                                '/assets/banner-sale.png',
-                                '/assets/cat-streetwear.png',
-                                '/assets/prod-jordan4-back.png',
-                                '/assets/jordan_4_cement_lifestyle.png',
-                                '/assets/cat-basketball.png'
+                        {/* Instagram Feed - @lukstore._ */}
+                        {[
+                                '/assets/instagram/ig-1.jpg',
+                                '/assets/instagram/ig-2.jpg',
+                                '/assets/instagram/ig-3.jpg',
+                                '/assets/instagram/ig-4.jpg',
+                                '/assets/instagram/ig-5.jpg',
+                                '/assets/instagram/ig-6.jpg',
+                                '/assets/instagram/ig-7.jpg',
+                                '/assets/instagram/ig-8.jpg',
+                                '/assets/instagram/ig-9.jpg'
                             ].map((src, i) => (
                                 <a key={i} href="https://www.instagram.com/lukstore._/" target="_blank" rel="noreferrer" className="ig-item">
                                     <img src={src} alt="Instagram Post" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />

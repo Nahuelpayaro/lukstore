@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import './ProductCard.css';
 
-const ProductCard = ({ id, image, title, price, category, condition, discount, originalPrice, isDrop, hierarchy, slug }) => {
+const ProductCard = ({ id, image, title, price, category, condition, discount, originalPrice, isDrop, hierarchy, slug, sizes }) => {
     // The instruction implies that 'product' object is passed, and 'loading' state is managed.
     // For this change, we'll assume 'product' is available and 'loading' state is handled
     // by the parent or within the component (e.g., using useState).
@@ -50,6 +50,11 @@ const ProductCard = ({ id, image, title, price, category, condition, discount, o
                         </p>
                     )}
                 </div>
+                {sizes && sizes.length > 0 && (
+                    <div className="card-sizes" style={{ fontSize: '0.8rem', color: '#666', marginTop: '0.5rem' }}>
+                        Tallas: {sizes.map(s => s.size).join(', ')}
+                    </div>
+                )}
                 <button className="btn-view-product">Ver producto</button>
             </div>
         </Link>

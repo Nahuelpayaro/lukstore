@@ -2,13 +2,19 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { PageMeta } from '../hooks/usePageMeta';
-import { Trash2, Plus, Minus, ArrowLeft } from 'lucide-react';
 import { useCart } from '../context/CartContext';
+import { trackViewCart, trackRemoveFromCart, trackBeginCheckout } from '../utils/analytics';
 import './Cart.css';
 
 const Cart = () => {
     const { cartItems, cartTotal, removeFromCart, updateQuantity } = useCart();
     const navigate = useNavigate();
+
+    React.useEffect(() => {
+        if (cartItems.length > 0) {
+            trackViewCart(cartItems, cartTotal);
+        }
+    }, [cartItems, cartTotal]);
 
     if (cartItems.length === 0) {
         return (
@@ -65,7 +71,10 @@ const Cart = () => {
                                     </div>
                                     <button
                                         className="remove-btn"
-                                        onClick={() => removeFromCart(item.id, item.size)}
+                                        onClick={() => {
+                                            trackRemoveFromCart(item);
+                                            removeFromCart(item.id, item.size);
+                                        }}
                                     >
                                         <Trash2 size={18} />
                                     </button>
@@ -96,7 +105,10 @@ const Cart = () => {
                     </div>
                     <button
                         className="btn btn-primary btn-block checkout-btn"
-                        onClick={() => navigate('/checkout')}
+                        onClick={() => {
+                            trackBeginCheckout(cartItems, cartTotal);
+                            navigate('/checkout');
+                        }}
                     >
                         Finalizar compra
                     </button>

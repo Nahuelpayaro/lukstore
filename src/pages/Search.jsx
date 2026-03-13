@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 import ProductCard from '../components/ProductCard';
 import { useProducts } from '../hooks/useProducts';
 import { PageMeta } from '../hooks/usePageMeta';
+import { trackViewItemList } from '../utils/analytics';
 import './Category.css'; // Re-use category grid styles
 
 const Search = () => {
@@ -15,9 +16,16 @@ const Search = () => {
         if (!query) return [];
         return products.filter(p =>
             p.title.toLowerCase().includes(query.toLowerCase()) ||
-            p.category.toLowerCase().includes(query.toLowerCase())
+            (p.hierarchy && p.hierarchy.some(cat => cat.toLowerCase().includes(query.toLowerCase())))
         );
     }, [products, query]);
+
+    // GA4 Tracking
+    React.useEffect(() => {
+        if (results.length > 0) {
+            trackViewItemList(results, `Búsqueda: ${query}`, `search_results`);
+        }
+    }, [results, query]);
 
     return (
         <div className="category-page">
