@@ -40,7 +40,12 @@ export const trackVirtualPageView = (url, title) => {
     window.dataLayer.push({
         event: "virtual_page_view",
         page_location: url,
-        page_title: title
+        page_path: window.location.pathname + window.location.search,
+        page_title: title,
+        page_referrer: document.referrer || "",
+        language: navigator.language || navigator.userLanguage || "",
+        screen_resolution: `${window.screen.width}x${window.screen.height}`,
+        user_agent: navigator.userAgent
     });
 };
 
