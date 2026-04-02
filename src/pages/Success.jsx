@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { CheckCircle, Loader2 } from 'lucide-react';
 import { PageMeta } from '../hooks/usePageMeta';
-import { supabase } from '../supabase';
 import { trackPurchase } from '../utils/ecommerceTracker';
 
 const Success = () => {
@@ -14,36 +13,20 @@ const Success = () => {
 
     useEffect(() => {
         const verifyPayment = async () => {
-             if(orderId && paymentStatus === 'approved') {
-                 // Optionally update order status in Supabase to 'paid' if real backend exists
-                 if (typeof supabase.from('orders').update === 'function') {
-                     const { error } = await supabase
-                        .from('orders')
-                        .update({ status: 'paid' })
-                        .eq('id', orderId);
-                     if(error) console.error("Error updating order status:", error);
-                 }
-                 
-                 // Retrieve order from session to render receipt and trigger GA4
-                 const lastOrderStr = sessionStorage.getItem('lastOrderGA4');
-                 if (lastOrderStr) {
-                     try {
-                         const orderData = JSON.parse(lastOrderStr);
-                         setOrderDetails(orderData); // Save to state to render it in UI
-
-                         // Trigger GA4 Purchase Event
-                         trackPurchase(orderData.cartItems, orderData.cartTotal, orderData.transactionId || orderId, 0, 0, orderData.customer);
-                         
-                         // Clean up so refresh doesn't trigger GA4 twice!
-                         sessionStorage.removeItem('lastOrderGA4'); 
-                     } catch(e) {
-                         console.error("Error formatting GA4 purchase:", e);
-                     }
-                 }
-             }
-             
-             // Simulate small verification delay for UI smoothness
-             setTimeout(() => setIsVerifying(false), 800);
+            if (orderId && paymentStatus === 'approved') {
+                const lastOrderStr = sessionStorage.getItem('lastOrderGA4');
+                if (lastOrderStr) {
+                    try {
+                        const orderData = JSON.parse(lastOrderStr);
+                        setOrderDetails(orderData);
+                        trackPurchase(orderData.cartItems, orderData.cartTotal, orderData.transactionId || orderId, 0, 0, orderData.customer);
+                        sessionStorage.removeItem('lastOrderGA4');
+                    } catch(e) {
+                        console.error('Error procesando datos de orden:', e);
+                    }
+                }
+            }
+            setTimeout(() => setIsVerifying(false), 800);
         };
 
         verifyPayment();

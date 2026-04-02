@@ -2,16 +2,14 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { PageMeta } from '../hooks/usePageMeta';
-import { supabase } from '../supabase';
+import { createOrder } from '../lib/woocommerce';
 import { trackAddShippingInfo, trackAddPaymentInfo } from '../utils/ecommerceTracker';
-import './Cart.css'; // Reusing Cart styles for layout
+import './Cart.css';
 
 const Checkout = () => {
-
     const navigate = useNavigate();
     const { cartItems, cartTotal, clearCart } = useCart();
 
-    // Form State
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',
@@ -41,116 +39,59 @@ const Checkout = () => {
         setIsProcessing(true);
 
         try {
-            // Check if we have a real backend by verifying if insert function exists on the mock
-            const hasRealBackend = typeof supabase.from('orders').insert === 'function';
-
-            if (hasRealBackend) {
-                // 1. Create Order in Pending State
-                const { data: orderData, error: orderError } = await supabase
-                    .from('orders')
-                    .insert([{
-                        customer_name: `${formData.firstName} ${formData.lastName}`,
-                        customer_email: formData.email,
-                        customer_address: formData.address,
-                        customer_city: formData.city,
-                        customer_region: formData.region,
-                        total_amount: cartTotal,
-                        status: 'pending', // Pending payment
-                        payment_method: 'mercadopago'
-                    }])
-                    .select()
-                    .single();
-
-                if (orderError) throw orderError;
-
-                // 2. Create Order Items
-                if (orderData) {
-                    const orderItems = cartItems.map(item => ({
-                        order_id: orderData.id,
-                        product_id: item.id,
-                        product_title: item.title,
-                        quantity: item.quantity,
-                        price_at_purchase: parseInt(String(item.price).replace(/\./g, ''))
-                    }));
-
-                    const { error: itemsError } = await supabase
-                        .from('order_items')
-                        .insert(orderItems);
-
-                    if (itemsError) throw itemsError;
-
-                    // 3. Request Preference Form Edge Function
-                    const { data: fnData, error: fnError } = await supabase.functions.invoke('create-preference', {
-                        body: {
-                           orderItems: orderItems,
-                           orderId: orderData.id,
-                           payer: {
-                               email: formData.email,
-                               name: formData.firstName
-                           }
-                        }
-                    });
-
-                    if (fnError) {
-                         console.error("Function error details:", fnError)
-                         throw fnError;
-                    }
-
-                    if(fnData?.init_point) {
-                         // Fire GA4 Events right before leaving for Payment Gateway
-                         trackAddShippingInfo(cartItems, cartTotal, "Standard", formData);
-                         trackAddPaymentInfo(cartItems, cartTotal, "MercadoPago", formData);
-                         
-                         sessionStorage.setItem('lastOrderGA4', JSON.stringify({
-                             cartItems,
-                             cartTotal,
-                             transactionId: orderData.id,
-                             customer: formData
-                         }));
-
-                         clearCart();
-                         window.location.href = fnData.init_point;
-                    } else {
-                         throw new Error("No init_point received from MercadoPago");
-                    }
-                }
-            } else {
-                // Mock Frontend Flow for Demo & Tracking
-                console.log("Mocking MercadoPago payment flow...");
-                
-                // Fire GA4 Events
-                trackAddShippingInfo(cartItems, cartTotal, "Standard", formData);
-                trackAddPaymentInfo(cartItems, cartTotal, "MercadoPago", formData);
-                
-                const fakeOrderId = "ORD-" + Math.floor(100000 + Math.random() * 900000);
-                
-                // Store order details temporarily for 'purchase' tracking and receipt rendering
+            // Verificar que todos los items tengan wcId (vienen de WooCommerce)
+            const itemsSinWcId = cartItems.filter(item => !item.wcId);
+            if (itemsSinWcId.length > 0) {
+                // Fallback para productos del catálogo local (demo)
+                const fakeOrderId = 'ORD-' + Math.floor(100000 + Math.random() * 900000);
+                trackAddShippingInfo(cartItems, cartTotal, 'Standard', formData);
+                trackAddPaymentInfo(cartItems, cartTotal, 'Gateway', formData);
                 sessionStorage.setItem('lastOrderGA4', JSON.stringify({
                     cartItems,
                     cartTotal,
                     transactionId: fakeOrderId,
                     customer: formData
                 }));
-
-                // Simulate network payment gateway transition
-                setTimeout(() => {
-                    clearCart();
-                    navigate(`/success?status=approved&orderId=${fakeOrderId}`);
-                }, 1500); 
+                clearCart();
+                navigate(`/success?status=approved&orderId=${fakeOrderId}`);
+                return;
             }
 
+            // Crear orden en WooCommerce
+            const order = await createOrder({
+                customer: formData,
+                items: cartItems,
+            });
+
+            // Guardar datos para GA4 y recibo en /success
+            trackAddShippingInfo(cartItems, cartTotal, 'Standard', formData);
+            trackAddPaymentInfo(cartItems, cartTotal, 'Gateway', formData);
+            sessionStorage.setItem('lastOrderGA4', JSON.stringify({
+                cartItems,
+                cartTotal,
+                transactionId: order.id,
+                customer: formData
+            }));
+
+            clearCart();
+
+            // Redirigir a la URL de pago del gateway configurado en WooCommerce
+            window.location.href = order.payment_url;
+
         } catch (error) {
-            console.error('Error creating order/preference:', error);
+            console.error('Error creando orden en WooCommerce:', error);
             alert('Hubo un error al procesar tu pedido. Por favor intenta nuevamente.');
             setIsProcessing(false);
         }
     };
 
     return (
-        <div className="cart-page container"> {/* Reusing cart-page layout class for padding */}
+        <div className="cart-page container">
             <PageMeta title="Checkout" description="Finaliza tu compra de forma segura." />
             <h1 className="cart-title">Finalizar Compra</h1>
-            <p style={{ textAlign: 'center', marginBottom: '2rem', color: '#666' }}>Completa tus datos para finalizar tu pedido.</p>
+            <p style={{ textAlign: 'center', marginBottom: '2rem', color: '#666' }}>
+                Completa tus datos para finalizar tu pedido.
+            </p>
 
             <div className="cart-grid">
                 {/* Left: Form */}
@@ -190,36 +131,27 @@ const Checkout = () => {
                                     <option value="RM">Metropolitana</option>
                                     <option value="V">Valparaíso</option>
                                     <option value="VIII">Biobío</option>
-                                    {/* ... others */}
                                 </select>
                             </div>
                         </div>
 
-
                         <h3>Pago</h3>
                         <div className="payment-mock mp-payment">
                             <div className="payment-header">
-                                <span style={{ color: '#009EE3', fontWeight: '800' }}>mercadopago</span>
+                                <span style={{ fontWeight: '800' }}>Pago Seguro</span>
                             </div>
                             <div className="payment-option selected">
                                 <div className="mp-radio"></div>
-                                <span>Tarjetas (Crédito, Débito, Prepago)</span>
-                            </div>
-                            <div className="payment-logos">
-                                <span className="card-pill">Visa</span>
-                                <span className="card-pill">Mastercard</span>
-                                <span className="card-pill">Amex</span>
-                                <span className="card-pill">Mach</span>
+                                <span>Serás redirigido al gateway de pago al confirmar</span>
                             </div>
                             <p className="payment-note">
-                                Estás en un servidor seguro. Al confirmar, serás redirigido a MercadoPago para completar la transacción.
+                                Estás en un servidor seguro. Al confirmar, serás redirigido para completar el pago.
                             </p>
                         </div>
-
                     </form>
                 </div>
 
-                {/* Right: Summary Order */}
+                {/* Right: Order Summary */}
                 <div className="cart-summary">
                     <h2>Tu Pedido</h2>
                     <div className="order-items-preview">
@@ -231,7 +163,7 @@ const Checkout = () => {
                                     <span className="order-preview-qty">Cant: {item.quantity}</span>
                                 </div>
                                 <span className="order-preview-price">
-                                    ${(parseInt(String(item.price).replace(/\./g, '')) * item.quantity).toLocaleString('es-CL')}
+                                    ${(item.price * item.quantity).toLocaleString('es-CL')}
                                 </span>
                             </div>
                         ))}
@@ -241,8 +173,13 @@ const Checkout = () => {
                         <span>Total a Pagar</span>
                         <span>${cartTotal.toLocaleString('es-CL')}</span>
                     </div>
-                    <button type="submit" form="checkoutForm" className="btn btn-primary btn-block mp-btn" disabled={isProcessing}>
-                        {isProcessing ? 'Procesando conexión...' : 'Pagar con MercadoPago'}
+                    <button
+                        type="submit"
+                        form="checkoutForm"
+                        className="btn btn-primary btn-block mp-btn"
+                        disabled={isProcessing}
+                    >
+                        {isProcessing ? 'Procesando...' : 'Confirmar y Pagar'}
                     </button>
                     <Link to="/cart" className="continue-shopping" style={{ marginTop: '1rem' }}>
                         Volver al carrito
