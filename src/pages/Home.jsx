@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { PageMeta } from '../hooks/usePageMeta';
 import ProductCard from '../components/ProductCard';
+import { ProductSkeletonGrid } from '../components/ProductSkeleton';
 import { useProducts } from '../hooks/useProducts';
 import { trackViewItemList } from '../utils/ecommerceTracker';
 import './Home.css';
@@ -33,7 +34,7 @@ const Home = () => {
         }
     };
 
-    if (loading) return <div className="loading-screen"></div>;
+    // No full-page loading — skeletons inline per section
 
     return (
         <div className="home-clean">
@@ -72,25 +73,29 @@ const Home = () => {
             </section>
 
             {/* 2. CATEGORÍAS */}
-            <section className="container categories-section">
+            <section className="categories-section">
                 <motion.div
                     variants={staggerContainer}
                     initial="hidden"
                     whileInView="visible"
                     viewport={{ once: true }}
-                    className="categories-grid-5"
+                    className="categories-grid"
                 >
                     {[
-                        { title: 'Zapatillas', link: '/zapatillas', copy: 'Sneakers urbanos seleccionados por diseño, estado y autenticidad.' },
-                        { title: 'Hombre', link: '/hombre', copy: 'Ropa urbana pensada para el día a día.' },
-                        { title: 'Mujer', link: '/mujer', copy: 'Streetwear funcional con carácter.' },
-                        { title: 'Accesorios', link: '/accesorios', copy: 'Detalles que completan el fit.' },
-                        { title: 'Drops', link: '/drops', copy: 'Lanzamientos y selecciones limitadas.' }
+                        { title: 'Zapatillas', link: '/zapatillas', image: '/assets/cat-basketball.png', size: 'large' },
+                        { title: 'Hombre', link: '/hombre', image: '/assets/cat-streetwear.png', size: 'small' },
+                        { title: 'Mujer', link: '/mujer', image: '/assets/hero-home.png', size: 'small' },
+                        { title: 'Accesorios', link: '/accesorios', image: '/assets/hero-street-editorial.png', size: 'small' },
+                        { title: 'Drops', link: '/drops', image: '/assets/cat-drops.png', size: 'small' },
                     ].map((cat) => (
-                        <motion.div key={cat.title} variants={fadeInUp} className="cat-card-text">
+                        <motion.div key={cat.title} variants={fadeInUp} className={`cat-card ${cat.size}`}>
                             <Link to={cat.link}>
-                                <h3>{cat.title}</h3>
-                                <p>{cat.copy}</p>
+                                <div className="cat-card-bg" style={{ backgroundImage: `url(${cat.image})` }} />
+                                <div className="cat-card-overlay" />
+                                <div className="cat-card-content">
+                                    <h3>{cat.title}</h3>
+                                    <span>Ver colección →</span>
+                                </div>
                             </Link>
                         </motion.div>
                     ))}
@@ -103,19 +108,21 @@ const Home = () => {
                     <h2>Nuevos Ingresos</h2>
                     <Link to="/zapatillas" className="link-arrow">Ver todo</Link>
                 </div>
-                <div className="product-grid">
-                    {newArrivals.slice(0, 4).map(product => (
-                        <ProductCard key={product.id} {...product} />
-                    ))}
-                </div>
+                {loading ? <ProductSkeletonGrid count={4} /> : (
+                    <div className="product-grid">
+                        {newArrivals.slice(0, 4).map(product => (
+                            <ProductCard key={product.id} {...product} />
+                        ))}
+                    </div>
+                )}
             </section>
 
             {/* 4. BANNER EDITORIAL */}
             <section className="banner-sale">
                 <div className="banner-content">
-                    <h2>SUMMER SALE</h2>
-                    <p>Selección de temporada con descuentos limitados.</p>
-                    <Link to="/drops" className="btn btn-white">Ver ofertas</Link>
+                    <h2>NUEVOS DROPS</h2>
+                    <p>Lanzamientos limitados. Cuando se acaban, no vuelven.</p>
+                    <Link to="/drops" className="btn btn-white">Ver drops</Link>
                 </div>
             </section>
 
@@ -125,11 +132,13 @@ const Home = () => {
                     <h2>Selección Destacada</h2>
                     <Link to="/drops" className="link-arrow">Ver selección</Link>
                 </div>
-                <div className="product-grid">
-                    {featuredSelection.slice(0, 4).map(product => (
-                        <ProductCard key={product.id} {...product} />
-                    ))}
-                </div>
+                {loading ? <ProductSkeletonGrid count={4} /> : (
+                    <div className="product-grid">
+                        {featuredSelection.slice(0, 4).map(product => (
+                            <ProductCard key={product.id} {...product} />
+                        ))}
+                    </div>
+                )}
             </section>
 
             {/* 6. TESTIMONIOS */}

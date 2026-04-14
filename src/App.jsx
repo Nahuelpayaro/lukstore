@@ -1,6 +1,7 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { CartProvider } from './context/CartContext';
+import { ToastProvider } from './components/Toast';
 
 // Components
 import Header from './components/Header';
@@ -16,7 +17,6 @@ import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
 import Success from './pages/Success';
 import Search from './pages/Search';
-import Category from './pages/Category';
 import ClusterPage from './pages/ClusterPage';
 import Drops from './pages/Drops';
 
@@ -36,12 +36,11 @@ import Admin from './pages/Admin';
 import Tracking from './pages/Tracking';
 import FAQ from './pages/Support/FAQ';
 import NotFound from './pages/NotFound';
-import Login from './pages/Auth/Login';
-import Register from './pages/Auth/Register';
 
 function App() {
     return (
         <CartProvider>
+        <ToastProvider>
             <div className="app">
                 <Header />
                 <ScrollToTop />
@@ -76,10 +75,6 @@ function App() {
                         <Route path="/terminos" element={<Legal />} />
                         <Route path="/privacidad" element={<Legal />} />
 
-                        {/* Auth */}
-                        <Route path="/login" element={<Login />} />
-                        <Route path="/register" element={<Register />} />
-
                         {/* Admin & Tools */}
                         <Route path="/admin" element={<Admin />} />
                         <Route path="/tracking" element={<Tracking />} />
@@ -92,6 +87,7 @@ function App() {
                 <CookieBanner />
                 <WhatsAppWidget />
             </div>
+        </ToastProvider>
         </CartProvider>
     );
 }
