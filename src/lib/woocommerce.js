@@ -1,5 +1,6 @@
 const BASE_URL = `${(import.meta.env.VITE_WC_URL ?? '').replace(/\/$/, '')}/wp-json/wc/v3`;
 const AUTH = `consumer_key=${import.meta.env.VITE_WC_KEY}&consumer_secret=${import.meta.env.VITE_WC_SECRET}`;
+const AUTH_HEADER = 'Basic ' + btoa(`${import.meta.env.VITE_WC_KEY}:${import.meta.env.VITE_WC_SECRET}`);
 
 // Helper: lee un atributo por nombre (case-insensitive)
 const getAttr = (attributes = [], names) => {
@@ -13,15 +14,18 @@ export const normalizeProduct = (p) => {
     const categories = p.categories ?? [];
     const images = (p.images ?? []).map(img => img.src);
 
-    const hierarchy = categories.map(c => c.name);
-    const category = categories[0]?.name ?? '';
+    // Ordenar categorías: padre primero (parent=0), hijo después
+    const sortedCategories = [...categories].sort((a, b) => a.parent - b.parent);
+    const hierarchy = sortedCategories.map(c => c.name);
+    const category = sortedCategories[0]?.name ?? '';
 
     // Tallas desde atributo "Talle", "Talla" o "Size"
     const sizeAttr = (p.attributes ?? []).find(a =>
         ['talle', 'talla', 'size'].includes(a.name.toLowerCase())
     );
-    const sizes = sizeAttr?.options?.map(s => ({ size: s, stock: 1 }))
-        ?? [{ size: 'Única', stock: p.stock_quantity ?? (p.stock_status === 'instock' ? 1 : 0) }];
+    const productStock = p.stock_quantity ?? (p.stock_status === 'instock' ? 1 : 0);
+    const sizes = sizeAttr?.options?.map(s => ({ size: s, stock: productStock }))
+        ?? [{ size: 'Única', stock: productStock }];
 
     // Condición desde atributo "Condición" o "Condition"
     const conditionRaw = getAttr(p.attributes ?? [], ['condición', 'condicion', 'condition']);
@@ -64,7 +68,7 @@ export const normalizeProduct = (p) => {
                 .replace(/<[^>]*>/g, '')
                 .slice(0, 160),
         },
-        shortDescription: p.short_description || '',
+        shortDescription: (p.short_description || '').replace(/<[^>]*>/g, ''),
         longDescription: p.description || '',
         description: (p.description || '').replace(/<[^>]*>/g, ''),
         specs: {
@@ -150,12 +154,24 @@ export const createOrder = async ({ customer, items }) => {
         })),
     };
 
-    const res = await fetch(`${BASE_URL}/orders?${AUTH}`, {
+    const res = await fetch(`${BASE_URL}/orders`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': AUTH_HEADER,
+        },
         body: JSON.stringify(body),
     });
 
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return await res.json();
+};
+
+// Trae una orden por su ID numérico de WooCommerce
+export const getOrderById = async (id) => {
+    const res = await fetch(`${BASE_URL}/orders/${id}`, {
+        headers: { 'Authorization': AUTH_HEADER },
+    });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     return await res.json();
 };

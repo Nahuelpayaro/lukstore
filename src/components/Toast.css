@@ -1,0 +1,125 @@
+/* Toast — Radix UI styled */
+
+.toast-viewport {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    width: 380px;
+    max-width: calc(100vw - 2rem);
+    z-index: 9999;
+    outline: none;
+}
+
+.toast-root {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 1rem 1.25rem;
+    border-radius: 16px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    background: #fff;
+    border: 1px solid #eaeaea;
+    animation: toast-slide-in 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.toast-root[data-state='closed'] {
+    animation: toast-slide-out 0.2s ease-in forwards;
+}
+
+.toast-root[data-swipe='move'] {
+    transform: translateX(var(--radix-toast-swipe-move-x));
+}
+
+.toast-root[data-swipe='cancel'] {
+    transform: translateX(0);
+    transition: transform 0.2s ease-out;
+}
+
+.toast-root[data-swipe='end'] {
+    animation: toast-swipe-out 0.1s ease-out forwards;
+}
+
+/* Types */
+.toast-success .toast-icon { color: #22c55e; }
+.toast-error .toast-icon { color: #ef4444; }
+.toast-success { border-left: 3px solid #22c55e; }
+.toast-error { border-left: 3px solid #ef4444; }
+
+.toast-icon {
+    flex-shrink: 0;
+    margin-top: 1px;
+}
+
+.toast-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.toast-title {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #111;
+    margin-bottom: 0.2rem;
+}
+
+.toast-description {
+    font-size: 0.85rem;
+    color: #666;
+    line-height: 1.4;
+}
+
+.toast-close {
+    flex-shrink: 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #aaa;
+    padding: 2px;
+    border-radius: 4px;
+    transition: color 0.2s ease;
+    display: flex;
+    align-items: center;
+}
+
+.toast-close:hover {
+    color: #111;
+}
+
+@keyframes toast-slide-in {
+    from {
+        opacity: 0;
+        transform: translateX(calc(100% + 2rem));
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes toast-slide-out {
+    from {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateX(calc(100% + 2rem));
+    }
+}
+
+@keyframes toast-swipe-out {
+    from { transform: translateX(var(--radix-toast-swipe-end-x)); }
+    to { transform: translateX(calc(100% + 2rem)); }
+}
+
+@media (max-width: 480px) {
+    .toast-viewport {
+        bottom: 1rem;
+        right: 1rem;
+        left: 1rem;
+        width: auto;
+    }
+}

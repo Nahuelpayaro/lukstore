@@ -4,57 +4,49 @@ import { motion } from 'framer-motion';
 import { PageMeta } from '../hooks/usePageMeta';
 import ProductCard from '../components/ProductCard';
 import Breadcrumbs from '../components/Breadcrumbs';
-import { PRODUCTS } from '../data/products';
 import { getClusterData } from '../data/clusters';
 import { getCategoryContent } from '../data/categoryContent';
 import { trackViewItemList } from '../utils/ecommerceTracker';
+import { useProducts } from '../hooks/useProducts';
 import './ClusterPage.css';
 
 const ClusterPage = () => {
     const { category, brand, model } = useParams();
     const [filters, setFilters] = useState({ sort: 'newest', size: 'all' });
+    const { products, loading } = useProducts();
 
     // 1. Resolve Active Content (Hierarchy or Main Category)
     const activeContent = useMemo(() => {
-        // If it's a deep hierarchy (brand or model present)
-        if (brand || model) {
-            return getClusterData(category, brand, model);
-        }
-        // If it's a top-level category page
+        if (brand || model) return getClusterData(category, brand, model);
         return getCategoryContent(category);
     }, [category, brand, model]);
 
     // 2. Resolve Products for this page
     const filteredProducts = useMemo(() => {
-        let result = PRODUCTS.filter(p => {
-            const h = p.hierarchy.map(x => x.toLowerCase());
+        if (!products.length) return [];
+
+        let result = products.filter(p => {
+            const h = (p.hierarchy || []).map(x => x.toLowerCase());
             const catLower = category ? category.toLowerCase() : '';
 
-            // Hierarchy matching logic
             let catMatch = !category || h.includes(catLower);
-            
-            // Gender/Category fallback
+
             if (!catMatch && (catLower === 'hombre' || catLower === 'mujer')) {
                 const pGender = p.gender?.toLowerCase() || 'unisex';
                 catMatch = pGender === catLower || pGender === 'unisex';
             }
-            if (!catMatch && catLower === 'zapatillas') catMatch = true;
 
             const brandMatch = !brand || h.includes(brand.toLowerCase());
             const modelMatch = !model || h.includes(model.replace(/-/g, ' ').toLowerCase());
-            
+
             return catMatch && brandMatch && modelMatch;
         });
 
-        // Price formatting/sorting
-        if (filters.sort === 'price-asc') {
-            result.sort((a, b) => a.price - b.price);
-        } else if (filters.sort === 'price-desc') {
-            result.sort((a, b) => b.price - a.price);
-        }
+        if (filters.sort === 'price-asc') result.sort((a, b) => a.price - b.price);
+        else if (filters.sort === 'price-desc') result.sort((a, b) => b.price - a.price);
 
         return result;
-    }, [category, brand, model, filters]);
+    }, [products, category, brand, model, filters]);
 
     // GA4 Tracking
     useEffect(() => {
@@ -76,6 +68,8 @@ const ClusterPage = () => {
     const heroImage = activeContent?.hero?.image || activeContent?.heroImage || '/assets/hero-street-editorial.png';
 
     const handleFilterChange = (key, value) => setFilters(prev => ({ ...prev, [key]: value }));
+
+    if (loading) return <div style={{ height: '60vh' }} />;
 
     return (
         <div className="cluster-page-v2">

@@ -203,6 +203,19 @@
     margin-bottom: 2.5rem;
 }
 
+.size-selector.size-error .size-grid {
+    border: 1.5px solid #ef4444;
+    border-radius: 12px;
+    padding: 0.5rem;
+    animation: shake 0.3s ease;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-4px); }
+    75% { transform: translateX(4px); }
+}
+
 .size-header {
     display: flex;
     justify-content: space-between;
@@ -296,6 +309,13 @@
 
 .add-to-cart-btn:active {
     transform: scale(0.98);
+}
+
+.add-to-cart-btn:disabled {
+    background: #ccc;
+    color: #888;
+    cursor: not-allowed;
+    transform: none;
 }
 
 

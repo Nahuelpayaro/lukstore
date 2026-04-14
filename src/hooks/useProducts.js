@@ -1,6 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
 import { getProducts } from '../lib/woocommerce';
-import { PRODUCTS } from '../data/products';
 
 export const useProducts = () => {
     const [products, setProducts] = useState([]);
@@ -9,11 +8,10 @@ export const useProducts = () => {
 
     useEffect(() => {
         getProducts().then(data => {
-            setProducts(data.length > 0 ? data : PRODUCTS);
+            setProducts(data);
         }).catch(err => {
-            console.error('[useProducts] Error cargando WooCommerce, usando datos locales:', err);
+            console.error('[useProducts] Error cargando productos:', err);
             setError(err);
-            setProducts(PRODUCTS);
         }).finally(() => {
             setLoading(false);
         });

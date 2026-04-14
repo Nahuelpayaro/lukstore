@@ -4,14 +4,13 @@ import ProductCard from '../components/ProductCard';
 import { useProducts } from '../hooks/useProducts';
 import { PageMeta } from '../hooks/usePageMeta';
 import { trackViewItemList } from '../utils/ecommerceTracker';
-import './Category.css'; // Re-use category grid styles
+import './Search.css';
 
 const Search = () => {
     const location = useLocation();
     const query = new URLSearchParams(location.search).get('q') || '';
     const { products, loading } = useProducts();
 
-    // Live search filter
     const results = useMemo(() => {
         if (!query) return [];
         return products.filter(p =>
@@ -20,39 +19,34 @@ const Search = () => {
         );
     }, [products, query]);
 
-    // GA4 Tracking
     React.useEffect(() => {
         if (results.length > 0) {
-            trackViewItemList(results, `Búsqueda: ${query}`, `search_results`);
+            trackViewItemList(results, `Búsqueda: ${query}`, 'search_results');
         }
     }, [results, query]);
 
     return (
-        <div className="category-page">
+        <div className="search-page">
             <PageMeta title={`Resultados para "${query}"`} description={`Resultados de búsqueda para ${query} en Lukstore.`} />
-
-            <div className="container breadcrumbs" style={{ marginTop: '2rem' }}>
-                <span>Home</span> / <span className="current">Búsqueda</span>
-            </div>
-
-            <section className="container cat-body">
-                <div className="cat-products" style={{ width: '100%' }}> {/* Full width, no sidebar */}
-                    <h2 style={{ marginBottom: '2rem', fontSize: '1.5rem' }}>Resultados para: &quot;{query}&quot;</h2>
-
-                    {loading ? (
-                        <div style={{ padding: '3rem 0', textAlign: 'center' }}>Cargando...</div>
-                    ) : results.length > 0 ? (
-                        <div className="grid product-grid">
-                            {results.map(p => <ProductCard key={p.id} {...p} />)}
-                        </div>
-                    ) : (
-                        <div style={{ padding: '3rem 0', textAlign: 'center' }}>
-                            <h3>No encontramos resultados.</h3>
-                            <p>Intenta con otra palabra clave o revisa nuestras categorías.</p>
-                        </div>
-                    )}
+            <div className="container">
+                <div className="search-header">
+                    <h1>Resultados para: &quot;{query}&quot;</h1>
+                    {!loading && <p>{results.length} {results.length === 1 ? 'resultado' : 'resultados'} encontrados</p>}
                 </div>
-            </section>
+
+                {loading ? (
+                    <div style={{ padding: '3rem 0', textAlign: 'center' }}>Cargando...</div>
+                ) : results.length > 0 ? (
+                    <div className="search-grid">
+                        {results.map(p => <ProductCard key={p.id} {...p} />)}
+                    </div>
+                ) : (
+                    <div style={{ padding: '3rem 0', textAlign: 'center' }}>
+                        <h3>No encontramos resultados para &quot;{query}&quot;</h3>
+                        <p style={{ marginTop: '0.5rem', color: '#666' }}>Intentá con otra palabra clave o revisá nuestras categorías.</p>
+                    </div>
+                )}
+            </div>
         </div>
     );
 };

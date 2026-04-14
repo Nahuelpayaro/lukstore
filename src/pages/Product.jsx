@@ -3,9 +3,10 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { PageMeta } from '../hooks/usePageMeta';
 import ProductCard from '../components/ProductCard';
 import { useCart } from '../context/CartContext';
-import { Shield, Truck, CreditCard, ThumbsUp } from 'lucide-react';
+import { Shield, Truck, CreditCard } from 'lucide-react';
 import { trackViewItem, trackAddToCart, trackViewItemList } from '../utils/ecommerceTracker';
 import { useProducts } from '../hooks/useProducts';
+import { useToast } from '../components/Toast';
 import './Product.css';
 
 // Accordion Component for IKEA-style cleaner UI
@@ -31,7 +32,9 @@ const Product = () => {
     const navigate = useNavigate();
     const { addToCart } = useCart();
     const { getProductById, getProductBySlug, products, loading } = useProducts();
+    const { showToast } = useToast();
     const [selectedSize, setSelectedSize] = useState(null);
+    const [sizeError, setSizeError] = useState(false);
     const [product, setProduct] = useState(null);
     const [activeImage, setActiveImage] = useState(null);
 
@@ -67,12 +70,14 @@ const Product = () => {
 
     const handleAddToCart = () => {
         if (!selectedSize) {
-            alert("Por favor selecciona una talla");
+            setSizeError(true);
+            showToast({ title: 'Seleccioná una talla', description: 'Elegí tu talla antes de agregar al carrito.', type: 'error' });
             return;
         }
+        setSizeError(false);
         trackAddToCart(product, selectedSize, 1);
         addToCart(product, selectedSize);
-        navigate('/cart');
+        showToast({ title: '¡Agregado al carrito!', description: `${product.title} — Talla ${selectedSize}`, type: 'success' });
     };
 
     const RELATED = products.filter(p => p.category === product.category && p.id !== product.id).slice(0, 4);
@@ -83,7 +88,7 @@ const Product = () => {
         "@context": "https://schema.org/",
         "@type": "Product",
         "name": product.title,
-        "image": `https://lukstore.cl${product.image}`,
+        "image": product.image,
         "description": product.seo?.description || product.description,
         "brand": {
             "@type": "Brand",
@@ -117,9 +122,10 @@ const Product = () => {
                 description={product.seo?.description || `Compra ${product.title} en Lukstore. Garantía de autenticidad.`}
             />
             {productSchema && (
-                <script type="application/ld+json">
-                    {JSON.stringify(productSchema)}
-                </script>
+                <script
+                    type="application/ld+json"
+                    dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
+                />
             )}
 
             <div className="container product-main">
@@ -175,17 +181,17 @@ const Product = () => {
                             </p>
                         </div>
 
-                        <div className="size-selector">
+                        <div className={`size-selector ${sizeError ? 'size-error' : ''}`}>
                             <div className="size-header">
                                 <label>Tallas disponibles (US)</label>
-                                <button className="size-guide-link" type="button">Guía de tallas</button>
+                                <Link to="/guia-tallas" className="size-guide-link">Guía de tallas</Link>
                             </div>
                             <div className="size-grid">
                                 {(product.sizes || []).map(s => (
                                     <button
                                         key={s.size}
                                         className={`size-btn ${selectedSize === s.size ? 'active' : ''} ${s.stock === 0 ? 'disabled' : ''}`}
-                                        onClick={() => s.stock > 0 && setSelectedSize(s.size)}
+                                        onClick={() => { if (s.stock > 0) { setSelectedSize(s.size); setSizeError(false); } }}
                                         disabled={s.stock === 0}
                                         type="button"
                                     >
@@ -196,12 +202,18 @@ const Product = () => {
                         </div>
 
                         <div className="p-actions">
-                            <button
-                                className="btn btn-primary add-to-cart-btn"
-                                onClick={handleAddToCart}
-                            >
-                                Añadir a la cesta
-                            </button>
+                            {product.stock > 0 ? (
+                                <button
+                                    className="btn btn-primary add-to-cart-btn"
+                                    onClick={handleAddToCart}
+                                >
+                                    Agregar al carrito
+                                </button>
+                            ) : (
+                                <button className="btn btn-primary add-to-cart-btn" disabled>
+                                    Agotado
+                                </button>
+                            )}
                         </div>
 
                         {/* Info Accordions */}
@@ -230,7 +242,7 @@ const Product = () => {
                                     <li><CreditCard size={16}/> Compra segura. Aceptamos múltiples métodos de pago.</li>
                                 </ul>
                                 <p style={{marginTop: '0.5rem', fontSize: '0.85rem', color: '#666'}}>
-                                    Revisa nuestras políticas completas de <Link to="/support/shipping">envíos</Link> y <Link to="/support/returns">devoluciones</Link>.
+                                    Revisa nuestras políticas completas de <Link to="/envios">envíos</Link> y <Link to="/terminos">términos y condiciones</Link>.
                                 </p>
                             </Accordion>
                         </div>
