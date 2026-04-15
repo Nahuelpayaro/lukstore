@@ -157,6 +157,11 @@
     color: #666;
 }
 
+/* Showroom Banner */
+.showroom-banner h2 {
+    color: rgba(255, 255, 255, 1);
+}
+
 /* SEO / Trust Block */
 .trust-block {
     text-align: center;
