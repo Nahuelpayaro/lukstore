@@ -237,7 +237,7 @@ const Product = () => {
 
                             <Accordion title="Envío y Devoluciones">
                                 <ul className="info-list">
-                                    <li><Truck size={16}/> Envío a todo Chile vía Starken o Chilexpress.</li>
+                                    <li><Truck size={16}/> Envío a todo Chile vía Blue Express.</li>
                                     <li><Shield size={16}/> Autenticidad 100% garantizada en todos nuestros productos.</li>
                                     <li><CreditCard size={16}/> Compra segura. Aceptamos múltiples métodos de pago.</li>
                                 </ul>
