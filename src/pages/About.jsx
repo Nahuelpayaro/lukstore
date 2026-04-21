@@ -32,7 +32,8 @@ const About = () => {
             </section>
 
             {/* INTRO: QUIENES SOMOS */}
-            <section className="container" style={{ padding: '6rem 0' }}>
+            <section className="about-intro-section">
+                <div className="container">
                 <div className="about-grid-intro">
                     <div className="about-text-col">
                         <span className="subtitle-small">Nuestra Historia</span>
@@ -47,6 +48,7 @@ const About = () => {
                     <div className="about-img-col">
                         <img src="/assets/cat-streetwear.png" alt="Lukstore Origins" />
                     </div>
+                </div>
                 </div>
             </section>
 

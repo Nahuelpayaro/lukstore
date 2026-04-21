@@ -79,25 +79,67 @@
     padding: 0 5px;
 }
 
-/* Intro Grid — Historia */
+/* Intro Section — Historia */
+.about-intro-section {
+    padding: 8rem 0;
+    background: #fafafa;
+    overflow: hidden;
+}
+
 .about-grid-intro {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 5rem;
+    grid-template-columns: 3fr 2fr;
+    gap: 6rem;
     align-items: center;
 }
 
 .about-text-col {
     display: flex;
     flex-direction: column;
-    gap: 1.2rem;
+    gap: 1.5rem;
+    min-width: 0;
+}
+
+.subtitle-small {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #888;
+}
+
+.section-title {
+    font-size: 3.5rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    color: #111;
+    margin: 0;
+}
+
+.lead-text {
+    font-size: 1.15rem;
+    line-height: 1.7;
+    color: #333;
+    font-weight: 400;
+    margin: 0;
+}
+
+.about-text-col p:not(.lead-text) {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: #666;
+    margin: 0;
 }
 
 .about-img-col {
     position: relative;
-    height: 480px;
-    border-radius: 16px;
+    height: 520px;
+    border-radius: 20px;
     overflow: hidden;
+    min-width: 0;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.12);
 }
 
 .about-img-col img {
@@ -107,6 +149,71 @@
     object-position: center top;
     filter: grayscale(100%);
     display: block;
+    transition: filter 0.4s ease;
+}
+
+.about-img-col:hover img {
+    filter: grayscale(0%);
+}
+
+/* Timeline Section */
+.timeline-section {
+    background: #111;
+    padding: 7rem 0;
+}
+
+.timeline-section .section-title {
+    color: #fff;
+    text-align: center;
+    margin-bottom: 4rem;
+}
+
+.timeline-section .section-title.center {
+    text-align: center;
+}
+
+.timeline-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+}
+
+.timeline-item {
+    padding: 3rem 2.5rem;
+    background: #1a1a1a;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    border-top: 3px solid transparent;
+    transition: border-color 0.3s;
+}
+
+.timeline-item:hover {
+    border-top-color: #fff;
+}
+
+.year {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    color: #666;
+    text-transform: uppercase;
+}
+
+.timeline-item h3 {
+    font-size: 1.3rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: #fff;
+    letter-spacing: -0.01em;
+    margin: 0;
+}
+
+.timeline-item p {
+    font-size: 0.95rem;
+    color: #888;
+    line-height: 1.6;
+    margin: 0;
 }
 
 /* Grid Layouts */
@@ -228,7 +335,16 @@
     }
 
     .about-img-col {
-        height: 300px;
+        height: 280px;
+    }
+
+    .section-title {
+        font-size: 2.5rem;
+    }
+
+    .timeline-grid {
+        grid-template-columns: 1fr;
+        gap: 2px;
     }
 
     .editorial-grid {
