@@ -1,5 +1,5 @@
-// Vercel serverless function — calcula la tarifa de Blue Express via WooCommerce Store API
-// Usa un nonce generado por el endpoint custom /wp-json/lukstore/v1/nonce en WordPress.
+// Vercel serverless function — calcula la tarifa de Blue Express
+// usando el endpoint custom /wp-json/lukstore/v1/shipping-rate en WordPress.
 
 export default async function handler(req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -12,88 +12,36 @@ export default async function handler(req, res) {
     const { items = [], address = {} } = req.body ?? {};
 
     const WC_URL = (process.env.VITE_WC_URL ?? '').replace(/\/$/, '');
-    const STORE = `${WC_URL}/wp-json/wc/store/v1`;
-
-    const WP_API = `${WC_URL}/wp-json`;
+    const ENDPOINT = `${WC_URL}/wp-json/lukstore/v1/shipping-rate`;
 
     try {
-        // 1. Obtener nonce válido para el Store API desde nuestro endpoint custom
-        const nonceRes = await fetch(`${WP_API}/lukstore/v1/nonce`);
-        if (!nonceRes.ok) throw new Error(`Nonce endpoint error: ${nonceRes.status}`);
-        const { nonce } = await nonceRes.json();
-
-        // 2. Iniciar sesión de carrito para obtener la cookie de sesión de WooCommerce
-        const initRes = await fetch(`${STORE}/cart`, {
-            headers: { 'Content-Type': 'application/json', 'X-WC-Store-API-Nonce': nonce },
-        });
-        const setCookie = initRes.headers.get('set-cookie') ?? '';
-        const sessionCookie = setCookie.split(',')
-            .map(c => c.trim().split(';')[0])
-            .join('; ');
-
-        const sessionHeaders = {
-            'Content-Type': 'application/json',
-            'X-WC-Store-API-Nonce': nonce,
-            ...(sessionCookie ? { Cookie: sessionCookie } : {}),
-        };
-
-        // 3. Limpiar carrito previo y agregar los productos actuales
-        await fetch(`${STORE}/cart/items`, { method: 'DELETE', headers: sessionHeaders });
-
-        for (const item of items) {
-            if (!item.wcId) continue;
-            const addRes = await fetch(`${STORE}/cart/add-item`, {
-                method: 'POST',
-                headers: sessionHeaders,
-                body: JSON.stringify({ id: item.wcId, quantity: item.quantity ?? 1 }),
-            });
-            if (!addRes.ok) {
-                console.error('[get-shipping] add-item error:', addRes.status, await addRes.text());
-            }
-        }
-
-        // 3. Setear dirección de envío
-        const updateRes = await fetch(`${STORE}/cart/update-customer`, {
+        const wpRes = await fetch(ENDPOINT, {
             method: 'POST',
-            headers: sessionHeaders,
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                shipping_address: {
-                    country: 'CL',
-                    state: address.region ?? '',
-                    city: address.city ?? '',
-                    address_1: address.address ?? '',
-                },
+                state: address.region ?? '',
+                city:  address.city  ?? '',
+                items: items.map(i => ({ wcId: i.wcId, quantity: i.quantity ?? 1 })),
             }),
         });
-        if (!updateRes.ok) {
-            console.error('[get-shipping] update-customer error:', updateRes.status, await updateRes.text());
+
+        if (!wpRes.ok) {
+            const txt = await wpRes.text();
+            console.error('[get-shipping] WP endpoint error:', wpRes.status, txt);
+            return res.status(200).json({ cost: 0, label: 'Blue Express', rateId: null });
         }
 
-        // 4. Obtener carrito con tarifas calculadas
-        const cartRes = await fetch(`${STORE}/cart`, { headers: sessionHeaders });
-        const cart = await cartRes.json();
+        const data = await wpRes.json();
+        console.log('[get-shipping] WP response:', JSON.stringify(data));
 
-        console.log('[get-shipping] shipping_rates:', JSON.stringify(cart.shipping_rates ?? []));
-
-        const packages = cart.shipping_rates ?? [];
-        const allRates = packages.flatMap(pkg => pkg.shipping_rates ?? []);
-
-        const blueRate = allRates.find(r =>
-            (r.name ?? '').toLowerCase().includes('blue') ||
-            (r.rate_id ?? '').toLowerCase().includes('blue')
-        );
-
-        if (blueRate) {
-            // Store API devuelve precios en centavos (×100), CLP no tiene decimales
-            const cost = parseInt(blueRate.price ?? '0', 10) / 100;
+        if (data.found && data.rate) {
             return res.status(200).json({
-                cost,
-                label: blueRate.name ?? 'Blue Express',
-                rateId: blueRate.rate_id ?? '',
+                cost:   data.rate.cost,
+                label:  data.rate.label ?? 'Blue Express',
+                rateId: data.rate.id ?? '',
             });
         }
 
-        console.warn('[get-shipping] Blue Express no encontrado. allRates:', JSON.stringify(allRates));
         return res.status(200).json({ cost: 0, label: 'Blue Express', rateId: null });
 
     } catch (err) {
