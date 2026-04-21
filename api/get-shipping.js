@@ -1,5 +1,5 @@
 // Vercel serverless function — calcula la tarifa de Blue Express via WooCommerce Store API
-// Usa Application Passwords de WordPress para saltear la validación de nonce.
+// Usa un nonce generado por el endpoint custom /wp-json/lukstore/v1/nonce en WordPress.
 
 export default async function handler(req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -12,37 +12,32 @@ export default async function handler(req, res) {
     const { items = [], address = {} } = req.body ?? {};
 
     const WC_URL = (process.env.VITE_WC_URL ?? '').replace(/\/$/, '');
-    const WP_USER = process.env.WP_APP_USER ?? '';
-    const WP_PASS = process.env.WP_APP_PASSWORD ?? '';
     const STORE = `${WC_URL}/wp-json/wc/store/v1`;
 
-    if (!WP_USER || !WP_PASS) {
-        console.error('[get-shipping] WP_APP_USER o WP_APP_PASSWORD no configurados');
-        return res.status(500).json({ error: 'Credenciales de WordPress no configuradas' });
-    }
-
-    const AUTH = `Basic ${Buffer.from(`${WP_USER}:${WP_PASS}`).toString('base64')}`;
-
-    const headers = {
-        'Content-Type': 'application/json',
-        'Authorization': AUTH,
-    };
+    const WP_API = `${WC_URL}/wp-json`;
 
     try {
-        // 1. Iniciar sesión — el carrito de WC es session-based incluso con App Passwords
-        const initRes = await fetch(`${STORE}/cart`, { headers });
+        // 1. Obtener nonce válido para el Store API desde nuestro endpoint custom
+        const nonceRes = await fetch(`${WP_API}/lukstore/v1/nonce`);
+        if (!nonceRes.ok) throw new Error(`Nonce endpoint error: ${nonceRes.status}`);
+        const { nonce } = await nonceRes.json();
+
+        // 2. Iniciar sesión de carrito para obtener la cookie de sesión de WooCommerce
+        const initRes = await fetch(`${STORE}/cart`, {
+            headers: { 'Content-Type': 'application/json', 'X-WC-Store-API-Nonce': nonce },
+        });
         const setCookie = initRes.headers.get('set-cookie') ?? '';
-        // Extraer solo el par nombre=valor de la cookie (sin atributos como Path, SameSite, etc.)
         const sessionCookie = setCookie.split(',')
             .map(c => c.trim().split(';')[0])
             .join('; ');
 
         const sessionHeaders = {
-            ...headers,
+            'Content-Type': 'application/json',
+            'X-WC-Store-API-Nonce': nonce,
             ...(sessionCookie ? { Cookie: sessionCookie } : {}),
         };
 
-        // 2. Limpiar carrito previo de esta sesión y agregar los productos actuales
+        // 3. Limpiar carrito previo y agregar los productos actuales
         await fetch(`${STORE}/cart/items`, { method: 'DELETE', headers: sessionHeaders });
 
         for (const item of items) {
