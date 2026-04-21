@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { PageMeta } from '../hooks/usePageMeta';
-import { createOrder } from '../lib/woocommerce';
+import { createOrder, getBlueExpressRate } from '../lib/woocommerce';
 import { trackAddShippingInfo, trackAddPaymentInfo } from '../utils/ecommerceTracker';
 import './Cart.css';
 
@@ -20,6 +20,18 @@ const Checkout = () => {
     });
 
     const [isProcessing, setIsProcessing] = useState(false);
+    const [shippingRate, setShippingRate] = useState(null); // { methodId, methodTitle, cost }
+    const [shippingLoading, setShippingLoading] = useState(false);
+
+    React.useEffect(() => {
+        setShippingLoading(true);
+        getBlueExpressRate()
+            .then(rate => setShippingRate(rate))
+            .finally(() => setShippingLoading(false));
+    }, []);
+
+    const shippingCost = shippingRate?.cost ?? 0;
+    const orderTotal = cartTotal + shippingCost;
 
     if (cartItems.length === 0) {
         return (
@@ -61,6 +73,7 @@ const Checkout = () => {
             const order = await createOrder({
                 customer: formData,
                 items: cartItems,
+                shippingLine: shippingRate,
             });
 
             // Guardar datos para GA4 y recibo en /success
@@ -169,9 +182,24 @@ const Checkout = () => {
                         ))}
                     </div>
                     <div className="summary-divider"></div>
+                    <div className="summary-row">
+                        <span>Subtotal</span>
+                        <span>${cartTotal.toLocaleString('es-CL')}</span>
+                    </div>
+                    <div className="summary-row">
+                        <span>Envío (Blue Express)</span>
+                        <span>
+                            {shippingLoading
+                                ? 'Calculando...'
+                                : shippingCost > 0
+                                    ? `$${shippingCost.toLocaleString('es-CL')}`
+                                    : 'A calcular'}
+                        </span>
+                    </div>
+                    <div className="summary-divider"></div>
                     <div className="summary-row total">
                         <span>Total a Pagar</span>
-                        <span>${cartTotal.toLocaleString('es-CL')}</span>
+                        <span>${orderTotal.toLocaleString('es-CL')}</span>
                     </div>
                     <button
                         type="submit"
