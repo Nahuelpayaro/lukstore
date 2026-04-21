@@ -29,24 +29,38 @@ export default async function handler(req, res) {
     };
 
     try {
-        // 1. Agregar productos al carrito (Application Password salta validación de nonce)
+        // 1. Iniciar sesión — el carrito de WC es session-based incluso con App Passwords
+        const initRes = await fetch(`${STORE}/cart`, { headers });
+        const setCookie = initRes.headers.get('set-cookie') ?? '';
+        // Extraer solo el par nombre=valor de la cookie (sin atributos como Path, SameSite, etc.)
+        const sessionCookie = setCookie.split(',')
+            .map(c => c.trim().split(';')[0])
+            .join('; ');
+
+        const sessionHeaders = {
+            ...headers,
+            ...(sessionCookie ? { Cookie: sessionCookie } : {}),
+        };
+
+        // 2. Limpiar carrito previo de esta sesión y agregar los productos actuales
+        await fetch(`${STORE}/cart/items`, { method: 'DELETE', headers: sessionHeaders });
+
         for (const item of items) {
             if (!item.wcId) continue;
             const addRes = await fetch(`${STORE}/cart/add-item`, {
                 method: 'POST',
-                headers,
+                headers: sessionHeaders,
                 body: JSON.stringify({ id: item.wcId, quantity: item.quantity ?? 1 }),
             });
             if (!addRes.ok) {
-                const err = await addRes.text();
-                console.error('[get-shipping] add-item error:', addRes.status, err);
+                console.error('[get-shipping] add-item error:', addRes.status, await addRes.text());
             }
         }
 
-        // 2. Setear dirección de envío
+        // 3. Setear dirección de envío
         const updateRes = await fetch(`${STORE}/cart/update-customer`, {
             method: 'POST',
-            headers,
+            headers: sessionHeaders,
             body: JSON.stringify({
                 shipping_address: {
                     country: 'CL',
@@ -60,9 +74,11 @@ export default async function handler(req, res) {
             console.error('[get-shipping] update-customer error:', updateRes.status, await updateRes.text());
         }
 
-        // 3. Obtener carrito con tarifas calculadas
-        const cartRes = await fetch(`${STORE}/cart`, { headers });
+        // 4. Obtener carrito con tarifas calculadas
+        const cartRes = await fetch(`${STORE}/cart`, { headers: sessionHeaders });
         const cart = await cartRes.json();
+
+        console.log('[get-shipping] shipping_rates:', JSON.stringify(cart.shipping_rates ?? []));
 
         const packages = cart.shipping_rates ?? [];
         const allRates = packages.flatMap(pkg => pkg.shipping_rates ?? []);
@@ -82,7 +98,7 @@ export default async function handler(req, res) {
             });
         }
 
-        console.warn('[get-shipping] Blue Express no encontrado en rates:', allRates);
+        console.warn('[get-shipping] Blue Express no encontrado. allRates:', JSON.stringify(allRates));
         return res.status(200).json({ cost: 0, label: 'Blue Express', rateId: null });
 
     } catch (err) {
