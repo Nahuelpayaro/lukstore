@@ -45,7 +45,7 @@ const About = () => {
                         </p>
                     </div>
                     <div className="about-img-col">
-                        <img src="/assets/cat-streetwear.png" alt="Lukstore Origins" style={{ width: '100%', height: 'auto', filter: 'grayscale(100%)' }} />
+                        <img src="/assets/cat-streetwear.png" alt="Lukstore Origins" />
                     </div>
                 </div>
             </section>
