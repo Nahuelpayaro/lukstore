@@ -25,22 +25,39 @@ const ClusterPage = () => {
     const filteredProducts = useMemo(() => {
         if (!products.length) return [];
 
+        const catLower = category ? category.toLowerCase() : '';
+        const isGenderPage = catLower === 'hombre' || catLower === 'mujer';
+        const isRootCatalog = catLower === 'zapatillas';
+
         let result = products.filter(p => {
             const h = (p.hierarchy || []).map(x => x.toLowerCase());
-            const catLower = category ? category.toLowerCase() : '';
 
-            let catMatch = !category || h.includes(catLower);
+            // /zapatillas → catálogo completo
+            if (isRootCatalog && !brand && !model) return true;
 
-            if (!catMatch && (catLower === 'hombre' || catLower === 'mujer')) {
-                const pGender = p.gender?.toLowerCase() || 'unisex';
-                catMatch = pGender === catLower || pGender === 'unisex';
+            // /hombre o /mujer → por género (incluye unisex)
+            if (isGenderPage && !brand && !model) {
+                const pGender = (p.gender || 'unisex').toLowerCase();
+                return pGender === catLower || pGender === 'unisex';
             }
 
+            // Sub-rutas con brand/model
+            const pGender = (p.gender || 'unisex').toLowerCase();
+            const catMatch = !category || h.includes(catLower) ||
+                (isGenderPage && (pGender === catLower || pGender === 'unisex'));
             const brandMatch = !brand || h.includes(brand.toLowerCase());
             const modelMatch = !model || h.includes(model.replace(/-/g, ' ').toLowerCase());
 
             return catMatch && brandMatch && modelMatch;
         });
+
+        // Páginas de género: gender-específicos primero, unisex después
+        if (isGenderPage && filters.sort === 'newest') {
+            result = [
+                ...result.filter(p => (p.gender || 'unisex').toLowerCase() === catLower),
+                ...result.filter(p => (p.gender || 'unisex').toLowerCase() === 'unisex'),
+            ];
+        }
 
         if (filters.sort === 'price-asc') result.sort((a, b) => a.price - b.price);
         else if (filters.sort === 'price-desc') result.sort((a, b) => b.price - a.price);
@@ -56,11 +73,17 @@ const ClusterPage = () => {
         }
     }, [filteredProducts, category]);
 
-    // Best Sellers (Top 4)
-    const bestSellers = useMemo(() => filteredProducts.slice(0, 4), [filteredProducts]);
-    
-    // Remaining products for the main grid
-    const remainingProducts = useMemo(() => filteredProducts.slice(4), [filteredProducts]);
+    // "Más elegidos": featured primero, si no hay suficientes toma los primeros
+    const bestSellers = useMemo(() => {
+        const featured = filteredProducts.filter(p => p.isFeatured);
+        return (featured.length >= 2 ? featured : filteredProducts).slice(0, 4);
+    }, [filteredProducts]);
+
+    // Remaining products: todo lo que no está en bestSellers
+    const remainingProducts = useMemo(() => {
+        const bestIds = new Set(bestSellers.map(p => p.id));
+        return filteredProducts.filter(p => !bestIds.has(p.id));
+    }, [filteredProducts, bestSellers]);
 
     // Metadata
     const title = activeContent?.hero?.title || activeContent?.title || category?.toUpperCase();
