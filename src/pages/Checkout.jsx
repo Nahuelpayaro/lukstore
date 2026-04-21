@@ -146,22 +146,22 @@ const Checkout = () => {
                                 <label>Región</label>
                                 <select required name="region" value={formData.region} onChange={handleInputChange}>
                                     <option value="">Selecciona...</option>
-                                    <option value="RM">Metropolitana</option>
-                                    <option value="VS">Valparaíso</option>
-                                    <option value="BI">Biobío</option>
-                                    <option value="AR">La Araucanía</option>
-                                    <option value="LR">Los Ríos</option>
-                                    <option value="LL">Los Lagos</option>
-                                    <option value="CO">Coquimbo</option>
-                                    <option value="AT">Atacama</option>
-                                    <option value="AN">Antofagasta</option>
-                                    <option value="AP">Arica y Parinacota</option>
-                                    <option value="TA">Tarapacá</option>
-                                    <option value="LI">O'Higgins</option>
-                                    <option value="ML">Maule</option>
-                                    <option value="NB">Ñuble</option>
-                                    <option value="AI">Aysén</option>
-                                    <option value="MA">Magallanes</option>
+                                    <option value="CL-RM">Metropolitana</option>
+                                    <option value="CL-VS">Valparaíso</option>
+                                    <option value="CL-BI">Biobío</option>
+                                    <option value="CL-AR">La Araucanía</option>
+                                    <option value="CL-LR">Los Ríos</option>
+                                    <option value="CL-LL">Los Lagos</option>
+                                    <option value="CL-CO">Coquimbo</option>
+                                    <option value="CL-AT">Atacama</option>
+                                    <option value="CL-AN">Antofagasta</option>
+                                    <option value="CL-AP">Arica y Parinacota</option>
+                                    <option value="CL-TA">Tarapacá</option>
+                                    <option value="CL-LI">O'Higgins</option>
+                                    <option value="CL-ML">Maule</option>
+                                    <option value="CL-NB">Ñuble</option>
+                                    <option value="CL-AI">Aysén</option>
+                                    <option value="CL-MA">Magallanes</option>
                                 </select>
                             </div>
                         </div>
