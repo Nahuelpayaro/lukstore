@@ -1,4 +1,11 @@
 {
+  "redirects": [
+    {
+      "source": "/webmail",
+      "destination": "https://gtxm1253.siteground.biz/webmail/log-in",
+      "permanent": false
+    }
+  ],
   "rewrites": [
     { "source": "/(.*)", "destination": "/index.html" }
   ]

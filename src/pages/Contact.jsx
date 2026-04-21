@@ -4,7 +4,34 @@ import { Mail, MessageCircle, Clock, MapPin, Instagram } from 'lucide-react';
 import { motion } from 'framer-motion';
 import './Institutional.css';
 
+const FORMSPREE_URL = 'https://formspree.io/f/xdaywolj';
+
 const Contact = () => {
+    const [status, setStatus] = React.useState('idle'); // idle | sending | ok | error
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setStatus('sending');
+        const form = e.target;
+        const data = new FormData(form);
+
+        try {
+            const res = await fetch(FORMSPREE_URL, {
+                method: 'POST',
+                body: data,
+                headers: { Accept: 'application/json' },
+            });
+            if (res.ok) {
+                setStatus('ok');
+                form.reset();
+            } else {
+                setStatus('error');
+            }
+        } catch {
+            setStatus('error');
+        }
+    };
+
     return (
         <div className="institutional-page contact-page">
             <PageMeta title="Contacto | Lukstore" description="Ponte en contacto con el equipo de Lukstore. Soporte ventas, autenticación y showroom." />
@@ -15,7 +42,7 @@ const Contact = () => {
                         initial={{ opacity: 0, scale: 0.9 }}
                         animate={{ opacity: 1, scale: 1 }}
                     >
-                        <h1 style={{ fontSize: '3.5rem', fontWeight: 800, marginBottom: '1rem' }}>CONTACTO</h1>
+                        <h1 style={{ fontSize: '3.5rem', fontWeight: 800, marginBottom: '1rem', color: 'rgba(255, 255, 255, 1)' }}>CONTACTO</h1>
                         <p style={{ color: '#888', fontSize: '1.2rem', maxWidth: '600px', margin: '0 auto' }}>
                             Estamos aquí para resolver tus dudas sobre lanzamientos, tallas o tu pedido actual.
                         </p>
@@ -38,7 +65,7 @@ const Contact = () => {
                                 <div>
                                     <h4 style={{ fontWeight: 700, marginBottom: '0.25rem' }}>WhatsApp Soporte</h4>
                                     <p style={{ color: '#666', marginBottom: '0.5rem' }}>Respuesta inmediata para ventas y guías.</p>
-                                    <a href="https://wa.me/56900000000" style={{ fontWeight: 800, borderBottom: '2px solid #000', paddingBottom: '2px' }}>+56 9 0000 0000</a>
+                                    <a href="https://wa.me/56933754698" style={{ fontWeight: 800, borderBottom: '2px solid #000', paddingBottom: '2px' }}>+56 9 3375 4698</a>
                                 </div>
                             </div>
 
@@ -69,20 +96,24 @@ const Contact = () => {
                     {/* FORM COL */}
                     <div style={{ background: '#fff', padding: '3rem', borderRadius: '24px', boxShadow: '0 10px 40px rgba(0,0,0,0.05)', border: '1px solid #eee' }}>
                         <h3 style={{ fontSize: '1.5rem', fontWeight: 800, marginBottom: '2rem' }}>Envíanos un mensaje</h3>
-                        <form onSubmit={(e) => e.preventDefault()} style={{ display: 'grid', gap: '1.2rem' }}>
+                        <form onSubmit={handleSubmit} style={{ display: 'grid', gap: '1.2rem' }}>
                             <div className="form-group">
                                 <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.85rem', fontWeight: 700, color: '#888' }}>NOMBRE COMPLETO</label>
-                                <input type="text" style={{ width: '100%', padding: '1rem', borderRadius: '8px', border: '1px solid #eee', background: '#fafafa' }} placeholder="Tu nombre..." />
+                                <input name="nombre" type="text" required style={{ width: '100%', padding: '1rem', borderRadius: '8px', border: '1px solid #eee', background: '#fafafa' }} placeholder="Tu nombre..." />
                             </div>
                             <div className="form-group">
                                 <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.85rem', fontWeight: 700, color: '#888' }}>EMAIL</label>
-                                <input type="email" style={{ width: '100%', padding: '1rem', borderRadius: '8px', border: '1px solid #eee', background: '#fafafa' }} placeholder="tu@email.com" />
+                                <input name="email" type="email" required style={{ width: '100%', padding: '1rem', borderRadius: '8px', border: '1px solid #eee', background: '#fafafa' }} placeholder="tu@email.com" />
                             </div>
                             <div className="form-group">
                                 <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.85rem', fontWeight: 700, color: '#888' }}>MENSAJE</label>
-                                <textarea rows="4" style={{ width: '100%', padding: '1rem', borderRadius: '8px', border: '1px solid #eee', background: '#fafafa' }} placeholder="¿En qué podemos ayudarte?"></textarea>
+                                <textarea name="mensaje" rows="4" required style={{ width: '100%', padding: '1rem', borderRadius: '8px', border: '1px solid #eee', background: '#fafafa' }} placeholder="¿En qué podemos ayudarte?"></textarea>
                             </div>
-                            <button type="submit" className="btn btn-black" style={{ marginTop: '1rem', padding: '1.2rem', borderRadius: '8px', fontWeight: 800 }}>ENVIAR MENSAJE</button>
+                            <button type="submit" disabled={status === 'sending'} className="btn btn-black" style={{ marginTop: '1rem', padding: '1.2rem', borderRadius: '8px', fontWeight: 800, opacity: status === 'sending' ? 0.7 : 1 }}>
+                                {status === 'sending' ? 'ENVIANDO...' : 'ENVIAR MENSAJE'}
+                            </button>
+                            {status === 'ok' && <p style={{ color: 'green', fontWeight: 700, textAlign: 'center' }}>¡Mensaje enviado! Te respondemos pronto.</p>}
+                            {status === 'error' && <p style={{ color: 'red', fontWeight: 700, textAlign: 'center' }}>Hubo un error. Intentá de nuevo.</p>}
                         </form>
                     </div>
                 </div>
