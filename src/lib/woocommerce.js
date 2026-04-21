@@ -152,11 +152,11 @@ export const createOrder = async ({ customer, items, shippingLine }) => {
             quantity: item.quantity,
             ...(item.variationId ? { variation_id: item.variationId } : {}),
         })),
-        ...(shippingLine ? {
+        ...(shippingLine?.rateId ? {
             shipping_lines: [{
-                method_id: shippingLine.methodId,
-                method_title: shippingLine.methodTitle,
-                total: String(shippingLine.cost),
+                method_id:    shippingLine.rateId,
+                method_title: shippingLine.label ?? 'Blue Express',
+                total:        String(Math.round(shippingLine.cost)),
             }]
         } : {}),
     };
