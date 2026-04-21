@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { PageMeta } from '../hooks/usePageMeta';
-import { createOrder, getBlueExpressRate } from '../lib/woocommerce';
+import { createOrder, fetchShippingRate } from '../lib/woocommerce';
 import { trackAddShippingInfo, trackAddPaymentInfo } from '../utils/ecommerceTracker';
 import './Cart.css';
 
@@ -20,15 +20,20 @@ const Checkout = () => {
     });
 
     const [isProcessing, setIsProcessing] = useState(false);
-    const [shippingRate, setShippingRate] = useState(null); // { methodId, methodTitle, cost }
+    const [shippingRate, setShippingRate] = useState(null);
     const [shippingLoading, setShippingLoading] = useState(false);
 
+    // Recalcular envío cuando el usuario completa ciudad y región
     React.useEffect(() => {
+        if (!formData.city || !formData.region || !cartItems.length) return;
+
         setShippingLoading(true);
-        getBlueExpressRate()
+        setShippingRate(null);
+
+        fetchShippingRate({ items: cartItems, address: formData })
             .then(rate => setShippingRate(rate))
             .finally(() => setShippingLoading(false));
-    }, []);
+    }, [formData.city, formData.region]);
 
     const shippingCost = shippingRate?.cost ?? 0;
     const orderTotal = cartTotal + shippingCost;
@@ -142,8 +147,21 @@ const Checkout = () => {
                                 <select required name="region" value={formData.region} onChange={handleInputChange}>
                                     <option value="">Selecciona...</option>
                                     <option value="RM">Metropolitana</option>
-                                    <option value="V">Valparaíso</option>
-                                    <option value="VIII">Biobío</option>
+                                    <option value="VS">Valparaíso</option>
+                                    <option value="BI">Biobío</option>
+                                    <option value="AR">La Araucanía</option>
+                                    <option value="LR">Los Ríos</option>
+                                    <option value="LL">Los Lagos</option>
+                                    <option value="CO">Coquimbo</option>
+                                    <option value="AT">Atacama</option>
+                                    <option value="AN">Antofagasta</option>
+                                    <option value="AP">Arica y Parinacota</option>
+                                    <option value="TA">Tarapacá</option>
+                                    <option value="LI">O'Higgins</option>
+                                    <option value="ML">Maule</option>
+                                    <option value="NB">Ñuble</option>
+                                    <option value="AI">Aysén</option>
+                                    <option value="MA">Magallanes</option>
                                 </select>
                             </div>
                         </div>

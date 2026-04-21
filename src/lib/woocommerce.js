@@ -183,38 +183,20 @@ export const getOrderById = async (id) => {
     return await res.json();
 };
 
-// Busca el método de envío Blue Express en las zonas de WooCommerce
-// Devuelve { methodId, methodTitle, cost } o null si no encuentra tarifa fija
-export const getBlueExpressRate = async () => {
+// Consulta la tarifa dinámica de Blue Express via nuestra función serverless de Vercel.
+// Devuelve { cost, label, rateId } o null si no se puede calcular.
+export const fetchShippingRate = async ({ items, address }) => {
     try {
-        const zonesRes = await fetch(`${BASE_URL}/shipping/zones?${AUTH}`);
-        if (!zonesRes.ok) throw new Error(`HTTP ${zonesRes.status}`);
-        const zones = await zonesRes.json();
-
-        for (const zone of zones) {
-            const methodsRes = await fetch(`${BASE_URL}/shipping/zones/${zone.id}/methods?${AUTH}`);
-            if (!methodsRes.ok) continue;
-            const methods = await methodsRes.json();
-
-            const blueExpressMethod = methods.find(m =>
-                m.method_id?.toLowerCase().includes('blue') ||
-                m.method_title?.toLowerCase().includes('blue')
-            );
-
-            if (blueExpressMethod) {
-                const cost = parseFloat(
-                    blueExpressMethod.settings?.cost?.value ?? 0
-                );
-                return {
-                    methodId: blueExpressMethod.method_id,
-                    methodTitle: blueExpressMethod.method_title || 'Blue Express',
-                    cost,
-                };
-            }
-        }
-        return null;
+        const res = await fetch('/api/get-shipping', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ items, address }),
+        });
+        if (!res.ok) return null;
+        const data = await res.json();
+        return data.cost > 0 ? data : null;
     } catch (err) {
-        console.error('[WooCommerce] getBlueExpressRate:', err);
+        console.error('[fetchShippingRate]', err);
         return null;
     }
 };
