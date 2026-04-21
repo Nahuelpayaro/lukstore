@@ -1,5 +1,5 @@
 // Vercel serverless function — calcula la tarifa de Blue Express via WooCommerce Store API
-// Se llama server-side para evitar CORS y manejar la sesión del carrito correctamente.
+// Usa Application Passwords de WordPress para saltear la validación de nonce.
 
 export default async function handler(req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -12,39 +12,41 @@ export default async function handler(req, res) {
     const { items = [], address = {} } = req.body ?? {};
 
     const WC_URL = (process.env.VITE_WC_URL ?? '').replace(/\/$/, '');
+    const WP_USER = process.env.WP_APP_USER ?? '';
+    const WP_PASS = process.env.WP_APP_PASSWORD ?? '';
     const STORE = `${WC_URL}/wp-json/wc/store/v1`;
 
+    if (!WP_USER || !WP_PASS) {
+        console.error('[get-shipping] WP_APP_USER o WP_APP_PASSWORD no configurados');
+        return res.status(500).json({ error: 'Credenciales de WordPress no configuradas' });
+    }
+
+    const AUTH = `Basic ${Buffer.from(`${WP_USER}:${WP_PASS}`).toString('base64')}`;
+
+    const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': AUTH,
+    };
+
     try {
-        // 1. Iniciar sesión de carrito — WooCommerce devuelve una cookie de sesión
-        const initRes = await fetch(`${STORE}/cart`, {
-            headers: { 'Content-Type': 'application/json' },
-        });
-
-        // Extraer cookie de sesión y nonce para requests posteriores
-        const rawCookie = initRes.headers.get('set-cookie') ?? '';
-        const sessionCookie = rawCookie.split(';')[0]; // solo el valor, sin atributos
-        const nonce = initRes.headers.get('x-wc-store-api-nonce') ?? '';
-
-        const sessionHeaders = {
-            'Content-Type': 'application/json',
-            ...(sessionCookie ? { Cookie: sessionCookie } : {}),
-            ...(nonce ? { 'X-WC-Store-API-Nonce': nonce } : {}),
-        };
-
-        // 2. Agregar productos al carrito
+        // 1. Agregar productos al carrito (Application Password salta validación de nonce)
         for (const item of items) {
             if (!item.wcId) continue;
-            await fetch(`${STORE}/cart/add-item`, {
+            const addRes = await fetch(`${STORE}/cart/add-item`, {
                 method: 'POST',
-                headers: sessionHeaders,
+                headers,
                 body: JSON.stringify({ id: item.wcId, quantity: item.quantity ?? 1 }),
             });
+            if (!addRes.ok) {
+                const err = await addRes.text();
+                console.error('[get-shipping] add-item error:', addRes.status, err);
+            }
         }
 
-        // 3. Setear dirección de envío
-        await fetch(`${STORE}/cart/update-customer`, {
+        // 2. Setear dirección de envío
+        const updateRes = await fetch(`${STORE}/cart/update-customer`, {
             method: 'POST',
-            headers: sessionHeaders,
+            headers,
             body: JSON.stringify({
                 shipping_address: {
                     country: 'CL',
@@ -54,9 +56,12 @@ export default async function handler(req, res) {
                 },
             }),
         });
+        if (!updateRes.ok) {
+            console.error('[get-shipping] update-customer error:', updateRes.status, await updateRes.text());
+        }
 
-        // 4. Obtener carrito con tarifas calculadas
-        const cartRes = await fetch(`${STORE}/cart`, { headers: sessionHeaders });
+        // 3. Obtener carrito con tarifas calculadas
+        const cartRes = await fetch(`${STORE}/cart`, { headers });
         const cart = await cartRes.json();
 
         const packages = cart.shipping_rates ?? [];
@@ -68,10 +73,8 @@ export default async function handler(req, res) {
         );
 
         if (blueRate) {
-            // Store API devuelve precios como enteros en unidades menores × 100
-            // CLP no tiene decimales, pero WC igual multiplica × 100 internamente
-            const rawPrice = parseInt(blueRate.price ?? '0', 10);
-            const cost = rawPrice / 100;
+            // Store API devuelve precios en centavos (×100), CLP no tiene decimales
+            const cost = parseInt(blueRate.price ?? '0', 10) / 100;
             return res.status(200).json({
                 cost,
                 label: blueRate.name ?? 'Blue Express',
@@ -79,11 +82,11 @@ export default async function handler(req, res) {
             });
         }
 
-        // No se encontró Blue Express — devolver 0 como fallback
+        console.warn('[get-shipping] Blue Express no encontrado en rates:', allRates);
         return res.status(200).json({ cost: 0, label: 'Blue Express', rateId: null });
 
     } catch (err) {
-        console.error('[get-shipping]', err?.message ?? err);
+        console.error('[get-shipping] excepción:', err?.message ?? err);
         return res.status(500).json({ error: 'No se pudo calcular el envío' });
     }
 }
