@@ -37,7 +37,7 @@ const About = () => {
                 <div className="about-grid-intro">
                     <div className="about-text-col">
                         <span className="subtitle-small">Nuestra Historia</span>
-                        <h2 className="section-title">Nacidos del Cemento</h2>
+                        <h2 className="section-title">Lo mejor del streetwear</h2>
                         <p className="lead-text">
                             Lukstore no empezó en una oficina. Empezó en las filas de los drops, en los foros de compra-venta y en la búsqueda incansable del par perfecto.
                         </p>
