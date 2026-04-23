@@ -19,9 +19,9 @@
     gap: 0.75rem;
     padding: 1rem 1.25rem;
     border-radius: 16px;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
-    background: #fff;
-    border: 1px solid #eaeaea;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+    background: #1a1a1a;
+    border: 1px solid #333;
     animation: toast-slide-in 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -61,13 +61,13 @@
 .toast-title {
     font-size: 0.9rem;
     font-weight: 700;
-    color: #111;
+    color: #fff;
     margin-bottom: 0.2rem;
 }
 
 .toast-description {
     font-size: 0.85rem;
-    color: #666;
+    color: #aaa;
     line-height: 1.4;
 }
 
@@ -85,7 +85,7 @@
 }
 
 .toast-close:hover {
-    color: #111;
+    color: #fff;
 }
 
 @keyframes toast-slide-in {

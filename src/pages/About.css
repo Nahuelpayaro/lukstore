@@ -2,15 +2,15 @@
 
 /* Base & Typography */
 .about-page {
-    background-color: #fff;
-    color: #111;
+    background-color: #000;
+    color: #fff;
     overflow-x: hidden;
 }
 
 .manifesto-section {
     padding: 6rem 0;
     position: relative;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid #222;
 }
 
 .manifesto-container {
@@ -65,7 +65,7 @@
 .manifesto-text {
     font-size: 1.25rem;
     line-height: 1.6;
-    color: #333;
+    color: #ccc;
     font-weight: 400;
 }
 
@@ -82,7 +82,7 @@
 /* Intro Section — Historia */
 .about-intro-section {
     padding: 8rem 0;
-    background: #fafafa;
+    background: #111;
     overflow: hidden;
 }
 
@@ -114,14 +114,14 @@
     text-transform: uppercase;
     letter-spacing: -0.03em;
     line-height: 1;
-    color: #111;
+    color: #fff;
     margin: 0;
 }
 
 .lead-text {
     font-size: 1.15rem;
     line-height: 1.7;
-    color: #333;
+    color: #ccc;
     font-weight: 400;
     margin: 0;
 }
@@ -129,7 +129,7 @@
 .about-text-col p:not(.lead-text) {
     font-size: 1rem;
     line-height: 1.7;
-    color: #666;
+    color: #888;
     margin: 0;
 }
 
@@ -246,13 +246,13 @@
 
 .editorial-content p {
     font-size: 1rem;
-    color: #666;
+    color: #888;
     line-height: 1.6;
 }
 
 /* Values Section */
 .values-section {
-    background: #f9f9f9;
+    background: #111;
     padding: 5rem 0;
 }
 
@@ -264,20 +264,20 @@
 
 .value-card {
     padding: 2rem;
-    background: #fff;
-    border: 1px solid #eee;
+    background: #1a1a1a;
+    border: 1px solid #333;
     transition: transform 0.2s;
 }
 
 .value-card:hover {
     transform: translateY(-5px);
-    border-color: #111;
+    border-color: #fff;
 }
 
 .value-number {
     font-size: 3rem;
     font-weight: 900;
-    color: #e0e0e0;
+    color: #333;
     line-height: 1;
     margin-bottom: 1rem;
 }
@@ -291,7 +291,7 @@
 
 .value-desc {
     font-size: 0.9rem;
-    color: #666;
+    color: #888;
 }
 
 /* Showroom Banner */
@@ -303,7 +303,7 @@
 .trust-block {
     text-align: center;
     padding: 4rem 0;
-    border-top: 1px solid #eee;
+    border-top: 1px solid #222;
 }
 
 .trust-logo {

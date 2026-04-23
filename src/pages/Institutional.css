@@ -42,7 +42,7 @@
 .manifesto-highlight {
     text-align: center;
     margin-bottom: 4rem;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid #222;
     padding-bottom: 3rem;
 }
 
@@ -55,7 +55,7 @@
 .kp-text-block p {
     font-size: 1.1rem;
     line-height: 1.8;
-    color: #444;
+    color: #ccc;
     margin-bottom: 1.5rem;
 }
 
@@ -101,7 +101,7 @@
 
 .value-item p {
     font-size: 0.9rem;
-    color: #666;
+    color: #888;
 }
 
 @media (max-width: 768px) {
@@ -137,7 +137,7 @@
 .contact-details {
     margin-top: 3rem;
     padding-top: 2rem;
-    border-top: 1px solid #ddd;
+    border-top: 1px solid #222;
 }
 
 /* Editorial Forms */
@@ -158,14 +158,15 @@
 .editorial-form textarea {
     width: 100%;
     padding: 1rem;
-    border: 1px solid #ddd;
-    background: #f9f9f9;
+    border: 1px solid #333;
+    background: #111;
+    color: #fff;
     font-family: inherit;
     border-radius: 0;
 }
 
 .editorial-form input:focus,
 .editorial-form textarea:focus {
-    border-color: #000;
-    background: #fff;
+    border-color: #fff;
+    background: #1a1a1a;
 }

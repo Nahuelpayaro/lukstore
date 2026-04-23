@@ -1,26 +1,20 @@
 :root {
-  /* Brand Colors - "Clean Heritage" Palette */
-  --color-bg: #FFFFFF;
-  /* Blanco Puro */
-  --color-bg-secondary: #F9F9F9;
-  /* Gris muy sutil para áreas secundarias */
+  /* Brand Colors - Dark Mode */
+  --color-bg: #000000;
+  --color-bg-secondary: #111111;
 
-  --color-text: #000000;
-  /* Negro Puro */
-  --color-text-secondary: #555555;
-  /* Gris medio elegante */
+  --color-text: #FFFFFF;
+  --color-text-secondary: #888888;
 
-  --color-accent: #000000;
-  /* Negro como acento principal */
-  --color-border: #E5E5E5;
-  /* Bordes muy suaves */
+  --color-accent: #FFFFFF;
+  --color-border: #222222;
 
   /* Typography - Editorial Clean */
   --font-main: 'Inter', system-ui, -apple-system, sans-serif;
 
   /* Spacing */
   --container-width: 1400px;
-  --header-height: 80px;
+  --header-height: 120px;
 }
 
 * {
@@ -31,12 +25,22 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+html,
+body {
+  overflow-x: clip;
+  max-width: 100%;
+}
+
 body {
   font-family: var(--font-main);
   background-color: var(--color-bg);
   color: var(--color-text);
   line-height: 1.5;
+}
+
+#root {
   overflow-x: hidden;
+  max-width: 100%;
 }
 
 /* Premium Selection */
@@ -51,15 +55,15 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: #111;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #888;
+  background: #444;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #555;
+  background: #666;
 }
 
 /* Removed noise overlay for cleaner look */
@@ -163,7 +167,7 @@ ul {
 /* Clean inputs */
 input,
 select {
-  background: #fff;
+  background: #111;
   border: 1px solid var(--color-border);
   color: var(--color-text);
   padding: 0.8rem;

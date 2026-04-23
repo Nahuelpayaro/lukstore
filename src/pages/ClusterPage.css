@@ -1,7 +1,7 @@
 /* ClusterPage Premium IKEA-Style Design — Lukstore */
 
 .cluster-page-v2 {
-    background-color: #fff;
+    background-color: #000;
     min-height: 100vh;
 }
 
@@ -55,10 +55,10 @@
 .cluster-nav-sticky {
     position: sticky;
     top: var(--header-height);
-    background: rgba(255, 255, 255, 0.9);
+    background: rgba(0, 0, 0, 0.9);
     backdrop-filter: blur(10px);
     z-index: 100;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid #222;
     padding: 1rem 0;
 }
 
@@ -78,9 +78,10 @@
 
 .pill-select {
     padding: 0.6rem 1.2rem;
-    border: 1px solid #ddd;
+    border: 1px solid #333;
     border-radius: 50px;
-    background: #fff;
+    background: #111;
+    color: #fff;
     font-size: 0.85rem;
     font-weight: 600;
     cursor: pointer;
@@ -89,19 +90,21 @@
 }
 
 .pill-select:hover {
-    border-color: #000;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    border-color: #fff;
+    box-shadow: 0 4px 10px rgba(255,255,255,0.05);
 }
 
 /* 3. GRIDS & SECTIONS */
 .section-padding {
     padding: 6rem 0;
-    border-bottom: 1px solid #f5f5f5;
+    border-bottom: 1px solid #222;
 }
 
 .section-header {
     margin-bottom: 3rem;
     text-align: left;
+    flex-wrap: wrap;
+    gap: 1rem;
 }
 
 .section-header h2 {
@@ -112,7 +115,7 @@
 }
 
 .section-sub {
-    color: #666;
+    color: #888;
     font-size: 1.1rem;
 }
 
@@ -200,7 +203,7 @@
     flex: 0 0 160px;
     text-align: center;
     text-decoration: none;
-    color: #000;
+    color: #fff;
     transition: transform 0.3s ease;
 }
 
@@ -211,7 +214,7 @@
 .cm-img {
     width: 100%;
     aspect-ratio: 1;
-    background: #f8f8f8;
+    background: #1a1a1a;
     border-radius: 20px;
     overflow: hidden;
     margin-bottom: 1rem;
@@ -243,7 +246,7 @@
 
 .blog-mini-card {
     text-decoration: none;
-    color: #000;
+    color: #fff;
 }
 
 .bm-img {
@@ -272,7 +275,7 @@
 
 /* 8. SEO BLOCK */
 .seo-optimized-section {
-    background: #fafafa;
+    background: #111;
     padding: 4rem 2rem;
     border-radius: 30px;
     margin-bottom: 8rem;
@@ -303,14 +306,14 @@
 .seo-content-expand {
     margin-top: 2.5rem;
     max-width: 800px;
-    border-top: 1px solid #eee;
+    border-top: 1px solid #333;
     padding-top: 2rem;
 }
 
 .seo-content-expand p {
     font-size: 1.1rem;
     line-height: 1.7;
-    color: #444;
+    color: #aaa;
 }
 
 .seo-faqs {
@@ -336,6 +339,9 @@
     }
     .editorial-banner-inline {
         grid-template-columns: 1fr;
+    }
+    .eb-image {
+        min-height: 300px;
     }
     .eb-content {
         padding: 3rem;

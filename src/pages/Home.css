@@ -293,6 +293,18 @@
     }
 }
 
+@media (max-width: 900px) {
+    .hero-original {
+        padding: 3rem 1.5rem;
+        justify-content: center;
+    }
+    .hero-content-original {
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+}
+
 @media (max-width: 768px) {
     .product-grid {
         grid-template-columns: repeat(2, 1fr);
@@ -362,14 +374,20 @@
 .testimonials-section {
     margin-bottom: 8rem;
     padding-top: 4rem;
-    border-top: 1px solid #f0f0f0;
+    border-top: 1px solid #222;
 }
 
 .section-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 4rem; /* Changed from 3rem to 4rem for breathing room below text/above products */
+    margin-bottom: 4rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.section-header > * {
+    min-width: 0;
 }
 
 .section-header h2 {
@@ -383,10 +401,10 @@
     display: flex;
     align-items: center;
     gap: 12px;
-    background: #fcfcfc;
+    background: #111;
     padding: 8px 20px;
     border-radius: 40px;
-    border: 1px solid #efefef;
+    border: 1px solid #333;
     transition: box-shadow 0.3s ease;
 }
 
@@ -423,17 +441,17 @@
 }
 
 .google-review-card {
-    background: #fff;
+    background: #111;
     padding: 2rem;
-    border: 1px solid #f0f0f0;
+    border: 1px solid #222;
     border-radius: 20px;
     transition: all 0.3s ease;
 }
 
 .google-review-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
-    border-color: #eaeaea;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    border-color: #333;
 }
 
 .gr-header {
@@ -458,7 +476,7 @@
 .gr-name {
     font-size: 0.95rem;
     font-weight: 700;
-    color: #111;
+    color: #fff;
 }
 
 .gr-rating-row {
@@ -475,7 +493,7 @@
 .gr-text {
     font-size: 0.95rem;
     line-height: 1.6;
-    color: #555;
+    color: #aaa;
     font-weight: 400;
     display: -webkit-box;
     -webkit-line-clamp: 4;
@@ -541,12 +559,12 @@
     text-decoration: underline;
     text-underline-offset: 4px;
     font-weight: 600;
-    color: #333;
+    color: #ccc;
     transition: color 0.3s ease;
 }
 
 .j-link:hover {
-    color: #000;
+    color: #fff;
 }
 
 /* 8. INSTAGRAM */
@@ -579,11 +597,11 @@
     position: relative;
     overflow: hidden;
     cursor: auto;
-    background: #f0f0f0;
+    background: #111;
 }
 
 .ig-item:nth-child(even) {
-    background: #e0e0e0;
+    background: #1a1a1a;
 }
 
 .ig-item img {

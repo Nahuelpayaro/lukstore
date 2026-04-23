@@ -16,7 +16,7 @@
 
 .product-image-container {
     position: relative;
-    background-color: #f8f9fa; /* Sleek off-white for contrast */
+    background-color: #111;
     aspect-ratio: 1/1;
     overflow: hidden;
     margin-bottom: 1.5rem;
@@ -24,7 +24,7 @@
     align-items: center;
     justify-content: center;
     border-radius: 20px;
-    border: 1px solid #eaeaea;
+    border: 1px solid #222;
     transition: all 0.4s ease;
 }
 
@@ -37,7 +37,7 @@
     content: '';
     position: absolute;
     top: 0; left: 0; right: 0; bottom: 0;
-    background: linear-gradient(135deg, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0) 100%);
+    background: linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0) 100%);
     pointer-events: none;
     border-radius: 20px;
     z-index: 2;
@@ -49,7 +49,7 @@
     object-fit: contain;
     padding: 2.5rem; /* Better padding for 1:1 format */
     transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
-    mix-blend-mode: multiply;
+    mix-blend-mode: normal;
     z-index: 3;
     position: relative;
 }
@@ -152,7 +152,7 @@
     font-size: 1rem;
     font-weight: 700;
     margin-bottom: 0.75rem;
-    color: #111;
+    color: #fff;
     line-height: 1.4;
     text-transform: uppercase;
     letter-spacing: -0.01em;
@@ -169,7 +169,7 @@
 
 .product-price {
     font-size: 0.95rem;
-    color: #111;
+    color: #fff;
     font-weight: 600;
 }
 
@@ -180,29 +180,50 @@
     font-weight: 400;
 }
 
-/* Ghost Button Implementation */
-.btn-view-product {
-    width: 100%;
-    padding: 0.9rem;
-    background: transparent;
-    border: 1px solid #ddd;
-    border-radius: 30px;
-    color: #333;
-    text-transform: uppercase;
-    font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+.card-actions {
+    display: flex;
+    gap: 0.5rem;
     margin-top: auto;
 }
 
-.product-card:hover .btn-view-product {
-    background: #111;
-    color: #fff;
-    border-color: #111;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+.btn-comprar,
+.btn-consultar {
+    flex: 1;
+    padding: 0.8rem 0.5rem;
+    border-radius: 30px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+    border: 1px solid #333;
+}
+
+.btn-comprar {
+    background: #fff;
+    color: #000;
+    border-color: #fff;
+}
+
+.btn-comprar:hover {
+    background: #e0e0e0;
+    border-color: #e0e0e0;
     transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(255,255,255,0.15);
+}
+
+.btn-consultar {
+    background: transparent;
+    color: #aaa;
+}
+
+.btn-consultar:hover {
+    background: #25D366;
+    color: #fff;
+    border-color: #25D366;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(37,211,102,0.2);
 }
 
 /* Responsive Product Card Updates */
@@ -223,9 +244,10 @@
         font-size: 0.75rem;
     }
 
-    .btn-view-product {
-        padding: 0.8rem;
-        font-size: 0.75rem;
+    .btn-comprar,
+    .btn-consultar {
+        padding: 0.7rem 0.3rem;
+        font-size: 0.65rem;
     }
     
     .badge {

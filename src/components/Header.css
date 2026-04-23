@@ -25,11 +25,10 @@
 .logo {
     display: flex;
     align-items: center;
-    height: 100%;
 }
 
 .logo-img {
-    height: 40px; /* Better size for new logo */
+    height: 100px;
     width: auto;
     object-fit: contain;
 }
@@ -107,6 +106,10 @@
 }
 
 @media (max-width: 900px) {
+    .header {
+        height: 80px;
+    }
+
     .nav-menu {
         display: none;
         position: fixed; /* Fixed prevents scrolling issues and keeps it relative to window */
@@ -134,7 +137,7 @@
         padding: 1rem 0;
         width: 100%;
         display: block; /* Takes full width for touch */
-        border-bottom: 1px solid #f0f0f0;
+        border-bottom: 1px solid #222;
     }
     
     .nav-link:last-child {
@@ -146,7 +149,7 @@
     }
 
     .logo-img {
-        height: 28px;
+        height: 60px;
     }
 }
 

@@ -19,7 +19,7 @@ const Header = () => {
 
                 {/* Logo - Header Lockup (Clean) */}
                 <Link to="/" className="logo">
-                    <img src="/assets/logo-heritage.png" alt="LUKSTORE" className="logo-img" />
+                    <img src="/assets/logo-web.png" alt="LUKSTORE" className="logo-img" />
                 </Link>
 
                 {/* Navigation - Editorial/Reserved Structure */}

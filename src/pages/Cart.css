@@ -62,15 +62,15 @@
 
 /* Shipping Alert override */
 .shipping-alert {
-    background: rgba(249, 249, 249, 0.8);
+    background: rgba(20, 20, 20, 0.8);
     backdrop-filter: blur(10px);
     padding: 1.25rem;
     margin-bottom: 3rem;
     text-align: center;
     border-radius: 12px;
-    border: 1px solid rgba(0,0,0,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
     font-size: 0.95rem;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
     transition: all 0.3s ease;
 }
 
@@ -98,9 +98,9 @@
     gap: 2rem;
     padding: 1.5rem;
     border-radius: 16px;
-    background: #ffffff;
-    border: 1px solid rgba(0,0,0,0.04);
-    box-shadow: 0 4px 24px rgba(0,0,0,0.02);
+    background: #111;
+    border: 1px solid rgba(255,255,255,0.05);
+    box-shadow: 0 4px 24px rgba(0,0,0,0.2);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -113,7 +113,7 @@
     width: 100%;
     aspect-ratio: 1;
     object-fit: cover;
-    background-color: #f5f5f5;
+    background-color: #1a1a1a;
     border-radius: 8px;
     transition: transform 0.5s ease;
 }
@@ -151,7 +151,7 @@
 .item-size {
     font-size: 0.9rem;
     font-weight: 500;
-    color: #444;
+    color: #888;
 }
 
 .item-actions {
@@ -170,7 +170,7 @@
 }
 
 .quantity-controls button {
-    background: #fff;
+    background: #1a1a1a;
     border: none;
     border-radius: 50%;
     width: 28px;
@@ -179,8 +179,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
     transition: all 0.2s ease;
+    color: #fff;
 }
 
 .quantity-controls button:hover:not(:disabled) {
@@ -232,13 +233,13 @@
 
 /* Summary Panel (Glassmorphism) */
 .cart-summary {
-    background: rgba(255, 255, 255, 0.7);
+    background: rgba(20, 20, 20, 0.9);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     padding: 2.5rem;
     border-radius: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
     position: sticky;
     top: 100px;
     height: fit-content;
@@ -250,7 +251,7 @@
     font-weight: 800;
     letter-spacing: -0.02em;
     padding-bottom: 1rem;
-    border-bottom: 1px solid rgba(0,0,0,0.05);
+    border-bottom: 1px solid rgba(255,255,255,0.1);
 }
 
 .summary-row {
@@ -258,12 +259,12 @@
     justify-content: space-between;
     margin-bottom: 1.25rem;
     font-size: 1rem;
-    color: #444;
+    color: #aaa;
 }
 
 .summary-divider {
     height: 1px;
-    background-color: rgba(0,0,0,0.05);
+    background-color: rgba(255,255,255,0.1);
     margin: 1.5rem 0;
 }
 
@@ -307,11 +308,11 @@
 
 /* Checkout Form Styles */
 .checkout-form-container {
-    background: #ffffff;
+    background: #111;
     padding: 3rem;
     border-radius: 20px;
-    border: 1px solid rgba(0,0,0,0.04);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 
 .checkout-form {
@@ -325,7 +326,7 @@
     font-weight: 700;
     margin-bottom: 0.5rem;
     padding-bottom: 1rem;
-    border-bottom: 1px solid rgba(0,0,0,0.05);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
     color: var(--color-text);
 }
 
@@ -344,17 +345,18 @@
 .form-group label {
     font-size: 0.9rem;
     font-weight: 600;
-    color: #333;
+    color: #ccc;
 }
 
 .form-group input,
 .form-group select {
     padding: 1rem 1.25rem;
-    border: 1px solid rgba(0,0,0,0.1);
+    border: 1px solid rgba(255,255,255,0.1);
     border-radius: 10px;
     font-family: inherit;
     font-size: 1rem;
-    background: rgba(249, 249, 249, 0.5);
+    background: rgba(30, 30, 30, 0.8);
+    color: #fff;
     transition: all 0.3s ease;
 }
 
@@ -362,8 +364,8 @@
 .form-group select:focus {
     outline: none;
     border-color: var(--color-text);
-    background: #fff;
-    box-shadow: 0 0 0 3px rgba(0,0,0,0.05);
+    background: #1a1a1a;
+    box-shadow: 0 0 0 3px rgba(255,255,255,0.05);
 }
 
 /* Order items preview in Checkout summary */
@@ -379,7 +381,7 @@
     align-items: center;
     gap: 1rem;
     font-size: 0.95rem;
-    color: #333;
+    color: #ccc;
 }
 
 .order-preview-image {
@@ -387,8 +389,8 @@
     height: 60px;
     border-radius: 8px;
     object-fit: cover;
-    background: #f5f5f5;
-    border: 1px solid rgba(0,0,0,0.05);
+    background: #1a1a1a;
+    border: 1px solid rgba(255,255,255,0.05);
 }
 
 .order-preview-details {
@@ -414,7 +416,7 @@
 /* MercadoPago Styles - Premium Mock */
 .payment-mock {
     padding: 1.5rem;
-    background: #f8fbff;
+    background: #1a1a1a;
     border-radius: 12px;
     border: 1px solid rgba(0, 158, 227, 0.2);
     transition: all 0.3s ease;
@@ -438,7 +440,7 @@
     border: 6px solid #009EE3;
     border-radius: 50%;
     margin-right: 12px;
-    background: #fff;
+    background: #111;
 }
 
 .payment-option {
@@ -462,19 +464,19 @@
 }
 
 .card-pill {
-    background: white;
+    background: #1a1a1a;
     padding: 4px 10px;
-    border: 1px solid rgba(0,0,0,0.08);
+    border: 1px solid rgba(255,255,255,0.08);
     border-radius: 20px;
     font-size: 0.75rem;
     font-weight: 600;
-    color: #444;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    color: #ccc;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
 .payment-note {
     font-size: 0.85rem;
-    color: #666;
+    color: #888;
     margin-top: 1rem;
     padding-left: 32px;
     line-height: 1.4;

@@ -7,7 +7,7 @@
     aspect-ratio: 1/1;
     border-radius: 20px;
     margin-bottom: 1.5rem;
-    background: #f0f0f0;
+    background: #222;
     animation: skeleton-pulse 1.5s ease-in-out infinite;
 }
 
@@ -22,7 +22,7 @@
 .skeleton-line {
     height: 12px;
     border-radius: 6px;
-    background: #f0f0f0;
+    background: #222;
     animation: skeleton-pulse 1.5s ease-in-out infinite;
     width: 100%;
 }
@@ -32,6 +32,6 @@
 .skeleton-line.btn { height: 38px; border-radius: 30px; margin-top: 0.5rem; }
 
 @keyframes skeleton-pulse {
-    0%, 100% { background-color: #f0f0f0; }
-    50% { background-color: #e4e4e4; }
+    0%, 100% { background-color: #222; }
+    50% { background-color: #2e2e2e; }
 }

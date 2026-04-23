@@ -9,8 +9,7 @@ const Footer = () => {
                 <div className="footer-top">
                     {/* Col 1: Brand */}
                     <div className="footer-col brand-col">
-                        <img src="/assets/logo-heritage.png" alt="Lukstore Logo" className="footer-iso" style={{ width: '120px', marginBottom: '1.5rem', mixBlendMode: 'screen' }} />
-                        <h4 className="footer-logo">LUKSTORE</h4>
+                        <img src="/assets/logo-web.png" alt="Lukstore Logo" className="footer-iso" style={{ height: '100px', width: 'auto', marginBottom: '1rem' }} />
                         <p className="footer-desc">
                             Selected street goods.
                             <br />Est. 2024 — Santiago, Chile.

@@ -1,19 +1,14 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './ProductCard.css';
 import { trackSelectItem } from '../utils/ecommerceTracker';
 
-const ProductCard = ({ id, image, title, price, category, condition, discount, originalPrice, isDrop, hierarchy, slug, sizes }) => {
-    // The instruction implies that 'product' object is passed, and 'loading' state is managed.
-    // For this change, we'll assume 'product' is available and 'loading' state is handled
-    // by the parent or within the component (e.g., using useState).
-    // Since the instruction only provides the JSX change, we'll adapt the existing props
-    // to match the new JSX structure as closely as possible, assuming 'product' is not
-    // explicitly passed but its properties are available via the existing props.
-    // We'll also need to add useState for 'loading' to make the provided snippet syntactically correct.
-    const [loading, setLoading] = React.useState(true);
+const WA_PHONE = "56948100032";
 
-    // IKEA-Style URL Generation
+const ProductCard = ({ id, image, title, price, category, condition, discount, originalPrice, isDrop, hierarchy, slug, sizes }) => {
+    const [loading, setLoading] = React.useState(true);
+    const navigate = useNavigate();
+
     let productUrl = `/product/${id}`;
     if (hierarchy && hierarchy.length >= 2 && slug) {
         const cat = hierarchy[0].toLowerCase();
@@ -24,6 +19,21 @@ const ProductCard = ({ id, image, title, price, category, condition, discount, o
 
     const handleClick = () => {
         trackSelectItem({ id, image, title, price, category, condition, discount, originalPrice, isDrop, hierarchy, slug, sizes }, "product_list", "Catálogo General/Recomendados");
+    };
+
+    const handleComprar = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        trackSelectItem({ id, image, title, price, category, condition, discount, originalPrice, isDrop, hierarchy, slug, sizes }, "product_list", "Catálogo General/Recomendados");
+        navigate(productUrl);
+    };
+
+    const handleConsultar = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const priceFormatted = new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP' }).format(price);
+        const text = `Hola Lukstore! Quiero consultar sobre este producto: *${title}* - ${priceFormatted} 👟`;
+        window.open(`https://wa.me/${WA_PHONE}?text=${encodeURIComponent(text)}`, '_blank');
     };
 
     return (
@@ -60,7 +70,10 @@ const ProductCard = ({ id, image, title, price, category, condition, discount, o
                         Tallas: {sizes.map(s => s.size).join(', ')}
                     </div>
                 )}
-                <button className="btn-view-product">Ver producto</button>
+                <div className="card-actions">
+                    <button className="btn-comprar" onClick={handleComprar}>Comprar</button>
+                    <button className="btn-consultar" onClick={handleConsultar}>Consultar</button>
+                </div>
             </div>
         </Link>
     );
