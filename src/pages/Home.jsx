@@ -1,15 +1,20 @@
 import React, { useEffect, useMemo } from 'react';
+import { img } from '../data/siteConfig';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { PageMeta } from '../hooks/usePageMeta';
 import ProductCard from '../components/ProductCard';
 import { ProductSkeletonGrid } from '../components/ProductSkeleton';
 import { useProducts } from '../hooks/useProducts';
+import { useCategories } from '../hooks/useCategories';
+import { usePosts } from '../hooks/usePosts';
 import { trackViewItemList } from '../utils/ecommerceTracker';
 import './Home.css';
 
 const Home = () => {
     const { getFeaturedProducts, loading, products } = useProducts();
+    const { getImage } = useCategories();
+    const { posts } = usePosts(3);
     const newArrivals = useMemo(() => products.slice(0, 4), [products]);
     const featuredSelection = useMemo(() => getFeaturedProducts() || [], [products, getFeaturedProducts]);
 
@@ -82,15 +87,15 @@ const Home = () => {
                     className="categories-grid"
                 >
                     {[
-                        { title: 'Zapatillas', link: '/zapatillas', image: '/assets/cat-basketball.png', size: 'large' },
-                        { title: 'Hombre', link: '/hombre', image: '/assets/cat-streetwear.png', size: 'small' },
-                        { title: 'Mujer', link: '/mujer', image: '/assets/hero-home.png', size: 'small' },
-                        { title: 'Accesorios', link: '/accesorios', image: '/assets/hero-street-editorial.png', size: 'small' },
-                        { title: 'Drops', link: '/drops', image: '/assets/cat-drops.png', size: 'small' },
+                        { title: 'Zapatillas', link: '/zapatillas', slug: 'zapatillas', fallback: '/assets/cat-basketball.png', size: 'large', pos: 'center center' },
+                        { title: 'Hombre',     link: '/hombre',     slug: 'hombre',     fallback: '/assets/cat-streetwear.png', size: 'small', pos: 'center center' },
+                        { title: 'Mujer',      link: '/mujer',      slug: 'mujer',      fallback: '/assets/hero-home.png', size: 'small', pos: 'center center' },
+                        { title: 'Accesorios', link: '/accesorios', slug: 'accesorios', fallback: '/assets/hero-street-editorial.png', size: 'small', pos: 'center center' },
+                        { title: 'Drops',      link: '/drops',      slug: 'drops',      fallback: '/assets/cat-drops.png', size: 'small', pos: 'center center' },
                     ].map((cat) => (
                         <motion.div key={cat.title} variants={fadeInUp} className={`cat-card ${cat.size}`}>
                             <Link to={cat.link}>
-                                <div className="cat-card-bg" style={{ backgroundImage: `url(${cat.image})` }} />
+                                <div className="cat-card-bg" style={{ backgroundImage: `url(${getImage(cat.slug, cat.fallback)})`, backgroundPosition: cat.pos }} />
                                 <div className="cat-card-overlay" />
                                 <div className="cat-card-content">
                                     <h3>{cat.title}</h3>
@@ -118,7 +123,7 @@ const Home = () => {
             </section>
 
             {/* 4. BANNER EDITORIAL */}
-            <section className="banner-sale">
+            <section className="banner-sale" style={{ backgroundImage: `url(${img('bannerDrops')})` }}>
                 <div className="banner-content">
                     <h2>NUEVOS DROPS</h2>
                     <p>Lanzamientos limitados. Cuando se acaban, no vuelven.</p>
@@ -141,127 +146,103 @@ const Home = () => {
                 )}
             </section>
 
-            {/* 6. TESTIMONIOS */}
-            <section className="container testimonials-section">
-                <div className="section-header">
-                    <h2>Trusted by the Culture</h2>
-                    <div className="google-badge">
-                        <span className="g-icon">G</span>
-                        <div className="g-rating">
-                            <strong>4.9</strong>
-                            <span className="g-stars">★★★★★</span>
-                            <span className="g-count">(142 reseñas)</span>
-                        </div>
-                    </div>
+            {/* 6. CLIENTES */}
+            <section className="customers-section">
+                <div className="customers-header">
+                    <h2>📸 Confían en Lukstore</h2>
+                    <p>Nuestros clientes eligen calidad, estilo y servicio real.</p>
                 </div>
-                {/* 6 Grid Google Style */}
-                <div className="testimonials-grid-scroll">
+                <div className="customers-masonry">
                     {[
-                        { name: "Martín Velasco", date: "hace 2 días", text: "La curaduría es excelente. Encontré pares que no veía hace años en Chile. El envío fue rapidísimo y el packaging es otro nivel.", initial: "M" },
-                        { name: "Sofia Andrade", date: "hace 1 semana", text: "Calidad impecable. Se nota que revisan cada detalle antes de enviar. 100% recomendado para quienes buscan streetwear real.", initial: "S" },
-                        { name: "Camilo Rojas", date: "hace 3 semanas", text: "Atención personalizada y honesta. Te dicen la posta sobre el fit y el estado. Volveré a comprar seguro.", initial: "C" },
-                        { name: "Andrés P.", date: "hace 1 mes", text: "Llegó al día siguiente en RM. Las Jordan 4 estaban pristine. Nada que envidiar a tiendas de USA.", initial: "A" },
-                        { name: "Bea T.", date: "hace 1 mes", text: "Me ayudaron mucho con la talla por Instagram. El servicio al cliente es súper cercano, no como otras tiendas grandes.", initial: "B" },
-                        { name: "Javier M.", date: "hace 2 meses", text: "Compré en el drop de Yeezy y todo fluyó perfecto. Sin bots, sin filas falsas. Experiencia de compra 10/10.", initial: "J" }
-                    ].map((review, i) => (
-                        <div className="google-review-card" key={i}>
-                            <div className="gr-header">
-                                <div className="gr-avatar" style={{ backgroundColor: ['#ea4335', '#4285f4', '#fbbc05', '#34a853', '#666', '#ea4335'][i] }}>{review.initial}</div>
-                                <div className="gr-meta">
-                                    <span className="gr-name">{review.name}</span>
-                                    <div className="gr-rating-row">
-                                        <span className="gr-stars">★★★★★</span>
-                                        <span className="gr-date">{review.date}</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <p className="gr-text">{review.text}</p>
+                        'IMG_3912','IMG_3913','IMG_3914','IMG_3915','IMG_3916',
+                        'IMG_3917','IMG_3918','IMG_3919','IMG_3920','IMG_3921','IMG_3922'
+                    ].map((name) => (
+                        <div className="customers-photo" key={name}>
+                            <img src={`/assets/feedback/${name}.PNG`} alt="Cliente Lukstore" loading="lazy" />
                         </div>
                     ))}
                 </div>
             </section>
 
             {/* 7. JOURNAL / BLOG */}
-            <section className="container journal-section">
-                <div className="section-header">
-                    <h2>News & Culture</h2>
-                    <Link to="/blog" className="link-arrow">Ver todo</Link>
-                </div>
-                <div className="journal-grid">
-                    <div className="journal-card">
-                        <div className="j-img" style={{ backgroundImage: 'url(/assets/hero-street-editorial.png)' }}></div>
-                        <div className="j-content">
-                            <span className="j-tag">Cultura</span>
-                            <h3>La historia detrás de las Jordan 4 &quot;Bred&quot;</h3>
-                            <Link to="/blog/historia-jordan-4-bred" className="j-link">Leer nota</Link>
-                        </div>
+            {posts.length > 0 && (
+                <section className="container journal-section">
+                    <div className="section-header">
+                        <h2>News & Culture</h2>
+                        <Link to="/blog" className="link-arrow">Ver todo</Link>
                     </div>
-                    <div className="journal-card">
-                        <div className="j-img" style={{ backgroundImage: 'url(/assets/cat-basketball.png)' }}></div>
-                        <div className="j-content">
-                            <span className="j-tag">Guías</span>
-                            <h3>Cómo cuidar tus sneakers de gamuza</h3>
-                            <Link to="/blog/cuidado-sneakers-gamuza" className="j-link">Leer nota</Link>
-                        </div>
+                    <div className="journal-grid">
+                        {posts.map((post) => (
+                            <div className="journal-card" key={post.id}>
+                                <div className="j-img" style={{ backgroundImage: `url(${post.image || img('clusterFallback')})` }}></div>
+                                <div className="j-content">
+                                    <span className="j-tag">{post.tag}</span>
+                                    <h3 dangerouslySetInnerHTML={{ __html: post.title }} />
+                                    <a href={post.link} className="j-link">Leer nota</a>
+                                </div>
+                            </div>
+                        ))}
                     </div>
-                    <div className="journal-card">
-                        <div className="j-img" style={{ backgroundImage: 'url(/assets/cat-streetwear.png)' }}></div>
-                        <div className="j-content">
-                            <span className="j-tag">Estilo</span>
-                            <h3>Essentials: 5 prendas para este invierno</h3>
-                            <Link to="/blog/essentials-invierno" className="j-link">Leer nota</Link>
-                        </div>
-                    </div>
-                </div>
-            </section>
+                </section>
+            )}
 
-            {/* 8. INSTAGRAM FEED */}
-            <section className="instagram-section">
+            {/* 8. REDES SOCIALES */}
+            <section className="redes-section">
                 <div className="container">
-                    <div className="ig-header">
-                        <h2>@lukstore._</h2>
-                        <a href="https://www.instagram.com/lukstore._/" target="_blank" rel="noreferrer" className="btn btn-outline">Seguir en Instagram</a>
+                    <div className="redes-header">
+                        <h2>Instagram</h2>
+                        <p>Síguenos para ver nuestros nuevos productos ↓</p>
                     </div>
-                    <div className="ig-grid">
-                        {/* Instagram Feed - @lukstore._ */}
+                    <div className="redes-grid">
                         {[
-                                '/assets/instagram/ig-1.jpg',
-                                '/assets/instagram/ig-2.jpg',
-                                '/assets/instagram/ig-3.jpg',
-                                '/assets/instagram/ig-4.jpg',
-                                '/assets/instagram/ig-5.jpg',
-                                '/assets/instagram/ig-6.jpg',
-                                '/assets/instagram/ig-7.jpg',
-                                '/assets/instagram/ig-8.jpg',
-                                '/assets/instagram/ig-9.jpg'
-                            ].map((src, i) => (
-                                <a key={i} href="https://www.instagram.com/lukstore._/" target="_blank" rel="noreferrer" className="ig-item">
-                                    <img src={src} alt="Instagram Post" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                                    <div className="ig-overlay"><span className="ig-icon">📸</span></div>
-                                </a>
-                            ))}
+                            {
+                                href: 'https://www.instagram.com/lukstore._/',
+                                video: '/assets/redes-video-1.mp4',
+                                username: '@lukstore._',
+                                label: 'Tienda oficial',
+                            },
+                            {
+                                href: 'https://www.instagram.com/lukstore._/',
+                                image: '/assets/feedback/IMG_3912.PNG',
+                                username: '@lukstore._',
+                                label: 'Ver perfil',
+                            },
+                            {
+                                href: 'https://www.instagram.com/lukstore._/',
+                                video: '/assets/redes-video-2.mp4',
+                                username: '@lukstore._',
+                                label: 'Ver más',
+                            },
+                        ].map((card) => (
+                            <a key={card.label} href={card.href} target="_blank" rel="noreferrer" className="redes-card">
+                                {card.video ? (
+                                    <video
+                                        className="redes-video"
+                                        src={card.video}
+                                        autoPlay
+                                        muted
+                                        loop
+                                        playsInline
+                                    />
+                                ) : (
+                                    <div className="redes-card-bg" style={{ backgroundImage: `url(${card.image})` }} />
+                                )}
+                                <div className="redes-card-overlay" />
+                                <div className="redes-card-footer">
+                                    <div className="redes-platform-icon">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" fill="#000"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5" stroke="#000" strokeWidth="2"/></svg>
+                                    </div>
+                                    <div className="redes-card-info">
+                                        <span className="redes-username">{card.username}</span>
+                                        <span className="redes-label">{card.label}</span>
+                                    </div>
+                                </div>
+                            </a>
+                        ))}
                     </div>
                 </div>
             </section>
 
-            {/* 9. CTA FINAL */}
-            {/* 9. CTA FINAL VISUAL */}
-            <section className="container final-cta-visual">
-                <Link to="/hombre" className="cta-card">
-                    <div className="cta-bg" style={{ backgroundImage: 'url(/assets/cat-streetwear.png)' }}></div>
-                    <div className="cta-content">
-                        <h2>Hombre</h2>
-                        <span>Ver Colección</span>
-                    </div>
-                </Link>
-                <Link to="/mujer" className="cta-card">
-                    <div className="cta-bg" style={{ backgroundImage: 'url(/assets/hero-home.png)' }}></div>
-                    <div className="cta-content">
-                        <h2>Mujer</h2>
-                        <span>Ver Colección</span>
-                    </div>
-                </Link>
-            </section>
         </div >
     );
 };

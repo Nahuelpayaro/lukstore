@@ -60,7 +60,14 @@ export const normalizeProduct = (p) => {
         cluster: p.slug,
         hierarchy,
         category,
-        gender: getAttr(p.attributes ?? [], ['género', 'genero', 'gender']) || 'Unisex',
+        gender: (() => {
+            const fromAttr = getAttr(p.attributes ?? [], ['género', 'genero', 'gender']);
+            if (fromAttr) return fromAttr;
+            const cats = (p.categories ?? []).map(c => c.name.toLowerCase());
+            if (cats.includes('hombre')) return 'Hombre';
+            if (cats.includes('mujer')) return 'Mujer';
+            return 'Unisex';
+        })(),
         tags: tags.map(t => t.slug),
         seo: {
             title: `${p.name} - Envíos a todo Chile`,

@@ -1,0 +1,434 @@
+/* Support.css — Shared styles for all support/footer pages */
+
+.support-page {
+    background: #000;
+    color: #fff;
+    min-height: 100vh;
+}
+
+/* HERO */
+.support-hero {
+    padding: 7rem 0 4rem;
+    text-align: center;
+    border-bottom: 1px solid #1a1a1a;
+}
+
+.support-hero-dark {
+    background: #000;
+}
+
+.support-hero-icon {
+    color: #fff;
+    margin-bottom: 1.5rem;
+}
+
+.support-tag {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #888;
+    margin-bottom: 1rem;
+}
+
+.support-hero h1 {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin-bottom: 1rem;
+    color: #fff;
+}
+
+.support-hero p {
+    font-size: 1.1rem;
+    color: #888;
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+/* BODY */
+.support-body {
+    padding: 5rem 0 8rem;
+}
+
+.support-section-title {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 1.5rem;
+    letter-spacing: -0.02em;
+}
+
+.support-subsection-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #fff;
+    margin: 2.5rem 0 1rem;
+}
+
+.support-text {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: #aaa;
+    margin-bottom: 1rem;
+}
+
+.support-divider {
+    border: none;
+    border-top: 1px solid #222;
+    margin: 3rem 0;
+}
+
+/* CARDS GRID */
+.support-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.support-card {
+    background: #111;
+    padding: 2.5rem;
+    border-radius: 20px;
+    border: 1px solid #222;
+    transition: border-color 0.3s ease;
+}
+
+.support-card:hover {
+    border-color: #333;
+}
+
+.support-card-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    color: #fff;
+}
+
+.support-card-header h3,
+.support-card-header h4 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #fff;
+}
+
+.support-icon-box {
+    background: #fff;
+    color: #000;
+    padding: 0.75rem;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+/* LISTS */
+.support-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 1rem;
+}
+
+.support-list li {
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+    color: #aaa;
+}
+
+.support-list li svg {
+    color: #555;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.support-list li strong {
+    color: #ddd;
+}
+
+/* CTA BLOCK */
+.support-cta-block {
+    margin-top: 5rem;
+    background: #111;
+    border: 1px solid #222;
+    padding: 4rem;
+    border-radius: 30px;
+}
+
+.support-cta-block h2,
+.support-cta-block h3 {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 1rem;
+}
+
+.support-cta-block p {
+    color: #888;
+    font-size: 1rem;
+    margin-bottom: 2rem;
+    line-height: 1.6;
+}
+
+.support-cta-center {
+    text-align: center;
+}
+
+.support-cta-badges {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.support-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #ccc;
+}
+
+/* TWO COL */
+.support-two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+}
+
+.support-shield-card {
+    background: #111;
+    border: 1px solid #222;
+    padding: 3rem;
+    border-radius: 24px;
+    text-align: center;
+    color: #fff;
+}
+
+.support-shield-card h3 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin: 1.5rem 0 0.75rem;
+}
+
+.support-shield-card p {
+    color: #888;
+}
+
+/* STEPS */
+.support-steps-section {
+    background: #0a0a0a;
+    padding: 6rem 0;
+    border-top: 1px solid #1a1a1a;
+    border-bottom: 1px solid #1a1a1a;
+}
+
+.support-steps-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+}
+
+.support-step-card {
+    background: #111;
+    padding: 2.5rem;
+    border-radius: 16px;
+    border: 1px solid #222;
+    transition: border-color 0.3s ease;
+}
+
+.support-step-card:hover {
+    border-color: #444;
+}
+
+.support-step-icon {
+    color: #fff;
+    margin-bottom: 1.5rem;
+}
+
+.support-step-card h4 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 0.75rem;
+}
+
+.support-step-card p {
+    color: #888;
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+/* FAQ */
+.faq-wrapper {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.faq-group {
+    margin-bottom: 4rem;
+}
+
+.faq-group-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    border-bottom: 2px solid #222;
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+    color: #fff;
+}
+
+.faq-group-header h2 {
+    font-size: 1.3rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #fff;
+}
+
+.faq-item {
+    border-bottom: 1px solid #1a1a1a;
+}
+
+.faq-trigger {
+    width: 100%;
+    padding: 1.5rem 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: none;
+    border: none;
+    text-align: left;
+    cursor: pointer;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 600;
+    gap: 1rem;
+}
+
+.faq-trigger svg {
+    flex-shrink: 0;
+    color: #888;
+}
+
+.faq-answer {
+    padding-bottom: 1.5rem;
+    color: #888;
+    line-height: 1.7;
+    font-size: 0.95rem;
+}
+
+/* SIZE TABLE */
+.size-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 3rem;
+}
+
+.btn-outline-dark {
+    background: none;
+    border: 1px solid #333;
+    color: #aaa;
+    padding: 0.8rem 2rem;
+    border-radius: 50px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.btn-outline-dark:hover {
+    border-color: #666;
+    color: #fff;
+}
+
+.size-table-wrap {
+    max-width: 800px;
+    margin: 0 auto;
+    background: #111;
+    border-radius: 24px;
+    border: 1px solid #222;
+    overflow: hidden;
+}
+
+.size-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+}
+
+.size-table thead tr {
+    background: #1a1a1a;
+}
+
+.size-table th {
+    padding: 1.25rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #888;
+    border-bottom: 1px solid #222;
+}
+
+.size-table td {
+    padding: 1rem;
+    color: #aaa;
+    border-bottom: 1px solid #1a1a1a;
+    font-size: 0.95rem;
+}
+
+.size-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.size-table tbody tr:hover td {
+    background: #1a1a1a;
+}
+
+.size-us {
+    font-weight: 700;
+    color: #fff !important;
+}
+
+.size-cm {
+    font-weight: 600;
+    color: #ccc !important;
+}
+
+/* LEGAL */
+.legal-content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .support-hero {
+        padding: 5rem 0 3rem;
+    }
+
+    .support-two-col {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    .support-cta-block {
+        padding: 2.5rem 1.5rem;
+    }
+
+    .support-cta-badges {
+        flex-direction: column;
+        align-items: center;
+    }
+}

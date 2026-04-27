@@ -1,7 +1,9 @@
 .breadcrumbs-container {
     padding: 1rem 0;
-    font-size: 0.85rem;
-    color: #666;
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 600;
     margin-bottom: 1rem;
 }
 
@@ -22,21 +24,20 @@
 .breadcrumb-item:not(:last-child)::after {
     content: '/';
     margin: 0 0.5rem;
-    color: #ccc;
+    color: #555;
 }
 
 .breadcrumb-item a {
-    color: #666;
+    color: #888;
     text-decoration: none;
     transition: color 0.2s;
 }
 
 .breadcrumb-item a:hover {
-    color: #000;
-    text-decoration: underline;
+    color: #fff;
 }
 
 .breadcrumb-item.current span {
-    color: #000;
-    font-weight: 600;
+    color: #fff;
+    font-weight: 700;
 }

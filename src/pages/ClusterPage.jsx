@@ -8,11 +8,14 @@ import { getClusterData } from '../data/clusters';
 import { getCategoryContent } from '../data/categoryContent';
 import { trackViewItemList } from '../utils/ecommerceTracker';
 import { useProducts } from '../hooks/useProducts';
+import { useCategories } from '../hooks/useCategories';
+import { img } from '../data/siteConfig';
 import './ClusterPage.css';
 
 const ClusterPage = () => {
     const { category, brand, model } = useParams();
     const [filters, setFilters] = useState({ sort: 'newest', size: 'all' });
+    const { getImage } = useCategories();
     const { products, loading } = useProducts();
 
     // 1. Resolve Active Content (Hierarchy or Main Category)
@@ -35,29 +38,21 @@ const ClusterPage = () => {
             // /zapatillas → catálogo completo
             if (isRootCatalog && !brand && !model) return true;
 
-            // /hombre o /mujer → por género (incluye unisex)
+            // /hombre o /mujer → solo productos explícitamente de ese género
             if (isGenderPage && !brand && !model) {
-                const pGender = (p.gender || 'unisex').toLowerCase();
-                return pGender === catLower || pGender === 'unisex';
+                const pGender = (p.gender || '').toLowerCase();
+                return pGender === catLower;
             }
 
             // Sub-rutas con brand/model
-            const pGender = (p.gender || 'unisex').toLowerCase();
+            const pGender = (p.gender || '').toLowerCase();
             const catMatch = !category || h.includes(catLower) ||
-                (isGenderPage && (pGender === catLower || pGender === 'unisex'));
+                (isGenderPage && pGender === catLower);
             const brandMatch = !brand || h.includes(brand.toLowerCase());
             const modelMatch = !model || h.includes(model.replace(/-/g, ' ').toLowerCase());
 
             return catMatch && brandMatch && modelMatch;
         });
-
-        // Páginas de género: gender-específicos primero, unisex después
-        if (isGenderPage && filters.sort === 'newest') {
-            result = [
-                ...result.filter(p => (p.gender || 'unisex').toLowerCase() === catLower),
-                ...result.filter(p => (p.gender || 'unisex').toLowerCase() === 'unisex'),
-            ];
-        }
 
         if (filters.sort === 'price-asc') result.sort((a, b) => a.price - b.price);
         else if (filters.sort === 'price-desc') result.sort((a, b) => b.price - a.price);
@@ -88,7 +83,10 @@ const ClusterPage = () => {
     // Metadata
     const title = activeContent?.hero?.title || activeContent?.title || category?.toUpperCase();
     const description = activeContent?.hero?.subtitle || activeContent?.description || `Explora lo mejor de ${category} en Lukstore.`;
-    const heroImage = activeContent?.hero?.image || activeContent?.heroImage || '/assets/hero-street-editorial.png';
+    const heroImage = activeContent?.hero?.image
+        || activeContent?.heroImage
+        || getImage(brand || category, null)
+        || img('clusterFallback');
 
     const handleFilterChange = (key, value) => setFilters(prev => ({ ...prev, [key]: value }));
 
@@ -124,10 +122,9 @@ const ClusterPage = () => {
                 <div className="container nav-flex">
                     <div className="breadcrumb-wrapper">
                         <Breadcrumbs items={[
-                            { label: 'Home', url: '/' },
-                            { label: category, url: `/${category}` },
-                            ...(brand ? [{ label: brand, url: `/${category}/${brand}` }] : []),
-                            ...(model ? [{ label: model, url: `/${category}/${brand}/${model}` }] : [])
+                            { label: category?.charAt(0).toUpperCase() + category?.slice(1), url: `/${category}` },
+                            ...(brand ? [{ label: brand.charAt(0).toUpperCase() + brand.slice(1), url: `/${category}/${brand}` }] : []),
+                            ...(model ? [{ label: model.replace(/-/g, ' '), url: `/${category}/${brand}/${model}` }] : [])
                         ]} />
                     </div>
                     <div className="filter-pills">
@@ -161,20 +158,7 @@ const ClusterPage = () => {
                     </section>
                 )}
 
-                {/* 4. EDITORIAL BANNER INLINE */}
-                {activeContent?.editorialBanner && (
-                    <section className="editorial-banner-inline">
-                        <div className="eb-image" style={{ backgroundImage: `url(${activeContent.editorialBanner.image})` }}></div>
-                        <div className="eb-content">
-                            <span className="eb-tag">Destacado</span>
-                            <h3>{activeContent.editorialBanner.title}</h3>
-                            <p>{activeContent.editorialBanner.copy}</p>
-                            <Link to={activeContent.editorialBanner.ctaLink} className="btn-eb">EXPLORAR</Link>
-                        </div>
-                    </section>
-                )}
-
-                {/* 5. GRID COMPLETO */}
+                {/* 4. GRID COMPLETO */}
                 {remainingProducts.length > 0 && (
                     <section className="section-padding">
                         <div className="section-header">
@@ -204,27 +188,7 @@ const ClusterPage = () => {
                     </section>
                 )}
 
-                {/* 7. BLOG RELACIONADO */}
-                {activeContent?.blogPosts && (
-                    <section className="section-padding blog-related">
-                        <div className="section-header">
-                            <h2>Journal & Cultura</h2>
-                        </div>
-                        <div className="blog-grid-horizontal">
-                            {activeContent.blogPosts.map(post => (
-                                <Link key={post.id} to={`/blog/${post.slug}`} className="blog-mini-card">
-                                    <div className="bm-img" style={{ backgroundImage: `url(${post.image})` }}></div>
-                                    <div className="bm-body">
-                                        <span className="bm-tag">{post.tag}</span>
-                                        <h4>{post.title}</h4>
-                                    </div>
-                                </Link>
-                            ))}
-                        </div>
-                    </section>
-                )}
-
-                {/* 8. SEO BLOCK */}
+                {/* 7. SEO BLOCK */}
                 {activeContent?.seo && (
                     <section className="section-padding seo-optimized-section">
                         <details className="seo-details">

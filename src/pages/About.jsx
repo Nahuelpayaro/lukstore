@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { PageMeta } from '../hooks/usePageMeta';
+import { img } from '../data/siteConfig';
 import './About.css';
 
 const About = () => {
@@ -24,7 +25,7 @@ const About = () => {
             </script>
 
             {/* HERO */}
-            <section className="about-hero" style={{ backgroundImage: 'url(/assets/hero-about.png)' }}>
+            <section className="about-hero" style={{ backgroundImage: `url(${img('aboutHero')})` }}>
                 <div className="about-hero-overlay"></div>
                 <div className="container" style={{ position: 'relative', zIndex: 2 }}>
                     <h1>NO HYPE.<br />JUST CULTURE.</h1>
@@ -46,7 +47,7 @@ const About = () => {
                         </p>
                     </div>
                     <div className="about-img-col">
-                        <img src="/assets/cat-streetwear.png" alt="Lukstore Origins" />
+                        <img src={img('aboutOrigins')} alt="Lukstore Origins" />
                     </div>
                 </div>
                 </div>

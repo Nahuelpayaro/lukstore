@@ -1,33 +1,17 @@
 import React, { useState } from 'react';
 import { PageMeta } from '../../hooks/usePageMeta';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronDown, HelpCircle, Package, Truck, CreditCard, RefreshCcw, ShieldCheck } from 'lucide-react';
-import '../../pages/Institutional.css';
+import { ChevronDown, HelpCircle, Package, Truck, CreditCard, RefreshCcw } from 'lucide-react';
+import '../Support.css';
 
 const FAQItem = ({ question, answer }) => {
     const [isOpen, setIsOpen] = useState(false);
 
     return (
-        <div className="faq-accordion-item" style={{ borderBottom: '1px solid #eee' }}>
-            <button 
-                onClick={() => setIsOpen(!isOpen)}
-                style={{ 
-                    width: '100%', 
-                    padding: '1.5rem 0', 
-                    display: 'flex', 
-                    justifyContent: 'space-between', 
-                    alignItems: 'center',
-                    background: 'none',
-                    border: 'none',
-                    textAlign: 'left',
-                    cursor: 'pointer'
-                }}
-            >
-                <span style={{ fontSize: '1.1rem', fontWeight: 600 }}>{question}</span>
-                <motion.div
-                    animate={{ rotate: isOpen ? 180 : 0 }}
-                    transition={{ duration: 0.2 }}
-                >
+        <div className="faq-item">
+            <button className="faq-trigger" onClick={() => setIsOpen(!isOpen)}>
+                <span>{question}</span>
+                <motion.div animate={{ rotate: isOpen ? 180 : 0 }} transition={{ duration: 0.2 }}>
                     <ChevronDown size={20} />
                 </motion.div>
             </button>
@@ -40,7 +24,7 @@ const FAQItem = ({ question, answer }) => {
                         transition={{ duration: 0.3, ease: 'easeInOut' }}
                         style={{ overflow: 'hidden' }}
                     >
-                        <p style={{ paddingBottom: '1.5rem', color: '#666', lineHeight: 1.6 }}>{answer}</p>
+                        <p className="faq-answer">{answer}</p>
                     </motion.div>
                 )}
             </AnimatePresence>
@@ -87,40 +71,36 @@ const FAQ = () => {
     ];
 
     return (
-        <div className="institutional-page faq-page">
+        <div className="support-page">
             <PageMeta title="Preguntas Frecuentes | Lukstore" description="Resolvemos todas tus dudas sobre pedidos, envíos, autenticidad y más." />
 
-            <header style={{ padding: '6rem 0 3rem', textAlign: 'center' }}>
+            <header className="support-hero">
                 <div className="container">
-                    <HelpCircle size={48} style={{ marginBottom: '1.5rem', color: '#000' }} />
-                    <h1 style={{ fontSize: '3rem', fontWeight: 800 }}>¿Cómo podemos ayudarte?</h1>
-                    <p style={{ color: '#666', fontSize: '1.1rem', maxWidth: '600px', margin: '1rem auto' }}>
-                        Encuentra respuestas rápidas a las dudas más comunes de nuestra comunidad.
-                    </p>
+                    <HelpCircle size={48} className="support-hero-icon" />
+                    <h1>¿Cómo podemos ayudarte?</h1>
+                    <p>Encuentra respuestas rápidas a las dudas más comunes de nuestra comunidad.</p>
                 </div>
             </header>
 
-            <section className="container" style={{ paddingBottom: '8rem' }}>
-                <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+            <section className="container support-body">
+                <div className="faq-wrapper">
                     {categories.map((cat, idx) => (
-                        <div key={idx} style={{ marginBottom: '4rem' }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem', borderBottom: '2px solid #000', paddingBottom: '1rem' }}>
+                        <div key={idx} className="faq-group">
+                            <div className="faq-group-header">
                                 {cat.icon}
-                                <h2 style={{ fontSize: '1.5rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{cat.title}</h2>
+                                <h2>{cat.title}</h2>
                             </div>
-                            <div className="faq-group">
-                                {cat.items.map((item, i) => (
-                                    <FAQItem key={i} question={item.q} answer={item.a} />
-                                ))}
-                            </div>
+                            {cat.items.map((item, i) => (
+                                <FAQItem key={i} question={item.q} answer={item.a} />
+                            ))}
                         </div>
                     ))}
                 </div>
 
-                <div style={{ background: '#f9f9f9', padding: '3rem', borderRadius: '24px', textAlign: 'center', marginTop: '4rem' }}>
-                    <h3 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '1rem' }}>¿No encontraste tu respuesta?</h3>
-                    <p style={{ color: '#666', marginBottom: '2rem' }}>Nuestro equipo de soporte está disponible para ayudarte en tiempo real.</p>
-                    <a href="https://wa.me/56900000000" className="btn btn-black" style={{ padding: '1rem 2.5rem', borderRadius: '50px' }}>Escribir al WhatsApp</a>
+                <div className="support-cta-block support-cta-center">
+                    <h3>¿No encontraste tu respuesta?</h3>
+                    <p>Nuestro equipo de soporte está disponible para ayudarte en tiempo real.</p>
+                    <a href="https://wa.me/56900000000" className="btn btn-white" style={{ padding: '1rem 2.5rem', borderRadius: '50px' }}>Escribir al WhatsApp</a>
                 </div>
             </section>
         </div>

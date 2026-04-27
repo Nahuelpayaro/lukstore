@@ -396,110 +396,60 @@
     letter-spacing: -0.03em;
 }
 
-/* Google Badge Refined */
-.google-badge {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    background: #111;
-    padding: 8px 20px;
-    border-radius: 40px;
-    border: 1px solid #333;
-    transition: box-shadow 0.3s ease;
+/* 6. CUSTOMERS PHOTO GRID */
+.customers-section {
+    padding: 5rem 0 7rem;
+    background: #000;
 }
 
-.google-badge:hover {
-    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+.customers-header {
+    text-align: center;
+    margin-bottom: 3.5rem;
+    padding: 0 2rem;
 }
 
-.g-icon {
+.customers-header h2 {
+    font-size: 2.2rem;
     font-weight: 800;
-    font-size: 1.5rem;
-    color: #4285f4;
-}
-
-.g-rating strong {
-    font-size: 0.95rem;
-}
-
-.g-stars {
-    color: #fbbc05;
-    font-size: 0.8rem;
-    letter-spacing: 2px;
-}
-
-.g-count {
-    font-size: 0.75rem;
-    color: #888;
-}
-
-/* Replacing old testimonials with grid scroll soft cards */
-.testimonials-grid-scroll {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2rem;
-}
-
-.google-review-card {
-    background: #111;
-    padding: 2rem;
-    border: 1px solid #222;
-    border-radius: 20px;
-    transition: all 0.3s ease;
-}
-
-.google-review-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-    border-color: #333;
-}
-
-.gr-header {
-    display: flex;
-    gap: 15px;
-    margin-bottom: 1.5rem;
-    align-items: center;
-}
-
-.gr-avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    color: white;
-    font-weight: 600;
-    font-size: 1rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.gr-name {
-    font-size: 0.95rem;
-    font-weight: 700;
+    letter-spacing: -0.02em;
     color: #fff;
+    margin-bottom: 0.5rem;
 }
 
-.gr-rating-row {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-}
-
-.gr-date {
-    font-size: 0.75rem;
-    color: #70757a;
-}
-
-.gr-text {
+.customers-header p {
     font-size: 0.95rem;
-    line-height: 1.6;
-    color: #aaa;
-    font-weight: 400;
-    display: -webkit-box;
-    -webkit-line-clamp: 4;
-    line-clamp: 4;
-    -webkit-box-orient: vertical;
+    color: #888;
+    max-width: 420px;
+    margin: 0 auto;
+}
+
+.customers-masonry {
+    columns: 4;
+    column-gap: 12px;
+    padding: 0 max(2.5rem, 6vw);
+    max-width: 1300px;
+    margin: 0 auto;
+}
+
+.customers-photo {
+    break-inside: avoid;
+    margin-bottom: 12px;
+    border-radius: 20px;
     overflow: hidden;
+    background: #111;
+    position: relative;
+}
+
+.customers-photo img {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+    border-radius: 20px;
+}
+
+.customers-photo:hover img {
+    transform: scale(1.04);
 }
 
 /* 7. JOURNAL */
@@ -567,72 +517,187 @@
     color: #fff;
 }
 
-/* 8. INSTAGRAM */
-.instagram-section {
-    margin-bottom: 6rem;
-    padding: 2rem 0;
+/* 8. REDES SOCIALES */
+.redes-section {
+    padding: 5rem 0 7rem;
+    background: #000;
 }
 
-.ig-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 3rem;
+.redes-header {
+    text-align: center;
+    margin-bottom: 4rem;
 }
 
-.ig-header h2 {
-    font-size: 1.8rem;
+.redes-header h2 {
+    font-size: 2.4rem;
     font-weight: 800;
+    color: #fff;
+    margin-bottom: 0.75rem;
     letter-spacing: -0.02em;
 }
 
-.ig-grid {
+.redes-header p {
+    font-size: 1rem;
+    color: #888;
+}
+
+.redes-grid {
     display: grid;
-    grid-template-columns: repeat(9, 1fr);
-    gap: 0;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    max-width: 900px;
+    margin: 0 auto;
 }
 
-.ig-item {
-    aspect-ratio: 1;
+.redes-card {
     position: relative;
+    aspect-ratio: 9 / 16;
+    border-radius: 28px;
     overflow: hidden;
-    cursor: auto;
-    background: #111;
-}
-
-.ig-item:nth-child(even) {
-    background: #1a1a1a;
-}
-
-.ig-item img {
     display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.6s ease;
+    text-decoration: none;
+    background: #111;
+    transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-.ig-item:hover img {
+.redes-card:hover {
+    transform: scale(1.02);
+}
+
+.redes-card-bg {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    transition: transform 0.5s ease;
+}
+
+.redes-card:hover .redes-card-bg {
     transform: scale(1.05);
 }
 
-.ig-overlay {
+.redes-video {
     position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0, 0, 0, 0.4);
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.redes-card-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to bottom,
+        rgba(0,0,0,0.1) 0%,
+        rgba(0,0,0,0) 40%,
+        rgba(0,0,0,0.7) 80%,
+        rgba(0,0,0,0.85) 100%
+    );
+}
+
+.redes-mute {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    background: rgba(0,0,0,0.55);
+    backdrop-filter: blur(4px);
+    border-radius: 50%;
+    width: 34px;
+    height: 34px;
     display: flex;
     align-items: center;
     justify-content: center;
-    opacity: 0;
-    transition: opacity 0.3s ease;
+    color: #fff;
+    z-index: 3;
 }
 
-.ig-item:hover .ig-overlay {
-    opacity: 1;
+.redes-play {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60px;
+    height: 60px;
+    background: rgba(0,0,0,0.5);
+    backdrop-filter: blur(6px);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 3;
+    transition: background 0.2s;
 }
 
-.ig-icon {
-    font-size: 1.5rem;
+.redes-card:hover .redes-play {
+    background: rgba(0,0,0,0.7);
+}
+
+
+.redes-card-footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 1.2rem 1.2rem 1.4rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    z-index: 3;
+    text-decoration: none;
+}
+
+.redes-platform-icon {
+    width: 36px;
+    height: 36px;
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(6px);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.redes-card-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.redes-username {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #fff;
+}
+
+.redes-label {
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.65);
+}
+
+@media (max-width: 640px) {
+    .redes-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.6rem;
+    }
+
+    .redes-card {
+        border-radius: 18px;
+    }
+
+    .redes-play {
+        width: 42px;
+        height: 42px;
+    }
+
+    .redes-username {
+        font-size: 0.72rem;
+    }
+
+    .redes-label {
+        font-size: 0.65rem;
+    }
 }
 
 /* 9. FINAL CTA VISUAL */
@@ -702,14 +767,31 @@
 
 /* RESPONSIVE ADDITIONS FOR LOWER HALF */
 @media (max-width: 1024px) {
-    .testimonials-grid-scroll,
+    .customers-masonry {
+        columns: 3;
+    }
+
     .journal-grid {
         grid-template-columns: repeat(2, 1fr);
     }
 }
 
 @media (max-width: 768px) {
-    .testimonials-grid-scroll,
+    .customers-masonry {
+        columns: 2;
+        padding: 0 1rem;
+        column-gap: 6px;
+    }
+
+    .customers-photo {
+        margin-bottom: 6px;
+        border-radius: 10px;
+    }
+
+    .customers-header h2 {
+        font-size: 1.6rem;
+    }
+
     .journal-grid {
         grid-template-columns: 1fr;
     }
