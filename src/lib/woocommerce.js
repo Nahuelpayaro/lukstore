@@ -55,7 +55,8 @@ export const normalizeProduct = (p) => {
         image: images[0] ?? '',
         images,
         condition,
-        isDrop: tags.some(t => ['drop', 'drops'].includes(t.slug)),
+        isDrop: tags.some(t => ['drop', 'drops'].includes(t.slug)) ||
+            categories.some(c => ['drop', 'drops'].includes(c.slug) || ['drop', 'drops'].includes(c.name.toLowerCase())),
         isFeatured: p.featured ?? false,
         cluster: p.slug,
         hierarchy,

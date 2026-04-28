@@ -100,45 +100,6 @@
     font-size: 1rem;
 }
 
-/* PRODUCT CARD OVERRIDES FOR DARK MODE */
-.drops-page .product-card {
-    background: #111;
-    border: 1px solid #222;
-    transition: all 0.3s ease;
-}
-
-.drops-page .product-card:hover {
-    border-color: #444;
-    transform: translateY(-5px);
-}
-
-.drops-page .product-image-container {
-    background-color: #1a1a1a;
-    /* Darker bg for images */
-}
-
-.drops-page .product-title {
-    color: #fff !important;
-}
-
-.drops-page .product-price {
-    color: #fff !important;
-}
-
-.drops-page .product-category {
-    color: #888;
-}
-
-.drops-page .btn-view-product {
-    border-color: #fff;
-    color: #fff !important;
-}
-
-.drops-page .btn-view-product:hover {
-    background-color: #fff;
-    color: #000 !important;
-}
-
 /* NEWSLETTER / ALERTS */
 .drops-newsletter {
     background: #111;
