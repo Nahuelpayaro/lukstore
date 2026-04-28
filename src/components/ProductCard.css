@@ -228,10 +228,15 @@
 
 /* Responsive Product Card Updates */
 @media (max-width: 768px) {
-    .product-image {
-        padding: 1.5rem; /* Reduced padding so images don't look tiny in 2-col grids */
+    .product-card {
+        min-width: 0;
+        overflow: hidden;
     }
-    
+
+    .product-image {
+        padding: 1.5rem;
+    }
+
     .product-title {
         font-size: 0.85rem;
     }
@@ -239,17 +244,26 @@
     .product-price {
         font-size: 0.9rem;
     }
-    
+
     .product-price-original {
         font-size: 0.75rem;
     }
 
+    .card-actions {
+        gap: 0.35rem;
+    }
+
     .btn-comprar,
     .btn-consultar {
-        padding: 0.7rem 0.3rem;
-        font-size: 0.65rem;
+        min-width: 0;
+        padding: 0.6rem 0.25rem;
+        font-size: 0.6rem;
+        letter-spacing: 0.04em;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
-    
+
     .badge {
         font-size: 0.6rem;
         padding: 0.3rem 0.6rem;
