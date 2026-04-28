@@ -37,6 +37,7 @@ const Product = () => {
     const [sizeError, setSizeError] = useState(false);
     const [product, setProduct] = useState(null);
     const [activeImage, setActiveImage] = useState(null);
+    const [showSizeGuide, setShowSizeGuide] = useState(false);
 
     useEffect(() => {
         if (!loading && products.length > 0) {
@@ -184,7 +185,7 @@ const Product = () => {
                         <div className={`size-selector ${sizeError ? 'size-error' : ''}`}>
                             <div className="size-header">
                                 <label>Tallas disponibles (US)</label>
-                                <Link to="/guia-tallas" className="size-guide-link">Guía de tallas</Link>
+                                <button type="button" className="size-guide-link" onClick={() => setShowSizeGuide(true)}>Guía de tallas</button>
                             </div>
                             <div className="size-grid">
                                 {(product.sizes || []).map(s => (
@@ -263,6 +264,73 @@ const Product = () => {
                     </div>
                 </div>
             )}
+
+            {showSizeGuide && (
+                <div className="size-guide-overlay" onClick={() => setShowSizeGuide(false)}>
+                    <div className="size-guide-modal" onClick={e => e.stopPropagation()}>
+                        <div className="size-guide-modal-header">
+                            <h3>Guía de Tallas</h3>
+                            <button type="button" className="size-guide-modal-close" onClick={() => setShowSizeGuide(false)}>✕</button>
+                        </div>
+                        <SizeGuideContent />
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+};
+
+const nikeSizes = [
+    { us: '7', uk: '6', eu: '40', cm: '25' },
+    { us: '7.5', uk: '6.5', eu: '40.5', cm: '25.5' },
+    { us: '8', uk: '7', eu: '41', cm: '26' },
+    { us: '8.5', uk: '7.5', eu: '42', cm: '26.5' },
+    { us: '9', uk: '8', eu: '42.5', cm: '27' },
+    { us: '9.5', uk: '8.5', eu: '43', cm: '27.5' },
+    { us: '10', uk: '9', eu: '44', cm: '28' },
+    { us: '10.5', uk: '9.5', eu: '44.5', cm: '28.5' },
+    { us: '11', uk: '10', eu: '45', cm: '29' },
+    { us: '12', uk: '11', eu: '46', cm: '30' },
+];
+
+const yeezySizes = [
+    { us: '7', uk: '6.5', eu: '40', cm: '25' },
+    { us: '8', uk: '7.5', eu: '41 1/3', cm: '26' },
+    { us: '9', uk: '8.5', eu: '42 2/3', cm: '27' },
+    { us: '10', uk: '9.5', eu: '44', cm: '28' },
+    { us: '11', uk: '10.5', eu: '45 1/3', cm: '29' },
+];
+
+const SizeGuideContent = () => {
+    const [activeTab, setActiveTab] = useState('nike');
+    return (
+        <div className="size-guide-modal-body">
+            <div className="size-tabs">
+                <button type="button" onClick={() => setActiveTab('nike')} className={`btn ${activeTab === 'nike' ? 'btn-white' : 'btn-outline-dark'}`}>Nike / Jordan</button>
+                <button type="button" onClick={() => setActiveTab('yeezy')} className={`btn ${activeTab === 'yeezy' ? 'btn-white' : 'btn-outline-dark'}`}>Adidas / Yeezy</button>
+            </div>
+            <div className="size-table-wrap">
+                <table className="size-table">
+                    <thead>
+                        <tr><th>US</th><th>UK</th><th>EU</th><th>CM / JP</th></tr>
+                    </thead>
+                    <tbody>
+                        {(activeTab === 'nike' ? nikeSizes : yeezySizes).map((row, i) => (
+                            <tr key={i}>
+                                <td className="size-us">{row.us}</td>
+                                <td>{row.uk}</td>
+                                <td>{row.eu}</td>
+                                <td className="size-cm">{row.cm} cm</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+            <p className="size-guide-tip">
+                {activeTab === 'nike'
+                    ? 'Jordan 1, 3, 4 son True To Size. Pie ancho en Jordan 4 → subí 0.5 US.'
+                    : 'Yeezy 350 V2 tallan pequeño. Siempre subí 0.5 US de tu talla habitual en Nike.'}
+            </p>
         </div>
     );
 };

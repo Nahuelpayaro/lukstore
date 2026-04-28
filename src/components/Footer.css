@@ -147,13 +147,27 @@
         text-align: center;
     }
 
+    .brand-col {
+        align-items: center;
+    }
+
     .footer-logo,
     .footer-desc {
         margin-left: auto;
         margin-right: auto;
     }
 
-    .social-links {
+    .footer-links {
+        list-style: none;
+        padding: 0;
+    }
+
+    .footer-contact-list li {
+        justify-content: center;
+    }
+
+    .social-links,
+    .social-links-new {
         justify-content: center;
     }
 
@@ -161,5 +175,12 @@
         flex-direction: column-reverse;
         gap: 1rem;
         align-items: center;
+        padding-bottom: 1.5rem;
+    }
+
+    .copyright {
+        padding-right: 80px;
+        text-align: center;
+        width: 100%;
     }
 }

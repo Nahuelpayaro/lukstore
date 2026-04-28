@@ -488,4 +488,76 @@
         box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     }
 }
+
+/* Size Guide Modal */
+.size-guide-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    animation: fadeInPage 0.15s ease-out;
+}
+
+.size-guide-modal {
+    background: #111;
+    border: 1px solid #222;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 480px;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.size-guide-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid #222;
+}
+
+.size-guide-modal-header h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin: 0;
+    color: #fff;
+}
+
+.size-guide-modal-close {
+    background: none;
+    border: none;
+    color: #888;
+    font-size: 1rem;
+    cursor: pointer;
+    padding: 0.25rem 0.5rem;
+    line-height: 1;
+    transition: color 0.2s;
+}
+
+.size-guide-modal-close:hover {
+    color: #fff;
+}
+
+.size-guide-modal-body {
+    padding: 1.5rem;
+}
+
+.size-guide-modal-body .size-tabs {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.25rem;
+}
+
+.size-guide-tip {
+    margin-top: 1rem;
+    font-size: 0.8rem;
+    color: #888;
+    line-height: 1.5;
+}
 }

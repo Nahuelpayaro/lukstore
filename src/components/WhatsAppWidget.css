@@ -1,9 +1,8 @@
 .whatsapp-widget {
     position: fixed;
     bottom: 2rem;
-    right: 2rem;
+    right: 2.5rem;
     z-index: 1001;
-    /* Above cookie banner usually, or ensure layout works */
     display: flex;
     flex-direction: column;
     align-items: flex-end;
@@ -171,12 +170,22 @@
 
 @media (max-width: 768px) {
     .whatsapp-widget {
-        bottom: 1.5rem;
-        right: 1.5rem;
+        bottom: 5rem;
+        right: 1.25rem;
+    }
+
+    .wa-float-btn {
+        width: 52px;
+        height: 52px;
+    }
+
+    .wa-logo-svg {
+        width: 26px;
+        height: 26px;
     }
 
     .wa-chat-window {
-        width: 280px;
-        right: 0;
+        width: calc(100vw - 2.5rem);
+        max-width: 320px;
     }
 }
