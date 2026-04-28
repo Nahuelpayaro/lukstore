@@ -66,7 +66,7 @@ const ProductCard = ({ id, image, title, price, category, condition, discount, o
                     )}
                 </div>
                 {sizes && sizes.length > 0 && (
-                    <div className="card-sizes" style={{ fontSize: '0.8rem', color: '#666', marginTop: '0.5rem' }}>
+                    <div className="card-sizes">
                         Tallas: {sizes.map(s => s.size).join(', ')}
                     </div>
                 )}

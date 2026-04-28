@@ -114,7 +114,7 @@ const About = () => {
             {/* TRUST MARK */}
             <div className="trust-block">
                 <div className="trust-logo">
-                    <img src="/assets/logo-isotype.png" alt="Lukstore Seal" />
+                    <img src="/assets/logo-web.png" alt="Lukstore Seal" />
                 </div>
                 <p style={{ textTransform: 'uppercase', letterSpacing: '0.2em', fontWeight: 600, fontSize: '0.8rem' }}>
                     Santiago, Chile — Est. 2024
