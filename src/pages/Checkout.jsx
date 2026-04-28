@@ -112,7 +112,7 @@ const Checkout = () => {
             </p>
 
             <div className="cart-grid">
-                {/* Left: Form */}
+                {/* Left: Shipping Form */}
                 <div className="checkout-form-container">
                     <form id="checkoutForm" onSubmit={handleSubmit} className="checkout-form">
                         <h3>Datos de Envío</h3>
@@ -165,20 +165,6 @@ const Checkout = () => {
                                 </select>
                             </div>
                         </div>
-
-                        <h3>Pago</h3>
-                        <div className="payment-mock mp-payment">
-                            <div className="payment-header">
-                                <span style={{ fontWeight: '800' }}>Pago Seguro</span>
-                            </div>
-                            <div className="payment-option selected">
-                                <div className="mp-radio"></div>
-                                <span>Serás redirigido al gateway de pago al confirmar</span>
-                            </div>
-                            <p className="payment-note">
-                                Estás en un servidor seguro. Al confirmar, serás redirigido para completar el pago.
-                            </p>
-                        </div>
                     </form>
                 </div>
 
@@ -219,17 +205,34 @@ const Checkout = () => {
                         <span>Total a Pagar</span>
                         <span>${orderTotal.toLocaleString('es-CL')}</span>
                     </div>
-                    <button
-                        type="submit"
-                        form="checkoutForm"
-                        className="btn btn-primary btn-block mp-btn"
-                        disabled={isProcessing}
-                    >
-                        {isProcessing ? 'Procesando...' : 'Confirmar y Pagar'}
-                    </button>
+                    <div style={{ display: 'flex', justifyContent: 'center' }}>
+                        <button
+                            type="submit"
+                            form="checkoutForm"
+                            className="btn btn-primary mp-btn"
+                            disabled={isProcessing}
+                        >
+                            {isProcessing ? 'Procesando...' : 'Confirmar y Pagar'}
+                        </button>
+                    </div>
                     <Link to="/cart" className="continue-shopping" style={{ marginTop: '1rem' }}>
                         Volver al carrito
                     </Link>
+                </div>
+
+                {/* Row 2: Payment — full width */}
+                <div className="checkout-payment-section">
+                <div className="payment-mock mp-payment">
+                    <div className="payment-header">
+                        <span style={{ fontWeight: '800' }}>Pago Seguro</span>
+                    </div>
+                    <div className="payment-option selected">
+                        <div className="mp-radio"></div>
+                        <span>Serás redirigido al gateway de pago al confirmar</span>
+                    </div>
+                    <p className="payment-note">
+                        Estás en un servidor seguro. Al confirmar, serás redirigido para completar el pago.
+                    </p>
                 </div>
             </div>
         </div>

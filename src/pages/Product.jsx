@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { PageMeta } from '../hooks/usePageMeta';
 import ProductCard from '../components/ProductCard';
@@ -38,6 +39,17 @@ const Product = () => {
     const [product, setProduct] = useState(null);
     const [activeImage, setActiveImage] = useState(null);
     const [showSizeGuide, setShowSizeGuide] = useState(false);
+
+    useEffect(() => {
+        document.body.style.overflow = showSizeGuide ? 'hidden' : '';
+        return () => { document.body.style.overflow = ''; };
+    }, [showSizeGuide]);
+
+    useEffect(() => {
+        const onKey = (e) => { if (e.key === 'Escape') setShowSizeGuide(false); };
+        window.addEventListener('keydown', onKey);
+        return () => window.removeEventListener('keydown', onKey);
+    }, []);
 
     useEffect(() => {
         if (!loading && products.length > 0) {
@@ -265,16 +277,29 @@ const Product = () => {
                 </div>
             )}
 
-            {showSizeGuide && (
-                <div className="size-guide-overlay" onClick={() => setShowSizeGuide(false)}>
-                    <div className="size-guide-modal" onClick={e => e.stopPropagation()}>
-                        <div className="size-guide-modal-header">
+            {createPortal(
+                <>
+                    <div
+                        className={`size-guide-backdrop ${showSizeGuide ? 'open' : ''}`}
+                        onClick={() => setShowSizeGuide(false)}
+                        aria-hidden="true"
+                    />
+                    <div
+                        className={`size-guide-sidebar ${showSizeGuide ? 'open' : ''}`}
+                        role="dialog"
+                        aria-modal="true"
+                        aria-label="Guía de tallas"
+                    >
+                        <div className="size-guide-sidebar-header">
                             <h3>Guía de Tallas</h3>
-                            <button type="button" className="size-guide-modal-close" onClick={() => setShowSizeGuide(false)}>✕</button>
+                            <button type="button" className="size-guide-sidebar-close" onClick={() => setShowSizeGuide(false)} aria-label="Cerrar">✕</button>
                         </div>
-                        <SizeGuideContent />
+                        <div className="size-guide-sidebar-scroll">
+                            <SizeGuideContent />
+                        </div>
                     </div>
-                </div>
+                </>,
+                document.body
             )}
         </div>
     );
@@ -304,7 +329,7 @@ const yeezySizes = [
 const SizeGuideContent = () => {
     const [activeTab, setActiveTab] = useState('nike');
     return (
-        <div className="size-guide-modal-body">
+        <div className="size-guide-content">
             <div className="size-tabs">
                 <button type="button" onClick={() => setActiveTab('nike')} className={`btn ${activeTab === 'nike' ? 'btn-white' : 'btn-outline-dark'}`}>Nike / Jordan</button>
                 <button type="button" onClick={() => setActiveTab('yeezy')} className={`btn ${activeTab === 'yeezy' ? 'btn-white' : 'btn-outline-dark'}`}>Adidas / Yeezy</button>

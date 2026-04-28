@@ -17,6 +17,12 @@
   --header-height: 120px;
 }
 
+@media (max-width: 900px) {
+  :root {
+    --header-height: 80px;
+  }
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -102,13 +108,14 @@ ul {
 .container {
   max-width: var(--container-width);
   margin: 0 auto;
-  padding: 0 2rem;
+  padding-left: 2rem;
+  padding-right: 2rem;
 }
 
 @media (max-width: 768px) {
   .container {
-    padding: 0 1.25rem;
-    /* Slightly more edge padding */
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
   }
 
   /* Global vertical rhythm for mobile */

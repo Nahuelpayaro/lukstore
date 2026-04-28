@@ -30,6 +30,7 @@ const Header = () => {
                     <Link to="/accesorios" className="nav-link" onClick={() => setIsMenuOpen(false)}>Accesorios</Link>
                     <Link to="/drops" className="nav-link" onClick={() => setIsMenuOpen(false)}>Drops</Link>
                     <Link to="/nosotros" className="nav-link" onClick={() => setIsMenuOpen(false)}>Nosotros</Link>
+                    <Link to="/contacto" className="nav-link" onClick={() => setIsMenuOpen(false)}>Contacto</Link>
                 </nav>
 
                 {/* Actions */}
