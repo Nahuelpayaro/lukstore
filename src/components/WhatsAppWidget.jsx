@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { MessageCircle, X, Send, ChevronRight } from 'lucide-react';
 import './WhatsAppWidget.css';
 
-const PHONE_NUMBER = "56948100032";
+const PHONE_NUMBER = "56933754698";
 
 const QUICK_REPLIES = [
     { label: "Consultar por un pedido", text: "Hola Lukstore, necesito información sobre mi pedido." },

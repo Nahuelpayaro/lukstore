@@ -32,6 +32,8 @@ import SizeGuide from './pages/Support/SizeGuide';
 import Shipping from './pages/Support/Shipping';
 import Authenticity from './pages/Support/Authenticity';
 import Legal from './pages/Support/Legal';
+import Privacy from './pages/Support/Privacy';
+import Returns from './pages/Support/Returns';
 import Admin from './pages/Admin';
 import Tracking from './pages/Tracking';
 import FAQ from './pages/Support/FAQ';
@@ -73,7 +75,8 @@ function App() {
                         <Route path="/envios" element={<Shipping />} />
                         <Route path="/autenticidad" element={<Authenticity />} />
                         <Route path="/terminos" element={<Legal />} />
-                        <Route path="/privacidad" element={<Legal />} />
+                        <Route path="/privacidad" element={<Privacy />} />
+                        <Route path="/devoluciones" element={<Returns />} />
 
                         {/* Admin & Tools */}
                         <Route path="/admin" element={<Admin />} />
