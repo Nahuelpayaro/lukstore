@@ -25,7 +25,7 @@ const Shipping = () => {
                             <h3>Región Metropolitana</h3>
                         </div>
                         <ul className="support-list">
-                            <li><Clock size={18} /><span><strong>Tiempo:</strong> 24 a 48 horas hábiles.</span></li>
+                            <li><Clock size={18} /><span><strong>Tiempo:</strong> El mismo día o hasta 48 horas hábiles.</span></li>
                             <li><Truck size={18} /><span><strong>Método:</strong> Delivery privado Lukstore.</span></li>
                             <li><ShieldCheck size={18} /><span><strong>Seguridad:</strong> Entrega en mano con verificación.</span></li>
                         </ul>
@@ -37,7 +37,7 @@ const Shipping = () => {
                             <h3>Otras Regiones</h3>
                         </div>
                         <ul className="support-list">
-                            <li><Clock size={18} /><span><strong>Tiempo:</strong> 3 a 5 días hábiles.</span></li>
+                            <li><Clock size={18} /><span><strong>Tiempo:</strong> 2 a 5 días hábiles.</span></li>
                             <li><Box size={18} /><span><strong>Operadores:</strong> Blue Express / Starken.</span></li>
                             <li><ShieldCheck size={18} /><span><strong>Seguimiento:</strong> Número de tracking enviado al mail.</span></li>
                         </ul>

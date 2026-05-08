@@ -4,7 +4,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { PageMeta } from '../hooks/usePageMeta';
 import ProductCard from '../components/ProductCard';
 import { useCart } from '../context/CartContext';
-import { Shield, Truck, CreditCard } from 'lucide-react';
+import { Shield, Truck, CreditCard, Clock } from 'lucide-react';
 import { trackViewItem, trackAddToCart, trackViewItemList } from '../utils/ecommerceTracker';
 import { useProducts } from '../hooks/useProducts';
 import { useToast } from '../components/Toast';
@@ -251,6 +251,7 @@ const Product = () => {
                             <Accordion title="Envío y Devoluciones">
                                 <ul className="info-list">
                                     <li><Truck size={16}/> Envío a todo Chile vía Blue Express.</li>
+                                    <li><Clock size={16}/> Plazo de entrega: 2 a 5 días hábiles desde la compra.</li>
                                     <li><Shield size={16}/> Autenticidad 100% garantizada en todos nuestros productos.</li>
                                     <li><CreditCard size={16}/> Compra segura. Aceptamos múltiples métodos de pago.</li>
                                 </ul>
