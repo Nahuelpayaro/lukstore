@@ -251,7 +251,7 @@ const Product = () => {
                             <Accordion title="Envío y Devoluciones">
                                 <ul className="info-list">
                                     <li><Truck size={16}/> Envío a todo Chile vía Blue Express.</li>
-                                    <li><Clock size={16}/> Plazo de entrega: 2 a 5 días hábiles desde la compra.</li>
+                                    <li><Clock size={16}/> RM: el mismo día o hasta 48 hs hábiles. Regiones: 2 a 5 días hábiles.</li>
                                     <li><Shield size={16}/> Autenticidad 100% garantizada en todos nuestros productos.</li>
                                     <li><CreditCard size={16}/> Compra segura. Aceptamos múltiples métodos de pago.</li>
                                 </ul>
