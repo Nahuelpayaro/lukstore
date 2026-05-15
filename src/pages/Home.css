@@ -6,11 +6,13 @@
 
 /* 1. HERO ORIGINAL RESTORED AND PREMIUM-FIED */
 .hero-original {
-    background-image: url('/assets/hero-street-editorial.png');
+    background-image: url('/assets/hero-home-new.jpg');
     background-size: cover;
     background-position: center;
+    background-attachment: scroll;
     position: relative;
-    height: 85vh;
+    height: 70vh;
+    min-height: 500px;
     display: flex;
     align-items: center;
     justify-content: flex-start;

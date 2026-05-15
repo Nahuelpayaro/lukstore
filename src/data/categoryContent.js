@@ -4,7 +4,7 @@ export const CATEGORY_CONTENT = {
         hero: {
             title: "Basketball Heritage",
             subtitle: "Zapatillas que definieron la cultura y el juego.",
-            image: "/assets/cat-basketball.png"
+            image: "/assets/hero-zapatillas.jpg"
         },
         clusters: [
             { id: 'jordan', label: 'Jordan Retro', image: '/assets/prod-jordan1.png', link: '/zapatillas/jordan' },
@@ -25,7 +25,7 @@ export const CATEGORY_CONTENT = {
         hero: {
             title: "Streetwear Selected",
             subtitle: "Streetwear funcional. Corte, material y actitud.",
-            image: "/assets/cat-streetwear.png"
+            image: "/assets/hero-hombre.jpg"
         },
         seo: {
             h1: "Ropa de Hombre Streetwear en Chile",
@@ -39,7 +39,7 @@ export const CATEGORY_CONTENT = {
         hero: {
             title: "Ellas en el Juego",
             subtitle: "Fuerza, Estilo y Cultura Sneaker.",
-            image: "/assets/jordan_4_cement_lifestyle.png"
+            image: "/assets/hero-mujer.jpg"
         },
         seo: {
             h1: "Zapatillas y Streetwear para Mujer en Chile",
@@ -67,7 +67,7 @@ export const CATEGORY_CONTENT = {
         hero: {
             title: "Essential Gear",
             subtitle: "Detalles que completan el fit.",
-            image: "/assets/banner-sale.png"
+            image: "/assets/hero-cluster-new.jpg"
         },
         seo: {
             h1: "Accesorios Streetwear y Cuidado de Zapatillas",

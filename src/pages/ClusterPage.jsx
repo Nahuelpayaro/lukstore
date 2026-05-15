@@ -87,6 +87,7 @@ const ClusterPage = () => {
         || activeContent?.heroImage
         || getImage(brand || category, null)
         || img('clusterFallback');
+    const heroPosition = activeContent?.hero?.position || 'center';
 
     const handleFilterChange = (key, value) => setFilters(prev => ({ ...prev, [key]: value }));
 
@@ -97,7 +98,7 @@ const ClusterPage = () => {
             <PageMeta title={`${title} | LUKSTORE`} description={description} />
 
             {/* 1. HERO EDITORIAL */}
-            <header className="cluster-hero" style={{ backgroundImage: `url(${heroImage})` }}>
+            <header className="cluster-hero" style={{ backgroundImage: `url(${heroImage})`, backgroundPosition: heroPosition }}>
                 <div className="hero-overlay"></div>
                 <div className="container hero-content">
                     <motion.h1 

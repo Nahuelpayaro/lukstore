@@ -15,7 +15,7 @@ const Drops = () => {
             <PageMeta title="LUKSTORE DROPS | Lanzamientos Exclusivos" description="Acceso a lanzamientos limitados. Jordan 4, Travis Scott, Off-White. Compra antes que se agoten." />
 
             {/* HERO SECTION */}
-            <section className="drops-hero" style={{ backgroundImage: 'url(/assets/banner-drops.png)' }}>
+            <section className="drops-hero" style={{ backgroundImage: 'url(/assets/hero-drops-new.jpg)' }}>
                 <div className="drops-overlay"></div>
                 <div className="drops-hero-content">
                     <div className="drop-badge-hero">

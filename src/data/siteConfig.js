@@ -35,12 +35,12 @@ export const siteImages = {
 
 // Fallbacks locales — se usan automáticamente cuando siteImages[key] es null
 const fallbacks = {
-    heroHome:        '/assets/hero-bg.jpg',
+    heroHome:        '/assets/hero-home-new.jpg',
     bannerDrops:     '/assets/banner-drops.png',
-    aboutHero:       '/assets/hero-about.png',
+    aboutHero:       '/assets/hero-about-new.jpg',
     aboutOrigins:    '/assets/cat-streetwear.png',
     contactShowroom: '/assets/hero-street-editorial.png',
-    clusterFallback: '/assets/hero-street-editorial.png',
+    clusterFallback: '/assets/hero-cluster-new.jpg',
     blog: {
         jordanBred: '/assets/hero-street-editorial.png',
         gamuza:     '/assets/cat-basketball.png',
