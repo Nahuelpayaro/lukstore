@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Helmet } from 'react-helmet';
+import { PageMeta } from '../../hooks/usePageMeta';
 import { BLOG_POSTS } from '../../data/blog';
 import '../../components/Header.css'; // Reusing global styles
 import '../Home.css'; // Reusing card styles
@@ -8,10 +8,7 @@ import '../Home.css'; // Reusing card styles
 const Blog = () => {
     return (
         <div className="page-container" style={{ paddingTop: '100px', minHeight: '80vh' }}>
-            <Helmet>
-                <title>News & Culture | LUKSTORE</title>
-                <meta name="description" content="Noticias, guías y cultura sneaker. Mantente al día con lo último del streetwear en Chile." />
-            </Helmet>
+            <PageMeta title="News & Culture" description="Noticias, guías y cultura sneaker. Mantente al día con lo último del streetwear en Chile." />
 
             <div className="container">
                 <div className="section-header" style={{ marginBottom: '3rem', textAlign: 'center', display: 'block' }}>

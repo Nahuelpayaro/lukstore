@@ -1,6 +1,6 @@
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { Helmet } from 'react-helmet';
+import { PageMeta } from '../../hooks/usePageMeta';
 import { getBlogPost } from '../../data/blog';
 import '../Home.css'; // Utilizing shared styles
 
@@ -19,10 +19,7 @@ const BlogPost = () => {
 
     return (
         <div className="blog-post-page" style={{ paddingTop: '100px', paddingBottom: '4rem' }}>
-            <Helmet>
-                <title>{post.title} | LUKSTORE Journal</title>
-                <meta name="description" content={post.excerpt} />
-            </Helmet>
+            <PageMeta title={`${post.title} | Journal`} description={post.excerpt} />
 
             <article className="container" style={{ maxWidth: '800px' }}>
                 {/* Header */}

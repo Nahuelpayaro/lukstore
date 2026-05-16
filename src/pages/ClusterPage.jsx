@@ -95,7 +95,7 @@ const ClusterPage = () => {
 
     return (
         <div className="cluster-page-v2">
-            <PageMeta title={`${title} | LUKSTORE`} description={description} />
+            <PageMeta title={title} description={description} />
 
             {/* 1. HERO EDITORIAL */}
             <header className="cluster-hero" style={{ backgroundImage: `url(${heroImage})`, backgroundPosition: heroPosition }}>
