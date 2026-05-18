@@ -35,7 +35,13 @@ export const mapUserData = (customer) => {
     };
 };
 
+let _isFirstLoad = true;
+
 export const trackVirtualPageView = (url, title) => {
+    if (_isFirstLoad) {
+        _isFirstLoad = false;
+        return;
+    }
     initDataLayer();
     window.dataLayer.push({
         event: "virtual_page_view",
