@@ -121,7 +121,7 @@ const Home = () => {
             </section>
 
             {/* 4. BANNER EDITORIAL — the artwork carries the "Exclusive Drops" headline */}
-            <section className="banner-sale" style={{ backgroundImage: `url(${img('bannerDrops')})` }} aria-label="Exclusive Drops">
+            <section className="banner-sale" style={{ '--banner-img': `url(${img('bannerDrops')})` }} aria-label="Exclusive Drops">
                 <div className="banner-content">
                     <h2 className="visually-hidden">Exclusive Drops</h2>
                     <p>Lanzamientos limitados. Cuando se acaban, no vuelven.</p>

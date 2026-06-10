@@ -209,7 +209,8 @@
     gap: 2rem;
 }
 
-/* 4. DROPS BANNER — square artwork shown whole (contain) so its headline is never cropped */
+/* 4. DROPS BANNER — square artwork shown whole (contain) so its headline is never
+   cropped; a blurred cover copy of the same artwork fills the letterbox sides */
 .banner-sale {
     position: relative;
     min-height: 560px;
@@ -218,9 +219,6 @@
     margin-top: 4rem; /* Additional separation from buttons above */
     margin-bottom: 8rem;
     background-color: #0a0a0a;
-    background-size: contain;
-    background-position: center;
-    background-repeat: no-repeat;
     display: flex;
     align-items: flex-end;
     justify-content: center;
@@ -228,6 +226,27 @@
     margin-left: 2rem;
     margin-right: 2rem;
     overflow: hidden;
+}
+
+.banner-sale::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: var(--banner-img);
+    background-size: cover;
+    background-position: center;
+    filter: blur(40px) brightness(0.55);
+    transform: scale(1.15); /* push blur edge fringing outside the clip */
+}
+
+.banner-sale::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: var(--banner-img);
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 .banner-sale .visually-hidden {
