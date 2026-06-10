@@ -13,7 +13,8 @@ export const siteImages = {
     heroHome: null,
 
     // Banner "Nuevos Drops" (entre secciones de productos)
-    bannerDrops: null,
+    bannerDrops: null,          // versión cuadrada (mobile)
+    bannerDropsWide: null,      // versión ancha 2880x1080 (desktop)
 
     // Página /nosotros
     aboutHero:    null,
@@ -37,6 +38,7 @@ export const siteImages = {
 const fallbacks = {
     heroHome:        '/assets/hero-home-new.jpg',
     bannerDrops:     '/assets/banner-drops.png',
+    bannerDropsWide: '/assets/banner-drops-wide.jpg',
     aboutHero:       '/assets/hero-about-new.jpg',
     aboutOrigins:    '/assets/cat-streetwear.png',
     contactShowroom: '/assets/hero-street-editorial.png',

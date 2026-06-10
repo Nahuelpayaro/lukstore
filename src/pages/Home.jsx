@@ -120,8 +120,16 @@ const Home = () => {
                 )}
             </section>
 
-            {/* 4. BANNER EDITORIAL — the artwork carries the "Exclusive Drops" headline */}
-            <section className="banner-sale" style={{ backgroundImage: `url(${img('bannerDrops')})` }} aria-label="Exclusive Drops">
+            {/* 4. BANNER EDITORIAL — the artwork carries the "Exclusive Drops" headline;
+                CSS picks the wide artwork on desktop and the square one on mobile */}
+            <section
+                className="banner-sale"
+                style={{
+                    '--banner-img': `url(${img('bannerDrops')})`,
+                    '--banner-img-wide': `url(${img('bannerDropsWide')})`,
+                }}
+                aria-label="Exclusive Drops"
+            >
                 <div className="banner-content">
                     <h2 className="visually-hidden">Exclusive Drops</h2>
                     <p>Lanzamientos limitados. Cuando se acaban, no vuelven.</p>

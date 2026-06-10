@@ -209,7 +209,8 @@
     gap: 2rem;
 }
 
-/* 4. DROPS BANNER — square artwork shown whole (contain) so its headline is never cropped */
+/* 4. DROPS BANNER — wide 2880x1080 artwork on desktop (cover), square artwork on
+   mobile (contain) so the baked-in headline is never cropped on either */
 .banner-sale {
     position: relative;
     min-height: 560px;
@@ -218,7 +219,8 @@
     margin-top: 4rem; /* Additional separation from buttons above */
     margin-bottom: 8rem;
     background-color: #0a0a0a;
-    background-size: contain;
+    background-image: var(--banner-img-wide);
+    background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     display: flex;
@@ -373,6 +375,8 @@
         margin-right: 0;
         padding: 2rem 1.5rem;
         min-height: 420px;
+        background-image: var(--banner-img);
+        background-size: contain;
     }
 
     .banner-content h2 {
