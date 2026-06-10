@@ -12,18 +12,16 @@ import { trackViewItemList } from '../utils/ecommerceTracker';
 import './Home.css';
 
 const Home = () => {
-    const { getFeaturedProducts, loading, products } = useProducts();
+    const { loading, products } = useProducts();
     const { getImage } = useCategories();
     const { posts } = usePosts(3);
     const newArrivals = useMemo(() => products.slice(0, 4), [products]);
-    const featuredSelection = useMemo(() => getFeaturedProducts() || [], [products, getFeaturedProducts]);
 
     useEffect(() => {
         if (!loading && products.length > 0) {
             trackViewItemList(newArrivals, "home_new_arrivals", "Nuevos Ingresos");
-            trackViewItemList(featuredSelection.slice(0, 4), "home_featured", "Selección Destacada");
         }
-    }, [loading, products, newArrivals, featuredSelection]);
+    }, [loading, products, newArrivals]);
 
     // Animation Variants
     const fadeInUp = {
@@ -122,31 +120,16 @@ const Home = () => {
                 )}
             </section>
 
-            {/* 4. BANNER EDITORIAL */}
-            <section className="banner-sale" style={{ backgroundImage: `url(${img('bannerDrops')})` }}>
+            {/* 4. BANNER EDITORIAL — the artwork carries the "Exclusive Drops" headline */}
+            <section className="banner-sale" style={{ backgroundImage: `url(${img('bannerDrops')})` }} aria-label="Exclusive Drops">
                 <div className="banner-content">
-                    <h2>NUEVOS DROPS</h2>
+                    <h2 className="visually-hidden">Exclusive Drops</h2>
                     <p>Lanzamientos limitados. Cuando se acaban, no vuelven.</p>
                     <Link to="/drops" className="btn btn-white">Ver drops</Link>
                 </div>
             </section>
 
-            {/* 5. PRODUCTOS DESTACADOS */}
-            <section className="container product-section">
-                <div className="section-header">
-                    <h2>Selección Destacada</h2>
-                    <Link to="/drops" className="link-arrow">Ver selección</Link>
-                </div>
-                {loading ? <ProductSkeletonGrid count={4} /> : (
-                    <div className="product-grid">
-                        {featuredSelection.slice(0, 4).map(product => (
-                            <ProductCard key={product.id} {...product} />
-                        ))}
-                    </div>
-                )}
-            </section>
-
-            {/* 6. CLIENTES */}
+            {/* 5. CLIENTES */}
             <section className="customers-section">
                 <div className="customers-header">
                     <h2>📸 Confían en Lukstore</h2>
@@ -164,7 +147,7 @@ const Home = () => {
                 </div>
             </section>
 
-            {/* 7. JOURNAL / BLOG */}
+            {/* 6. JOURNAL / BLOG */}
             {posts.length > 0 && (
                 <section className="container journal-section">
                     <div className="section-header">
@@ -186,7 +169,7 @@ const Home = () => {
                 </section>
             )}
 
-            {/* 8. REDES SOCIALES */}
+            {/* 7. REDES SOCIALES */}
             <section className="redes-section">
                 <div className="container">
                     <div className="redes-header">

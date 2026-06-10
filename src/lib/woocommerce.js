@@ -62,12 +62,12 @@ export const normalizeProduct = (p) => {
         hierarchy,
         category,
         gender: (() => {
-            const fromAttr = getAttr(p.attributes ?? [], ['género', 'genero', 'gender']);
-            if (fromAttr) return fromAttr;
+            // Category wins over the attribute: products categorized "Hombre" often
+            // carry a generic "Unisex" attribute and must not leak into /mujer
             const cats = (p.categories ?? []).map(c => c.name.toLowerCase());
             if (cats.includes('hombre')) return 'Hombre';
             if (cats.includes('mujer')) return 'Mujer';
-            return 'Unisex';
+            return getAttr(p.attributes ?? [], ['género', 'genero', 'gender']) || 'Unisex';
         })(),
         tags: tags.map(t => t.slug),
         seo: {

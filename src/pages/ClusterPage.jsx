@@ -26,6 +26,12 @@ const PRICE_RANGES = [
 ];
 
 // Half-open intervals so boundary prices match exactly one bucket
+// The store has no "Zapatillas" category in WooCommerce — sneakers are categorized
+// by brand/model (Jordan, Air Force...). They are identified by NOT having a
+// clothing/accessory category. If a "Zapatillas" category is added later, switch
+// this to a positive hierarchy check.
+const NON_SNEAKER_CATEGORIES = ['accesorios', 'hoodies', 'pantalones', 'poleras', 'ropa'];
+
 const matchesPriceRange = (price, range) => {
     if (range === 'all') return true;
     if (range === '250000+') return price >= 250000;
@@ -61,19 +67,21 @@ const ClusterPage = () => {
         return products.filter(p => {
             const h = (p.hierarchy || []).map(x => x.toLowerCase());
 
-            // /zapatillas → full catalog
-            if (isRootCatalog && !brand && !model) return true;
+            // /zapatillas → everything that is not clothing or accessories
+            if (isRootCatalog && !brand && !model) {
+                return !h.some(c => NON_SNEAKER_CATEGORIES.includes(c));
+            }
 
-            // /hombre or /mujer → only explicitly-gendered products
+            // /hombre or /mujer → gendered products plus unisex (default for untagged)
             if (isGenderPage && !brand && !model) {
                 const pGender = (p.gender || '').toLowerCase();
-                return pGender === catLower;
+                return pGender === catLower || pGender === 'unisex';
             }
 
             // Sub-routes with brand/model
             const pGender = (p.gender || '').toLowerCase();
             const catMatch = !category || h.includes(catLower) ||
-                (isGenderPage && pGender === catLower);
+                (isGenderPage && (pGender === catLower || pGender === 'unisex'));
             const brandMatch = !brand || h.includes(brand.toLowerCase());
             const modelMatch = !model || h.includes(model.replace(/-/g, ' ').toLowerCase());
 

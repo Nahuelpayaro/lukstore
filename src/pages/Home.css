@@ -214,22 +214,35 @@
     gap: 2rem;
 }
 
-/* 4. SUMMER SALE BANNER */
+/* 4. DROPS BANNER — square artwork shown whole (contain) so its headline is never cropped */
 .banner-sale {
     position: relative;
-    padding: 10rem 2rem;
+    min-height: 560px;
+    padding: 3rem 2rem;
     text-align: center;
     margin-top: 4rem; /* Additional separation from buttons above */
     margin-bottom: 8rem;
     background-color: #0a0a0a;
-    background-image: radial-gradient(circle at center, #1a1a1a 0%, #000 100%);
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     justify-content: center;
     border-radius: 40px;
     margin-left: 2rem;
     margin-right: 2rem;
     overflow: hidden;
+}
+
+.banner-sale .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    white-space: nowrap;
 }
 
 .banner-content {
@@ -254,7 +267,7 @@
 
 .banner-content p {
     font-size: 1.1rem;
-    margin-bottom: 3rem;
+    margin-bottom: 1.5rem;
     color: #aaa;
     font-weight: 400;
     letter-spacing: 0.05em;
@@ -367,7 +380,8 @@
         border-radius: 0;
         margin-left: 0;
         margin-right: 0;
-        padding: 6rem 1.5rem;
+        padding: 2rem 1.5rem;
+        min-height: 420px;
     }
 
     .banner-content h2 {
