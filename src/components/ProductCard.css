@@ -113,6 +113,12 @@
     box-shadow: 0 4px 10px rgba(0,0,0,0.15);
 }
 
+.badge-featured {
+    background-color: rgba(255, 215, 0, 0.15);
+    color: #d4a800;
+    border: 1px solid rgba(212, 168, 0, 0.3);
+}
+
 /* Watermark Subdued */
 .card-isotype {
     position: absolute !important;

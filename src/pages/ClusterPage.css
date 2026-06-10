@@ -74,6 +74,32 @@
     gap: 0.75rem;
     overflow-x: auto;
     padding-bottom: 0.2rem;
+    align-items: center;
+}
+
+.pill-search {
+    padding: 0.6rem 1.2rem;
+    border: 1px solid #333;
+    border-radius: 50px;
+    background: #111;
+    color: #fff;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: text;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    outline: none;
+    min-width: 140px;
+}
+
+.pill-search::placeholder {
+    color: #555;
+    font-weight: 400;
+}
+
+.pill-search:focus {
+    border-color: #fff;
+    box-shadow: 0 4px 10px rgba(255,255,255,0.05);
 }
 
 .pill-select {
@@ -94,7 +120,43 @@
     box-shadow: 0 4px 10px rgba(255,255,255,0.05);
 }
 
-/* 3. GRIDS & SECTIONS */
+/* 3. EMPTY STATE */
+.cluster-empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 6rem 2rem;
+    gap: 1.5rem;
+    text-align: center;
+}
+
+.empty-state-message {
+    color: #666;
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+.btn-clear-filters {
+    padding: 0.7rem 1.8rem;
+    border: 1px solid #444;
+    border-radius: 50px;
+    background: transparent;
+    color: #fff;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.btn-clear-filters:hover {
+    border-color: #fff;
+    background: #111;
+}
+
+/* 4. GRIDS & SECTIONS */
 .section-padding {
     padding: 6rem 0;
     border-bottom: 1px solid #222;
@@ -119,7 +181,6 @@
     font-size: 1.1rem;
 }
 
-.best-sellers-grid,
 .main-cluster-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -330,7 +391,6 @@
 /* RESPONSIVE */
 
 @media (max-width: 1024px) {
-    .best-sellers-grid,
     .main-cluster-grid {
         grid-template-columns: repeat(3, 1fr);
     }
@@ -352,12 +412,10 @@
     .cluster-hero {
         height: 50vh;
     }
-    .best-sellers-grid,
     .main-cluster-grid {
         grid-template-columns: repeat(2, 1fr);
         gap: 0.75rem;
     }
-    .best-sellers-grid > *,
     .main-cluster-grid > * {
         min-width: 0;
     }
@@ -374,6 +432,10 @@
     }
     .filter-pills {
         width: 100%;
+        flex-wrap: wrap;
+    }
+    .pill-search {
+        min-width: 100%;
     }
     .section-padding {
         padding: 4rem 0;

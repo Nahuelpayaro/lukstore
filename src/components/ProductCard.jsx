@@ -5,7 +5,7 @@ import { trackSelectItem } from '../utils/ecommerceTracker';
 
 const WA_PHONE = "56948100032";
 
-const ProductCard = ({ id, image, title, price, category, condition, discount, originalPrice, isDrop, hierarchy, slug, sizes }) => {
+const ProductCard = ({ id, image, title, price, category, condition, discount, originalPrice, isDrop, isFeatured, hierarchy, slug, sizes }) => {
     const [loading, setLoading] = React.useState(true);
     const navigate = useNavigate();
 
@@ -44,7 +44,7 @@ const ProductCard = ({ id, image, title, price, category, condition, discount, o
                     {isDrop && <span className="badge badge-drop">DROP</span>}
                     {!isDrop && condition === 'new' && <span className="badge badge-new">NUEVO</span>}
                     {!isDrop && condition === 'used' && <span className="badge badge-used">USED</span>}
-                    {/* The original discount badge was removed in the provided snippet, so we remove it here too. */}
+                    {isFeatured && !isDrop && <span className="badge badge-featured">Destacado</span>}
                 </div>
 
                 {/* Heritage Isotype Overlay */}
