@@ -63,7 +63,9 @@ const mapProductToItem = (product, index = 0, extra = {}) => {
     const category4 = product.hierarchy?.[3] || "";
     
     return {
-        item_id: product.id || String(product.slug),
+        // WooCommerce numeric ID so GA4 items match product feeds (Merchant Center).
+        // Falls back to slug for local demo products without a WC counterpart.
+        item_id: String(product.wcId || product.id || product.slug),
         item_name: product.title || product.name || "Producto sin nombre",
         affiliation: "Luckstore",
         discount: product.originalPrice ? (product.originalPrice - product.price) : 0,
