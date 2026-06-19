@@ -69,7 +69,7 @@ const Footer = () => {
 
                 <div className="footer-bottom">
                     <div className="copyright">
-                        © {new Date().getFullYear()} Lukstore. Todos los derechos reservados.
+                        © {new Date().getFullYear()} URBAN FOOTWEAR SpA (LUKSTORE) · RUT 78.333.002-4 · Todos los derechos reservados.
                     </div>
                     <div className="legal-links">
                         <Link to="/terminos">Términos</Link>

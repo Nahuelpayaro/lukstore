@@ -10,17 +10,27 @@ const Legal = () => {
             <header className="support-hero">
                 <div className="container">
                     <h1>Legal</h1>
-                    <p>Última actualización: Marzo 2024</p>
+                    <p>Última actualización: Junio 2026</p>
                 </div>
             </header>
 
             <section className="container support-body">
                 <div className="legal-content">
+                    <h2 className="support-section-title">Identificación del vendedor</h2>
+                    <p className="support-text">
+                        Este sitio es operado por <strong>URBAN FOOTWEAR SpA</strong> (nombre de fantasía LUKSTORE), RUT 78.333.002-4,
+                        con domicilio comercial en la comuna de Lo Barnechea, Región Metropolitana de Santiago, Chile.
+                        Para cualquier consulta podés escribirnos a <a href="mailto:hola@lukstore.cl">hola@lukstore.cl</a> o
+                        al WhatsApp <a href="https://wa.me/56933754698">+56 9 3375 4698</a>.
+                    </p>
+
+                    <hr className="support-divider" />
+
                     <h2 className="support-section-title">1. Términos de Servicio</h2>
                     <p className="support-text">Bienvenido a Lukstore. Al acceder y utilizar este sitio web, aceptás cumplir con los siguientes términos y condiciones. Nos reservamos el derecho de actualizar estos términos en cualquier momento sin previo aviso.</p>
 
                     <h3 className="support-subsection-title">1.1 Propiedad de los Productos</h3>
-                    <p className="support-text">Lukstore comercializa productos de marcas internacionales. No somos distribuidores oficiales de las marcas mencionadas, sino un servicio de curaduría y reventa de artículos originales y verificados. Todas las marcas registradas son propiedad de sus respectivos dueños.</p>
+                    <p className="support-text">Lukstore comercializa productos de marcas internacionales. No somos distribuidores oficiales de las marcas mencionadas, sino un servicio de curaduría y reventa de artículos seleccionados y revisados por nuestro equipo. Todas las marcas registradas son propiedad de sus respectivos dueños.</p>
 
                     <h3 className="support-subsection-title">1.2 Veracidad de la Información</h3>
                     <p className="support-text">Hacemos todo lo posible para mostrar los colores y detalles de nuestros productos con precisión. Sin embargo, no podemos garantizar que la visualización en tu monitor sea exacta. El stock es limitado y los precios pueden variar sin previo aviso.</p>
