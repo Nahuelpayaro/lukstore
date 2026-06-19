@@ -20,7 +20,7 @@ const About = () => {
                     "url": "https://lukstore.cl",
                     "logo": "https://lukstore.cl/assets/logo.png",
                     "description": "Curaduría real de streetwear. Zapatillas y ropa urbana seleccionada.",
-                    "sameAs": ["https://instagram.com/lukstore"]
+                    "sameAs": ["https://instagram.com/lukstore._"]
                 })}
             </script>
 
@@ -84,7 +84,7 @@ const About = () => {
                         <div className="value-card">
                             <div className="value-number">01</div>
                             <h4 className="value-title">Autenticidad</h4>
-                            <p className="value-desc">Garantizamos que cada producto es legítimo. Doble verificación en mano antes de cada envío.</p>
+                            <p className="value-desc">Revisamos cada producto en mano antes de cada envío.</p>
                         </div>
                         <div className="value-card">
                             <div className="value-number">02</div>

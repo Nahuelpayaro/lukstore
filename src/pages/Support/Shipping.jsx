@@ -44,6 +44,10 @@ const Shipping = () => {
                     </motion.div>
                 </div>
 
+                <p className="support-text" style={{ textAlign: 'center', maxWidth: '640px', margin: '2.5rem auto 0' }}>
+                    El costo de envío se calcula automáticamente según tu región al finalizar la compra, con las tarifas vigentes de Blue Express y Starken. Verás el monto exacto antes de pagar.
+                </p>
+
                 <div className="support-cta-block">
                     <h2>Embalaje de Coleccionista</h2>
                     <p>

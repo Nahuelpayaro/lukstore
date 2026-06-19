@@ -8,19 +8,19 @@ const Authenticity = () => {
     const steps = [
         { icon: <Search size={32} />, title: "Inspección Física", desc: "Revisamos costuras, materiales y pegamentos bajo luz ultravioleta para detectar cualquier anomalía." },
         { icon: <ClipboardCheck size={32} />, title: "Verificación de Tags", desc: "Cruzamos los códigos de etiquetas internas con bases de datos globales de la marca." },
-        { icon: <Ruler size={32} />, title: "Análisis de Horma", desc: "Garantizamos que el peso y la estructura correspondan exactamente a los estándares del modelo." },
+        { icon: <Ruler size={32} />, title: "Análisis de Horma", desc: "Revisamos que el peso y la estructura correspondan a los estándares del modelo." },
         { icon: <Box size={32} />, title: "Caja y Accesorios", desc: "Incluso el empaque debe ser perfecto. Verificamos fuentes, texturas y accesorios incluidos." }
     ];
 
     return (
         <div className="support-page">
-            <PageMeta title="Autenticidad Garantizada | Lukstore" description="Conoce nuestro riguroso proceso de verificación. En Lukstore, la legitimidad no es opcional, es nuestra base." />
+            <PageMeta title="Curaduría y Verificación | Lukstore" description="Conoce el proceso de revisión con el que seleccionamos cada par antes de publicarlo." />
 
             <header className="support-hero support-hero-dark">
                 <div className="container">
                     <span className="support-tag">Trust System</span>
                     <h1>LEGIT OR NOTHING.</h1>
-                    <p>En un mercado saturado de réplicas, Lukstore nace para ofrecer paz mental. Cada par que vendemos ha pasado por un proceso de verificación manual de 12 puntos.</p>
+                    <p>En un mercado saturado de réplicas, Lukstore nace para ofrecer tranquilidad. Cada par que vendemos pasa por un proceso de revisión manual de nuestro equipo antes de publicarlo.</p>
                 </div>
             </header>
 
@@ -29,12 +29,12 @@ const Authenticity = () => {
                     <div>
                         <h2 className="support-section-title">Nuestro Compromiso</h2>
                         <p className="support-text">La confianza es el activo más valioso en el streetwear. Por eso, no delegamos la autenticación. Todo el stock que ves en la web ha sido inspeccionado físicamente por nuestro equipo en Santiago.</p>
-                        <p className="support-text">Si un producto no cumple con el 100% de nuestros estándares de legitimidad, simplemente no entra en nuestro catálogo. Sin excepciones.</p>
+                        <p className="support-text">Si un producto no cumple con nuestros estándares de calidad, no entra en nuestro catálogo.</p>
                     </div>
                     <div className="support-shield-card">
                         <ShieldCheck size={80} strokeWidth={1} />
                         <h3>Sello Lukstore</h3>
-                        <p>Garantía de originalidad de por vida en todos nuestros productos.</p>
+                        <p>Cada par es seleccionado y revisado por nuestro equipo antes de publicarlo.</p>
                     </div>
                 </div>
             </section>

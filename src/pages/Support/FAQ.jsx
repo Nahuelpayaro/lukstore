@@ -38,7 +38,7 @@ const FAQ = () => {
             icon: <Package size={24} />,
             title: "Pedidos y Productos",
             items: [
-                { q: "¿Los productos son originales?", a: "Absolutamente. Todos nuestros pares pasan por un riguroso proceso de autenticación manual de 12 puntos antes de ser publicados." },
+                { q: "¿Los productos son originales?", a: "Trabajamos solo con stock seleccionado y revisado por nuestro equipo antes de publicarlo. Si tienes dudas sobre un par puntual, te enviamos fotos de detalle por WhatsApp." },
                 { q: "¿Venden productos usados?", a: "Principalmente manejamos stock nuevo (Deadstock), pero contamos con una sección seleccionada de 'Used' con fotos reales y detalle de condición." },
                 { q: "¿Puedo reservar un producto?", a: "Debido a la alta demanda y exclusividad de nuestros drops, no realizamos reservas sin el pago completo del producto." }
             ]
@@ -64,7 +64,7 @@ const FAQ = () => {
             icon: <RefreshCcw size={24} />,
             title: "Cambios y Devoluciones",
             items: [
-                { q: "¿Aceptan cambios de talla?", a: "Sí, siempre y cuando tengamos stock disponible del mismo modelo. El producto debe estar en perfectas condiciones, sin uso y con sus etiquetas/caja original." },
+                { q: "¿Aceptan cambios de talla?", a: "Una vez despachado el pedido no realizamos cambios de talla por la disponibilidad limitada de stock. Si recibiste un producto con falla de fábrica o equivocado, escríbenos dentro de las 48 horas con fotos y tu número de orden y lo solucionamos." },
                 { q: "¿Qué pasa si mi pedido llega dañado?", a: "Contáctanos inmediatamente a nuestro WhatsApp de soporte con fotos del paquete. Nos haremos cargo de la gestión con la empresa de transporte." }
             ]
         }
@@ -100,7 +100,7 @@ const FAQ = () => {
                 <div className="support-cta-block support-cta-center">
                     <h3>¿No encontraste tu respuesta?</h3>
                     <p>Nuestro equipo de soporte está disponible para ayudarte en tiempo real.</p>
-                    <a href="https://wa.me/56900000000" className="btn btn-white" style={{ padding: '1rem 2.5rem', borderRadius: '50px' }}>Escribir al WhatsApp</a>
+                    <a href="https://wa.me/56933754698" className="btn btn-white" style={{ padding: '1rem 2.5rem', borderRadius: '50px' }}>Escribir al WhatsApp</a>
                 </div>
             </section>
         </div>

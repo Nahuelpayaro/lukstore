@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import './ProductCard.css';
 import { trackSelectItem } from '../utils/ecommerceTracker';
 
-const WA_PHONE = "56948100032";
+const WA_PHONE = "56933754698";
 
 const ProductCard = ({ id, image, title, price, category, condition, discount, originalPrice, isDrop, isFeatured, hierarchy, slug, sizes }) => {
     const [loading, setLoading] = React.useState(true);

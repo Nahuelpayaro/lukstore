@@ -243,8 +243,8 @@ const Product = () => {
                                 <p>
                                     <strong>{product.condition === 'new' ? 'Nuevo / Deadstock (DS)' : 'Pre-Loved / Usado'}</strong><br/>
                                     {product.condition === 'new'
-                                        ? 'Producto 100% nuevo y sin uso. Autenticidad garantizada y verificado por nuestros expertos. Incluye caja original y accesorios correspondientes.'
-                                        : 'Producto usado en excelente estado. Ha pasado por nuestro riguroso control de calidad para garantizar su autenticidad y condición funcional.'}
+                                        ? 'Producto nuevo y sin uso, revisado por nuestro equipo antes del envío. Incluye caja original y accesorios correspondientes.'
+                                        : 'Producto usado en buen estado. Ha pasado por nuestro control de calidad para revisar su condición funcional.'}
                                 </p>
                             </Accordion>
 
@@ -252,7 +252,7 @@ const Product = () => {
                                 <ul className="info-list">
                                     <li><Truck size={16}/> Envío a todo Chile vía Blue Express.</li>
                                     <li><Clock size={16}/> Región Metropolitana: el mismo día o hasta 48 hs hábiles. Otras regiones: 2 a 5 días hábiles.</li>
-                                    <li><Shield size={16}/> Autenticidad 100% garantizada en todos nuestros productos.</li>
+                                    <li><Shield size={16}/> Productos seleccionados y revisados por nuestro equipo.</li>
                                     <li><CreditCard size={16}/> Compra segura. Aceptamos múltiples métodos de pago.</li>
                                 </ul>
                                 <p style={{marginTop: '0.5rem', fontSize: '0.85rem', color: '#666'}}>

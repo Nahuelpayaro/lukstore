@@ -92,7 +92,7 @@ const SizeGuide = () => {
                 <div className="support-cta-block support-cta-center" style={{ marginTop: '6rem' }}>
                     <h3>¿Aún no estás seguro?</h3>
                     <p>Podemos asesorarte personalmente por WhatsApp para encontrar el fit perfecto según el modelo.</p>
-                    <a href="https://wa.me/56900000000" className="btn btn-white" style={{ padding: '1rem 2.5rem', borderRadius: '50px' }}>Hablar con un Experto</a>
+                    <a href="https://wa.me/56933754698" className="btn btn-white" style={{ padding: '1rem 2.5rem', borderRadius: '50px' }}>Hablar con un Experto</a>
                 </div>
             </section>
         </div>

@@ -54,7 +54,7 @@ export const BLOG_POSTS = [
         category: "Educación",
         content: `
             <h2>El Arte de la Autenticación</h2>
-            <p>El mercado de réplicas avanza rápido, pero hay detalles que la fabricación masiva no puede imitar a la perfección. En Lukstore, garantizamos autenticidad, y aquí te enseñamos en qué fijarte.</p>
+            <p>El mercado de réplicas avanza rápido, pero hay detalles que la fabricación masiva no puede imitar a la perfección. En Lukstore revisamos cada par con cuidado, y aquí te enseñamos en qué fijarte.</p>
 
             <h3>1. La Caja y la Etiqueta</h3>
             <p>La fuente tipográfica de la etiqueta de la caja debe ser consistente. Las falsificaciones suelen tener letras muy gruesas o espaciado irregular. El código de estilo (ej: CT8527-016) debe coincidir con el zapato.</p>

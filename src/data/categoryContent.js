@@ -14,9 +14,9 @@ export const CATEGORY_CONTENT = {
         ],
         seo: {
             h1: "Zapatillas Urbanas y de Basketball en Chile",
-            text: "Nuestra colección de Basketball Heritage no es solo nostalgia. Es rendimiento y estilo que trasciende la cancha. Encuentra desde Jordan Retro clásicas hasta las últimas firmas de atletas que están cambiando el juego hoy. Cada par en Lukstore es autenticado rigurosamente para garantizar que recibas calidad real.",
+            text: "Nuestra colección de Basketball Heritage no es solo nostalgia. Es rendimiento y estilo que trasciende la cancha. Encuentra desde Jordan Retro clásicas hasta las últimas firmas de atletas que están cambiando el juego hoy. Cada par en Lukstore es seleccionado y revisado por nuestro equipo antes de publicarlo.",
             faqs: [
-                { q: "¿Son originales?", a: "Sí, todos nuestros productos son 100% auténticos y pasan por un proceso de verificación manual." },
+                { q: "¿Son originales?", a: "Trabajamos con stock seleccionado y revisado por nuestro equipo. Si tienes dudas sobre un modelo puntual, te enviamos fotos de detalle por WhatsApp." },
                 { q: "¿Hacen envíos a regiones?", a: "Realizamos envíos a todo Chile a través de Starken y Blue Express." }
             ]
         }

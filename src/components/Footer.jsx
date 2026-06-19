@@ -44,7 +44,7 @@ const Footer = () => {
                         <ul className="footer-contact-list">
                             <li>
                                 <span className="icon">📍</span>
-                                <span>Avenida La Dehesa, Santiago</span>
+                                <span>La Dehesa, Lo Barnechea, Santiago</span>
                             </li>
                             <li>
                                 <span className="icon">📱</span>
